@@ -1,0 +1,493 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* =========================
+   RESET
+========================= */
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p,
+a, img, ul, ol, li,
+table, tr, th, td,
+form, label, input, button,
+article, aside, footer, header, nav, section {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+article, aside, footer, header, nav, section { display: block; }
+
+body {
+  line-height: 1.6;
+  font-family: "Noto Sans KR", "Montserrat", sans-serif;
+  background: var(--cream-base);
+  color: var(--text-primary);
+}
+ul, ol { list-style: none; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; height: auto; }
+* { box-sizing: border-box; }
+
+/* =========================
+   COLOR SYSTEM
+========================= */
+:root {
+  /* 베이스 톤 (배경 계열) */
+  --cream-base: #F7F4EF;         /* Cannoli Cream */
+  --cream-tan: #E8D8C4;          /* Cream Tan */
+  --safari: #D6C7A1;             /* Safari */
+  --sirocco: #C0A998;            /* Sirocco */
+
+  /* 포인트 & 중간 톤 */
+  --mocha: #B48A78;              /* Mocha Mousse */
+  --amber: #8D5E4C;              /* Baltic Amber */
+
+  /* 강조 & 텍스트 계열 */
+  --choco: #5B3B31;              /* Chocolate Martini */
+  --white: #FFFFFF;
+  --gray-100: #F3F3F2;
+  --gray-300: #E1DFDC;
+  --gray-600: #8C8278;
+  --text-primary: #2E2A27;
+
+  /* 공통 요소 */
+  --container: 1980px;
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-md: 0 6px 18px rgba(180,138,120,0.15);
+  --transition: all .25s ease;
+}
+
+/* =========================
+   GLOBAL LAYOUT
+========================= */
+.container-1980 {
+  width: min(100%, var(--container));
+  margin-inline: auto;
+  padding-inline: 60px;
+}
+
+.flex-row { display: flex; gap: 40px; align-items: center; }
+.flex-1 { flex: 1; }
+
+.text-center { text-align: center; }
+.rounded { border-radius: var(--radius-md); }
+.shadow { box-shadow: var(--shadow-sm); }
+.mt-40 { margin-top: 40px; }
+.mb-40 { margin-bottom: 40px; }
+
+/* =========================
+   HEADER
+========================= */
+.app-header {
+    background: var(--cream-base);
+    border-bottom: 1px solid var(--gray-300);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+/* 상단 (로고 중앙 + 로그인/회원가입 우측) */
+.header-top {
+    position: relative;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.header-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.header-logo img {
+    width: 250px;
+    height: auto;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.header-logo img:hover {
+    transform: scale(1.05);
+}
+
+/* 로그인/회원가입 버튼 (우측 정렬) */
+.header-actions {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+/* 하단 네비게이션 */
+.header-nav {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    font-weight: 600;
+    padding: 30px 0 20px 0;
+}
+
+.header-nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 17px;
+    transition: color 0.3s ease;
+}
+
+.header-nav a:hover {
+    color: var(--amber);
+}
+
+/* 구분선 */
+.divider-line {
+    width: 100%;
+    height: 3px;
+    background: var(--sirocco);
+    opacity: 0.35;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+    .header-nav {
+        gap: 40px;
+    }
+
+    .header-logo img {
+        width: 130px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-nav {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .header-actions {
+        position: static;
+        transform: none;
+        justify-content: center;
+        margin-top: 8px;
+    }
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+.btn-brown {
+  background: var(--mocha);
+  color: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+.btn-brown:hover {
+  background: var(--amber);
+  box-shadow: var(--shadow-md);
+}
+.btn-outline {
+  border: 1px solid var(--sirocco);
+  background: var(--white);
+  color: var(--amber);
+}
+.btn-outline:hover {
+  background: var(--cream-tan);
+}
+
+/* =========================
+   CARD SYSTEM
+========================= */
+.card {
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 40px;
+  transition: var(--transition);
+}
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-6px);
+}
+.card.soft {
+  background: var(--cream-base);
+  border: 1px solid var(--gray-300);
+}
+.card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--choco);
+  margin-bottom: 14px;
+}
+.card p {
+  color: var(--gray-600);
+  line-height: 1.7;
+}
+
+/* =========================
+   IMAGE CARD SECTION
+========================= */
+.card-image {
+    background: var(--cream-base);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.card-image h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--choco);
+    margin-top: 16px;
+}
+
+.card-image p {
+    font-size: 15px;
+    color: var(--gray-600);
+    padding: 0 16px 24px;
+}
+
+.card-image:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+}
+
+/* =========================
+   SECTION TITLE STYLE
+========================= */
+.section-title {
+    font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: var(--choco);
+    letter-spacing: 0.5px;
+    margin-top: 60px;      /* 👈 위쪽 여백 추가 */
+    margin-bottom: 40px;   /* 👈 아래쪽 여백 살짝 확대 */
+    position: relative;
+    display: inline-block;
+}
+
+/* 밑줄 강조선 */
+.section-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: var(--mocha);
+    margin: 16px auto 0;   /* 👈 밑줄 위에도 약간 간격 늘림 */
+    border-radius: 2px;
+    opacity: 0.6;
+}
+
+/* 반응형 크기 조정 */
+@media (max-width: 1024px) {
+    .section-title {
+        font-size: 24px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 20px;
+        margin-top: 40px;
+        margin-bottom: 24px;
+    }
+}
+
+
+
+/* =========================
+   HERO SECTION (Video Background)
+========================= */
+.hero-card {
+    position: relative;
+    overflow: hidden;
+    height: 800px;
+    border: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+}
+
+/* 영상 */
+.hero-card video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 영상 꽉 채우기 */
+    z-index: 0;
+    filter: brightness(70%); /* 약간 어둡게 */
+}
+
+/* 텍스트 오버레이 */
+.hero-card .overlay {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.hero-card h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.hero-card p {
+    font-size: 18px;
+    margin-bottom: 28px;
+}
+
+.hero-card .btn {
+    border: 1px solid #fff;
+    color: #fff;
+    background: transparent;
+}
+
+.hero-card .btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================
+   CARD IMAGE / VIDEO SECTION
+========================= */
+.card-image {
+    background: var(--cream-base);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.card-image:hover {
+    transform: translateY(-6px);
+}
+
+/* 🎥 이미지 / 영상 공통 스타일 */
+.card-image img,
+.card-image video {
+    width: 100%;
+    height: 320px;              /* ✅ 세로 길이 제한 */
+    object-fit: cover;          /* ✅ 비율 유지하면서 꽉 채움 */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 🧾 제목 */
+.card-image h3 {
+    font-size: 20px;
+    color: var(--choco);
+    font-weight: 600;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+}
+
+/* 📄 설명문 */
+.card-image p {
+    font-size: 16px;
+    color: var(--gray-600);
+    line-height: 1.5;
+    padding: 0 16px 24px;
+}
+
+/* 📱 반응형 조정 */
+@media (max-width: 1200px) {
+    .card-image img,
+    .card-image video {
+        height: 260px;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-image img,
+    .card-image video {
+        height: 200px;
+    }
+
+    .card-image h3 {
+        font-size: 18px;
+    }
+
+    .card-image p {
+        font-size: 14px;
+    }
+}
+
+/* =========================
+   GRID (3단 카드 구조)
+========================= */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 60px;
+}
+
+/* =========================
+   GRID (4단 카드 구조)
+========================= */
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+/* =========================
+   SCROLL ANIMATION (Fade + Slide)
+========================= */
+
+/* 초기 상태 - 숨김 */
+.scroll-fade {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease-out;
+}
+
+/* 스크롤 진입 시 활성화 */
+.scroll-fade.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+   FOOTER
+========================= */
+.app-footer {
+  background: var(--mocha);
+  color: var(--cream-tan);
+  padding: 40px 0;
+  text-align: center;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
