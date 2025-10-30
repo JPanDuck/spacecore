@@ -213,6 +213,15 @@ img { display: block; max-width: 100%; height: auto; }
 /* =========================
    CARD SYSTEM
 ========================= */
+.card-basic {
+    background: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 36px 32px;
+    transition: none;             /* ✅ hover 효과 제거 */
+    text-align: left;
+}
 .card {
   background: var(--white);
   border: 1px solid var(--gray-300);
