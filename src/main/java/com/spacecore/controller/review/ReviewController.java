@@ -1,33 +1,18 @@
 package com.spacecore.controller.review;
 
-import com.spacecore.dto.common.PaginationDTO;
-import com.spacecore.dto.review.ReviewSummaryDTO;
-import com.spacecore.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController
-@RequestMapping("/api/reviews")
+@Controller
 @RequiredArgsConstructor
 public class ReviewController {
 
-    private final ReviewService reviewService;
-
-    @GetMapping("/rooms/{roomId}")
-    public PaginationDTO getReviews(
-            @PathVariable Long roomId,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String userName,
-            @RequestParam(required = false) Integer rating
-    ) {
-        return reviewService.getReviews(roomId, page, size, keyword, userName, rating);
-    }
-
-    @GetMapping("/rooms/{roomId}/summary")
-    public ReviewSummaryDTO getReviewSummary(@PathVariable Long roomId) {
-        return reviewService.getReviewSummary(roomId);
+    // 그냥 페이지 보여주는 역할만
+    @GetMapping("/reviews")
+    public String reviewListPage(@RequestParam(required = false) Long roomId) {
+        // roomId는 JSP에서 param으로 받아쓰면 됨
+        return "review/review-list";   // /WEB-INF/views/review/review-list.jsp
     }
 }
-

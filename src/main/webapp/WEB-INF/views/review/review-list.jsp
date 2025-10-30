@@ -67,88 +67,86 @@
 </main>
 
 <%@ include file="/WEB-INF/views/components/footer.jsp" %>
-
+<%@ include file="/WEB-INF/views/components/pagination.jsp" %>
 <script>
     var base = "<%=context%>";
     var roomId = "<%=roomId%>";
     var currentPage = 1;
     var size = 5;
 
-    // ⭐ 리뷰 요약
     function loadReviewSummary() {
         fetch(base + "/api/reviews/rooms/" + roomId + "/summary")
-            .then(res => res.json())
-            .then(data => {
-                const el = document.getElementById("reviewSummary");
+            .then(function(res){ return res.json(); })
+            .then(function(data){
+                var el = document.getElementById("reviewSummary");
                 if (!data || data.totalCount === 0) {
                     el.innerHTML = "아직 등록된 리뷰가 없습니다.";
                 } else {
-                    el.innerHTML = "⭐ 평균 <strong>" + data.avgRating.toFixed(1)
-                        + "</strong>점 (총 <strong>" + data.totalCount + "</strong>개의 리뷰)";
+                    el.innerHTML = "⭐ 평균 <strong>" + data.avgRating.toFixed(1) + "</strong>점 (총 <strong>" + data.totalCount + "</strong>개의 리뷰)";
                 }
             })
-            .catch(err => {
+            .catch(function(err){
                 console.error("요약 불러오기 실패:", err);
                 document.getElementById("reviewSummary").innerText = "요약 정보를 불러오지 못했습니다.";
             });
     }
 
-    // 💬 리뷰 목록 로드
-    function loadReviews(page = 1) {
+    function loadReviews(page) {
+        if (!page) page = 1;
         currentPage = page;
-        const keyword = document.getElementById("keyword").value.trim();
-        const userName = document.getElementById("userName").value.trim();
-        const rating = document.getElementById("rating").value;
 
-        let url = base + "/api/reviews/rooms/" + roomId + "?page=" + page + "&size=" + size;
+        var keyword = document.getElementById("keyword").value.trim();
+        var userName = document.getElementById("userName").value.trim();
+        var rating = document.getElementById("rating").value;
+
+        var url = base + "/api/reviews/rooms/" + roomId + "?page=" + page + "&size=" + size;
         if (keyword) url += "&keyword=" + encodeURIComponent(keyword);
         if (userName) url += "&userName=" + encodeURIComponent(userName);
         if (rating) url += "&rating=" + rating;
 
         fetch(url)
-            .then(res => res.json())
-            .then(pagination => {
-                const data = pagination.data;
-                const pageInfo = pagination.pageInfo;
-
-                const area = document.getElementById("reviewList");
+            .then(function(res){ return res.json(); })
+            .then(function(result){
+                var data = result.data || [];
+                var pageInfo = result.pageInfo || {};
+                var area = document.getElementById("reviewList");
                 area.innerHTML = "";
 
-                if (!Array.isArray(data) || data.length === 0) {
+                if (data.length === 0) {
                     area.innerHTML = '<p class="text-center" style="color:var(--gray-600);">등록된 리뷰가 없습니다.</p>';
                     document.getElementById("pagination").innerHTML = "";
                     return;
                 }
 
-                data.forEach(r => {
-                    let html = '<div class="rounded shadow" style="padding:20px; border:1px solid var(--gray-300); background:var(--white);">';
+                data.forEach(function(r){
+                    var html = '';
+                    html += '<div class="rounded shadow" style="padding:20px; border:1px solid var(--gray-300); background:var(--white);">';
                     html += '<div class="flex-row" style="justify-content:space-between;">';
                     html += '<strong style="color:var(--choco);">' + r.userName + '</strong>';
                     html += '<span style="color:var(--amber);">' + "⭐".repeat(r.rating) + '</span>';
                     html += '</div>';
                     html += '<p style="margin:10px 0; color:var(--text-primary); white-space:pre-line;">' + r.content + '</p>';
-                    if (r.imgUrl)
+                    if (r.imgUrl) {
                         html += '<img src="' + r.imgUrl + '" alt="리뷰 이미지" class="rounded" style="width:140px; margin-top:10px;">';
+                    }
                     html += '<p style="font-size:13px; color:var(--gray-600); margin-top:8px;">' + r.createdAt + '</p>';
                     html += '</div>';
                     area.innerHTML += html;
                 });
 
-                renderPagination(pageInfo.totalPages);
+                renderPagination(pageInfo.totalPages || 1);
             })
-            .catch(err => {
+            .catch(function(err){
                 console.error("리뷰 불러오기 실패:", err);
                 document.getElementById("reviewList").innerHTML =
                     '<p class="text-center" style="color:red;">리뷰를 불러오는 중 오류가 발생했습니다.</p>';
             });
     }
 
-    // 🔍 검색
     function searchReviews() {
         loadReviews(1);
     }
 
-    // ♻ 필터 초기화
     function resetFilters() {
         document.getElementById("keyword").value = "";
         document.getElementById("userName").value = "";
@@ -156,18 +154,17 @@
         loadReviews(1);
     }
 
-    // 📄 페이지네이션 렌더링
     function renderPagination(totalPages) {
-        const el = document.getElementById("pagination");
+        var el = document.getElementById("pagination");
         el.innerHTML = "";
         if (totalPages <= 1) return;
 
-        let html = '<ul class="pagination-list">';
+        var html = '<ul class="pagination-list">';
         if (currentPage > 1) {
             html += '<li><a href="javascript:void(0)" onclick="loadReviews(' + (currentPage - 1) + ')">이전</a></li>';
         }
 
-        for (let i = 1; i <= totalPages; i++) {
+        for (var i = 1; i <= totalPages; i++) {
             html += '<li class="' + (i === currentPage ? 'active' : '') + '">';
             html += '<a href="javascript:void(0)" onclick="loadReviews(' + i + ')">' + i + '</a>';
             html += '</li>';
@@ -181,7 +178,6 @@
         el.innerHTML = html;
     }
 
-    // ✅ 초기 실행
     window.onload = function() {
         loadReviewSummary();
         loadReviews();
