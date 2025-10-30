@@ -1,8 +1,14 @@
 package com.spacecore.service.review;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Service;
+import com.spacecore.dto.review.ReviewRequestDTO;
+import com.spacecore.dto.review.ReviewSummaryDTO;
+import com.spacecore.dto.common.PaginationDTO;
 
-@Service
 public interface ReviewService {
+
+    void createReview(Long roomId, ReviewRequestDTO request);
+
+    PaginationDTO getReviews(Long roomId, int page, int size, String keyword, String userName, Integer rating);
+
+    ReviewSummaryDTO getReviewSummary(Long roomId);
 }
