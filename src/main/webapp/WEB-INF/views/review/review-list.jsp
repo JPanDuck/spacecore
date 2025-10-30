@@ -25,7 +25,7 @@
 <main class="container-1980 mt-40 mb-40">
     <h2 class="section-title">이용자 리뷰 목록</h2>
 
-    <div class="card soft">
+    <div class="card-basic">
         <h3 class="card-title">등록된 리뷰</h3>
 
         <!-- ⭐ 리뷰 요약 -->
