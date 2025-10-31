@@ -153,32 +153,6 @@ img { display: block; max-width: 100%; height: auto; }
     opacity: 0.35;
 }
 
-/* 반응형 */
-@media (max-width: 1024px) {
-    .header-nav {
-        gap: 40px;
-    }
-
-    .header-logo img {
-        width: 130px;
-    }
-}
-
-@media (max-width: 768px) {
-    .header-nav {
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .header-actions {
-        position: static;
-        transform: none;
-        justify-content: center;
-        margin-top: 8px;
-    }
-}
-
-
 /* =========================
    BUTTONS
 ========================= */
@@ -294,10 +268,19 @@ img { display: block; max-width: 100%; height: auto; }
     font-size: 28px;
     color: var(--choco);
     letter-spacing: 0.5px;
-    margin-top: 60px;      /* 👈 위쪽 여백 추가 */
-    margin-bottom: 40px;   /* 👈 아래쪽 여백 살짝 확대 */
+    margin-top: 60px;
+    margin-bottom: 40px;
     position: relative;
     display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* 화면에 나타날 때 적용 */
+.section-title.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* 밑줄 강조선 */
@@ -307,28 +290,10 @@ img { display: block; max-width: 100%; height: auto; }
     width: 60px;
     height: 2px;
     background: var(--mocha);
-    margin: 16px auto 0;   /* 👈 밑줄 위에도 약간 간격 늘림 */
+    margin: 16px auto 0;
     border-radius: 2px;
     opacity: 0.6;
 }
-
-/* 반응형 크기 조정 */
-@media (max-width: 1024px) {
-    .section-title {
-        font-size: 24px;
-        margin-top: 50px;
-        margin-bottom: 30px;
-    }
-}
-
-@media (max-width: 768px) {
-    .section-title {
-        font-size: 20px;
-        margin-top: 40px;
-        margin-bottom: 24px;
-    }
-}
-
 
 
 /* =========================
@@ -430,29 +395,6 @@ img { display: block; max-width: 100%; height: auto; }
     padding: 0 16px 24px;
 }
 
-/* 📱 반응형 조정 */
-@media (max-width: 1200px) {
-    .card-image img,
-    .card-image video {
-        height: 260px;
-    }
-}
-
-@media (max-width: 768px) {
-    .card-image img,
-    .card-image video {
-        height: 200px;
-    }
-
-    .card-image h3 {
-        font-size: 18px;
-    }
-
-    .card-image p {
-        font-size: 14px;
-    }
-}
-
 /* =========================
    GRID (3단 카드 구조)
 ========================= */
@@ -490,6 +432,69 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 /* =========================
+   PAGINATION (UL 구조 대응)
+========================= */
+
+/* pagination wrapper */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+/* pagination 리스트를 가로 정렬 */
+.pagination-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* li 기본 스타일 제거 */
+.pagination-list li {
+    display: flex;
+}
+
+/* a 태그 버튼 스타일 */
+.pagination-list a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    color: var(--amber);
+    border: 1px solid var(--sirocco);
+    background: var(--white);
+    transition: var(--transition);
+}
+
+/* hover 효과 */
+.pagination-list a:hover {
+    background: var(--cream-tan);
+    color: var(--choco);
+}
+
+/* active 버튼 (현재 페이지) */
+.pagination-list .active a,
+.pagination-list a.btn-brown {
+    background: var(--mocha);
+    color: var(--white);
+    border: none;
+}
+
+
+
+/* =========================
    FOOTER
 ========================= */
 .app-footer {
@@ -499,4 +504,139 @@ img { display: block; max-width: 100%; height: auto; }
   text-align: center;
   font-size: 14px;
   letter-spacing: 0.3px;
+}
+
+/*========================
+반응형 한스푼 (컴,폰,탭)
+=========================*/
+
+/*  (max-width: 1400px)
+   - 전체 여백 줄이고, 폰트 크기 약간 감소 */
+@media (max-width: 1400px) {
+    .container-1980 {
+        padding-inline: 40px;
+    }
+    .header-nav {
+        gap: 60px;
+    }
+    .card-basic {
+        padding: 28px 24px;
+    }
+    .section-title {
+        font-size: 26px;
+    }
+}
+
+/*  (max-width: 1024px)
+   - 헤더 메뉴 줄이기, 카드 여백 줄이기 */
+@media (max-width: 1024px) {
+    .header-top {
+        padding: 16px 0;
+    }
+    .header-logo img {
+        width: 180px;
+    }
+    .header-nav {
+        gap: 40px;
+        font-size: 15px;
+    }
+    .card-basic {
+        padding: 24px 20px;
+    }
+    .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+    .grid-4 {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    .pagination-list a {
+        min-width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+}
+
+/*  (max-width: 768px)
+   - 헤더 수직 정렬, 카드 한 줄 표시, 버튼 간격 조정 */
+@media (max-width: 768px) {
+    .container-1980 {
+        padding-inline: 20px;
+    }
+
+    .header-nav {
+        flex-wrap: wrap;
+        gap: 20px;
+        font-size: 14px;
+    }
+
+    .header-actions {
+        position: static;
+        transform: none;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .card-basic {
+        padding: 20px;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .pagination-list {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .pagination-list a {
+        min-width: 30px;
+        height: 30px;
+        font-size: 12px;
+        padding: 0 8px;
+    }
+
+    .btn {
+        height: 36px;
+        font-size: 14px;
+        padding: 0 16px;
+    }
+
+    .section-title {
+        font-size: 22px;
+        text-align: center;
+    }
+}
+
+/* (max-width: 480px)
+   - 모든 요소 최소한으로 압축 */
+@media (max-width: 480px) {
+    .header-logo img {
+        width: 140px;
+    }
+
+    .header-nav {
+        gap: 12px;
+        font-size: 13px;
+    }
+
+    .btn {
+        height: 32px;
+        font-size: 13px;
+        padding: 0 12px;
+    }
+
+    .pagination-list a {
+        min-width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
 }

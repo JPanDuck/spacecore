@@ -92,17 +92,17 @@
         <br>
         <h2 class="section-title">특별한 온라인 서비스</h2>
         <div class="grid-3 mt-40">
-            <div class="card-image">
+            <div class="card-image scroll-fade">
                 <img src="${pageContext.request.contextPath}/img/remote.jpg" alt="원격 설정">
                 <h3>원격 설정</h3>
                 <p>당신의 계정을 통해 어디서든 공간을 관리하세요.</p>
             </div>
-            <div class="card-image">
+            <div class="card-image scroll-fade">
                 <img src="${pageContext.request.contextPath}/img/print.jpg" alt="프린트 서비스">
                 <h3>프린트 서비스</h3>
                 <p>모든 지점에서 인쇄 가능. 비즈니스 효율성을 극대화합니다.</p>
             </div>
-            <div class="card-image">
+            <div class="card-image scroll-fade">
                 <img src="${pageContext.request.contextPath}/img/register.jpg" alt="사전 등록">
                 <h3>사전 등록</h3>
                 <p>방문 전에 손쉽게 등록 완료. 더 빠른 체크인 경험을 제공합니다.</p>
@@ -121,7 +121,7 @@
                     // 스크롤 진입 시 활성화
                     entry.target.classList.add('active');
                 } else {
-                    // 뷰포트에서 벗어나면 비활성화
+                    // 벗어나면 비활성화
                     entry.target.classList.remove('active');
                 }
             });
@@ -131,6 +131,27 @@
     });
 </script>
 <%@ include file="../components/footer.jsp" %>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const titles = document.querySelectorAll('.section-title');
 
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 화면에 들어오면 fade-in
+                        entry.target.classList.add('visible');
+                    } else {
+                        // 화면에서 사라지면 다시 초기화
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            },
+            { threshold: 0.3 } // 30% 이상 보일 때
+        );
+
+        titles.forEach(title => observer.observe(title));
+    });
+</script>
 </body>
 </html>

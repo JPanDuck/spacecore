@@ -5,25 +5,42 @@
 
 <mapper namespace="com.spacecore.mapper.review.ReviewMapper">
 
-    <!-- ✅ 리뷰 등록 -->
-    <insert id="insertReview">
-        INSERT INTO reviews (id, user_id, room_id, rating, content, img, created_at)
-        VALUES (seq_reviews.NEXTVAL, #{userId}, #{roomId}, #{rating}, #{content}, #{img}, SYSTIMESTAMP)
+    <!-- =========================================================
+         1. 리뷰 등록 (INSERT)
+         ========================================================= -->
+    <insert id="insertReview" parameterType="com.spacecore.dto.review.ReviewRequestDTO">
+        INSERT INTO reviews (
+            id, user_id, room_id, rating, content, img_url, created_at
+        ) VALUES (
+                     seq_reviews.NEXTVAL,
+                     #{userId, jdbcType=NUMERIC},
+                     #{roomId, jdbcType=NUMERIC},
+                     #{rating, jdbcType=NUMERIC},
+                     #{content, jdbcType=VARCHAR},
+                     #{imgUrl, jdbcType=VARCHAR},
+                     SYSTIMESTAMP
+                 )
     </insert>
 
-    <!-- ✅ 리뷰 목록 조회 -->
-    <select id="findReviews" parameterType="map" resultType="com.spacecore.dto.review.ReviewResponseDTO">
+    <!-- =========================================================
+         2. 리뷰 목록 조회 (검색 + 필터 + 페이징)
+         ========================================================= -->
+    <select id="findReviews" resultType="com.spacecore.dto.review.ReviewResponseDTO">
         SELECT
-        r.id AS id,
+        r.id,
         u.name AS userName,
         r.room_id AS roomId,
-        r.rating AS rating,
-        r.content AS content,
-        r.created_at AS createdAt,
-        NULL AS imgUrl
+        r.rating,
+        r.content,
+        r.img_url AS imgUrl,
+        TO_CHAR(r.created_at, 'YYYY-MM-DD HH24:MI:SS') AS createdAt
         FROM reviews r
-        JOIN users u ON r.user_id = u.id
-        WHERE r.room_id = #{roomId}
+        <!-- ✅ LEFT JOIN 으로 변경 -->
+        LEFT JOIN users u ON r.user_id = u.id
+        WHERE 1=1
+        <if test="roomId != null">
+            AND r.room_id = #{roomId, jdbcType=NUMERIC}
+        </if>
         <if test="keyword != null and keyword != ''">
             AND LOWER(r.content) LIKE '%' || LOWER(#{keyword}) || '%'
         </if>
@@ -31,18 +48,23 @@
             AND LOWER(u.name) LIKE '%' || LOWER(#{userName}) || '%'
         </if>
         <if test="rating != null">
-            AND r.rating = #{rating}
+            AND r.rating = #{rating, jdbcType=NUMERIC}
         </if>
         ORDER BY r.created_at DESC
-        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+        OFFSET #{offset, jdbcType=INTEGER} ROWS FETCH NEXT #{limit, jdbcType=INTEGER} ROWS ONLY
     </select>
 
-    <!-- ✅ 리뷰 총 개수 카운트 -->
-    <select id="countReviews" parameterType="map" resultType="int">
+    <!-- =========================================================
+         3. 리뷰 개수 조회 (페이징 total count)
+         ========================================================= -->
+    <select id="countReviews" resultType="int">
         SELECT COUNT(*)
         FROM reviews r
-        JOIN users u ON r.user_id = u.id
-        WHERE r.room_id = #{roomId}
+        LEFT JOIN users u ON r.user_id = u.id
+        WHERE 1=1
+        <if test="roomId != null">
+            AND r.room_id = #{roomId, jdbcType=NUMERIC}
+        </if>
         <if test="keyword != null and keyword != ''">
             AND LOWER(r.content) LIKE '%' || LOWER(#{keyword}) || '%'
         </if>
@@ -50,17 +72,39 @@
             AND LOWER(u.name) LIKE '%' || LOWER(#{userName}) || '%'
         </if>
         <if test="rating != null">
-            AND r.rating = #{rating}
+            AND r.rating = #{rating, jdbcType=NUMERIC}
         </if>
     </select>
 
-    <!-- ✅ 리뷰 요약 (평균 평점, 총 리뷰 수) -->
+    <!-- =========================================================
+         4. 리뷰 요약 (평균 별점 + 총 개수)
+         ========================================================= -->
     <select id="getReviewSummary" resultType="com.spacecore.dto.review.ReviewSummaryDTO">
         SELECT
-            NVL(ROUND(AVG(r.rating), 1), 0) AS avgRating,
-            COUNT(*) AS totalCount
+        ROUND(AVG(r.rating), 1) AS avgRating,
+        COUNT(*) AS totalCount
         FROM reviews r
-        WHERE r.room_id = #{roomId}
+        WHERE 1=1
+        <if test="roomId != null">
+            AND r.room_id = #{roomId, jdbcType=NUMERIC}
+        </if>
+    </select>
+
+    <!-- =========================================================
+         5. 리뷰 상세조회
+         ========================================================= -->
+    <select id="findById" resultType="com.spacecore.dto.review.ReviewResponseDTO">
+        SELECT
+            r.id,
+            u.name AS userName,
+            r.room_id AS roomId,
+            r.rating,
+            r.content,
+            r.img_url AS imgUrl,
+            TO_CHAR(r.created_at, 'YYYY-MM-DD HH24:MI:SS') AS createdAt
+        FROM reviews r
+                 LEFT JOIN users u ON r.user_id = u.id
+        WHERE r.id = #{reviewId, jdbcType=NUMERIC}
     </select>
 
 </mapper>

@@ -8,7 +8,7 @@
 
     <!-- ✅ 공통 CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-
+    <link rel="icon" href="data:,">
     <!-- ✅ 폰트 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 </head>
