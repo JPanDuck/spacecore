@@ -116,7 +116,7 @@
 <body>
 <div class="register-card">
     <h2>회원가입</h2>
-    <p>Space Core에 오신 것을 환영합니다.<br>아래 정보를 입력해 계정을 만들어주세요.</p>
+    <p><strong>Space Core</strong>에 오신 것을 환영합니다.<br>아래 정보를 입력해 계정을 만들어주세요.</p>
 
     <form action="${pageContext.request.contextPath}/register" method="post">
         <div class="form-group">
@@ -144,6 +144,15 @@
 
     <div class="footer-link">
         이미 계정이 있으신가요? <a href="${pageContext.request.contextPath}/login">로그인</a>
+    </div>
+
+    <!-- 메인으로 돌아가기 버튼 -->
+    <div style="margin-top: 20px;">
+        <a href="${pageContext.request.contextPath}/index"
+           class="btn btn-outline"
+           style="width: 100%; height: 44px; font-size: 15px; font-weight: 600;">
+            ← 메인으로 돌아가기
+        </a>
     </div>
 </div>
 

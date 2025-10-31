@@ -187,6 +187,15 @@
     <div class="footer-link">
         계정이 없으신가요? <a href="${pageContext.request.contextPath}/register">회원가입</a>
     </div>
+
+    <!-- 메인으로 돌아가기 버튼 -->
+    <div style="margin-top: 20px;">
+        <a href="${pageContext.request.contextPath}/index"
+           class="btn btn-outline"
+           style="width: 100%; height: 44px; font-size: 15px; font-weight: 600;">
+            ← 메인으로 돌아가기
+        </a>
+    </div>
 </div>
 </body>
 </html>
