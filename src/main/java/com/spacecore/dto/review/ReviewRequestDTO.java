@@ -5,9 +5,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ReviewRequestDTO {
-    private Long roomId;
     private Long userId;
-    private Long rating;
+    private Long roomId;
+    private int rating;
     private String content;
-    private MultipartFile img; // 파일 업로드용
+    private MultipartFile imgFile; //이미지파일
+    private String imgUrl; //파일 경로
 }
+

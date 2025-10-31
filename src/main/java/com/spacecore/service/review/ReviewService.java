@@ -1,6 +1,7 @@
 package com.spacecore.service.review;
 
 import com.spacecore.dto.review.ReviewRequestDTO;
+import com.spacecore.dto.review.ReviewResponseDTO;
 import com.spacecore.dto.review.ReviewSummaryDTO;
 import com.spacecore.dto.common.PaginationDTO;
 
@@ -11,4 +12,6 @@ public interface ReviewService {
     PaginationDTO getReviews(Long roomId, int page, int size, String keyword, String userName, Integer rating);
 
     ReviewSummaryDTO getReviewSummary(Long roomId);
+
+    ReviewResponseDTO getReviewById(Long reviewId);
 }
