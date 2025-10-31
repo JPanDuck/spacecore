@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인 | Space Core</title>
 
-    <!-- ✅ 공통 스타일 -->
+    <!-- 공통 스타일 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
     <style>

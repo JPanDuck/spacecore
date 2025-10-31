@@ -10,7 +10,7 @@
     Long loginUserId = 1L; // 임시 사용자 ID
 %>
 
-<!-- ✅ HEADER -->
+<!-- HEADER -->
 <%@ include file="/WEB-INF/views/components/header.jsp" %>
 
 <main class="container-1980 mt-40 mb-40">
@@ -79,7 +79,7 @@
     </div>
 </main>
 
-<!-- ✅ FOOTER -->
+<!-- FOOTER -->
 <%@ include file="/WEB-INF/views/components/footer.jsp" %>
 
 <!-- 이미지 미리보기 -->

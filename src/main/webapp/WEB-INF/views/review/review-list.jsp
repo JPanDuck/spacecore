@@ -13,10 +13,10 @@
 </head>
 <body>
 
-<!-- ✅ HEADER -->
+<!-- HEADER -->
 <%@ include file="/WEB-INF/views/components/header.jsp" %>
 
-<!-- ✅ MAIN CONTENT -->
+<!-- MAIN CONTENT -->
 <main class="container-1980 mt-40 mb-40">
 
     <!-- 페이지 헤더: 제목 + 작성 버튼 -->
@@ -85,7 +85,7 @@
     </div>
 </main>
 
-<!-- ✅ FOOTER -->
+<!-- FOOTER -->
 <%@ include file="/WEB-INF/views/components/footer.jsp" %>
 
 <!-- JS -->

@@ -19,7 +19,7 @@ public class ReviewRestController {
 
     private final ReviewService reviewService;
 
-    /** 💾 리뷰 등록 (파일첨부 포함) */
+    /** 리뷰 등록 (파일첨부 포함) */
     @PostMapping("/rooms/{roomId}")
     public ResponseEntity<String> createReview(
             @PathVariable Long roomId,
@@ -29,7 +29,7 @@ public class ReviewRestController {
         return ResponseEntity.ok("리뷰가 등록되었습니다.");
     }
 
-    /** 📄 리뷰 목록 조회 (페이징 + 검색 + 필터링) */
+    /** 리뷰 목록 조회 (페이징 + 검색 + 필터링) */
     @GetMapping("/rooms/{roomId}")
     public ResponseEntity<Map<String, Object>> getReviews(
             @PathVariable Long roomId,
@@ -39,11 +39,11 @@ public class ReviewRestController {
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) Integer rating
     ) {
-        // ✅ 서비스 호출
+        // 서비스 호출
         PaginationDTO<ReviewResponseDTO> result =
                 reviewService.getReviews(roomId, page, limit, keyword, userName, rating);
 
-        // ✅ null 방어 처리
+        // null 방어 처리
         if (result == null) {
             return ResponseEntity.ok(Map.of(
                     "pageInfo", Collections.emptyMap(),
@@ -51,14 +51,14 @@ public class ReviewRestController {
             ));
         }
 
-        // ✅ 데이터가 없을 때도 항상 data 키 포함
+        // 데이터가 없을 때도 항상 data 키 포함
         return ResponseEntity.ok(Map.of(
                 "pageInfo", result.getPageInfo(),
                 "data", result.getData() != null ? result.getData() : Collections.emptyList()
         ));
     }
 
-    /** ⭐ 리뷰 요약 (평균 + 총 개수) */
+    /** 리뷰 요약 (평균 + 총 개수) */
     @GetMapping("/rooms/{roomId}/summary")
     public ResponseEntity<ReviewSummaryDTO> getReviewSummary(@PathVariable Long roomId) {
         return ResponseEntity.ok(reviewService.getReviewSummary(roomId));

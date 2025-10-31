@@ -193,7 +193,7 @@ img { display: block; max-width: 100%; height: auto; }
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     padding: 36px 32px;
-    transition: none;             /* ✅ hover 효과 제거 */
+    transition: none;
     text-align: left;
 }
 .card {
@@ -368,12 +368,12 @@ img { display: block; max-width: 100%; height: auto; }
     transform: translateY(-6px);
 }
 
-/* 🎥 이미지 / 영상 공통 스타일 */
+/* 이미지 / 영상 공통 스타일 */
 .card-image img,
 .card-image video {
     width: 100%;
-    height: 320px;              /* ✅ 세로 길이 제한 */
-    object-fit: cover;          /* ✅ 비율 유지하면서 꽉 채움 */
+    height: 320px;
+    object-fit: cover;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 

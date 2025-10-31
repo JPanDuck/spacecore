@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<!-- ✅ HEADER -->
+<!-- HEADER -->
 <%@ include file="/WEB-INF/views/components/header.jsp" %>
 
 <main class="container-1980 mt-40 mb-40">
@@ -46,5 +46,5 @@
     </div>
 </main>
 
-<!-- ✅ FOOTER -->
+<!-- FOOTER -->
 <%@ include file="/WEB-INF/views/components/footer.jsp" %>

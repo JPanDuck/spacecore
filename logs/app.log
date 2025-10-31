@@ -14860,3 +14860,1128 @@ This generated password is for development use only. Your security configuration
 2025-10-31 17:44:28.823 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
 2025-10-31 17:44:28.823 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
 2025-10-31 17:44:28.824 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:08.339 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:08.339 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:08.339 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:08.339 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:08.339 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:08.340 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:08.345 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:08.353 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:08.354 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:08.354 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:10.986 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /login
+2025-10-31 17:46:10.987 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:10.988 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:10.988 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /login
+2025-10-31 17:46:10.988 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/login", parameters={}
+2025-10-31 17:46:10.989 DEBUG 8772 --- [http-nio-8082-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#loginForm()
+2025-10-31 17:46:10.993 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:46:10.993 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.view.JstlView            : View name 'auth/login', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:46:10.993 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/auth/login.jsp]
+2025-10-31 17:46:10.996 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:11.003 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:11.006 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:11.007 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:11.138 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:46:11.138 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:11.138 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:11.138 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:46:11.138 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:46:11.138 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:11.139 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:11.140 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:11.140 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:11.140 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:11.155 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /img/google_logo.png
+2025-10-31 17:46:11.155 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:11.155 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:11.155 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /img/google_logo.png
+2025-10-31 17:46:11.155 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/img/google_logo.png", parameters={}
+2025-10-31 17:46:11.155 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:11.167 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:11.167 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:11.167 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:11.168 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.455 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /index
+2025-10-31 17:46:13.455 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.455 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.455 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /index
+2025-10-31 17:46:13.455 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/index", parameters={}
+2025-10-31 17:46:13.455 DEBUG 8772 --- [http-nio-8082-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#index()
+2025-10-31 17:46:13.456 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:46:13.456 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.view.JstlView            : View name 'common/index', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:46:13.456 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/common/index.jsp]
+2025-10-31 17:46:13.459 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.460 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.460 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.460 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.505 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:46:13.506 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.506 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.506 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:46:13.506 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:46:13.506 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /img/Cleansmall.png
+2025-10-31 17:46:13.506 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.507 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.507 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.507 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /img/Cleansmall.png
+2025-10-31 17:46:13.507 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/img/Cleansmall.png", parameters={}
+2025-10-31 17:46:13.507 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /img/reserve.png
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /img/location.png
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /img/interior.png
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /img/reserve.png
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /img/location.png
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/img/reserve.png", parameters={}
+2025-10-31 17:46:13.511 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /img/interior.png
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.511 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/img/interior.png", parameters={}
+2025-10-31 17:46:13.511 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.511 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.512 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.511 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.510 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/img/location.png", parameters={}
+2025-10-31 17:46:13.513 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.518 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.519 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.519 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.520 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /img/Clean.png
+2025-10-31 17:46:13.521 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.521 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.521 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /img/Clean.png
+2025-10-31 17:46:13.521 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/img/Clean.png", parameters={}
+2025-10-31 17:46:13.521 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.523 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.523 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.528 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /img/remote.jpg
+2025-10-31 17:46:13.528 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.528 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.529 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /img/remote.jpg
+2025-10-31 17:46:13.529 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/img/remote.jpg", parameters={}
+2025-10-31 17:46:13.529 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.531 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.553 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /img/print.jpg
+2025-10-31 17:46:13.554 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.554 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.554 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /img/print.jpg
+2025-10-31 17:46:13.554 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/img/print.jpg", parameters={}
+2025-10-31 17:46:13.554 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.555 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.576 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.612 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.630 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.631 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.631 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.641 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.641 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.641 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.649 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.650 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.650 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.658 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.659 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.661 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.677 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.678 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.678 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.695 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /img/register.jpg
+2025-10-31 17:46:13.695 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.696 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.696 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /img/register.jpg
+2025-10-31 17:46:13.696 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/img/register.jpg", parameters={}
+2025-10-31 17:46:13.696 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.703 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.708 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.709 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.709 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.794 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:13.795 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.795 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:13.795 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.795 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.795 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:13.795 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.795 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:13.796 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.801 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /video/rest.mp4
+2025-10-31 17:46:13.801 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /video/interior.mp4
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /video/interior.mp4
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/video/interior.mp4", parameters={}
+2025-10-31 17:46:13.801 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /video/system.mp4
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /video/system.mp4
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/video/system.mp4", parameters={}
+2025-10-31 17:46:13.802 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /video/rest.mp4
+2025-10-31 17:46:13.803 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/video/rest.mp4", parameters={}
+2025-10-31 17:46:13.803 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.803 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.803 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.813 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.815 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.817 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.819 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.845 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /video/rest.mp4
+2025-10-31 17:46:13.845 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /video/system.mp4
+2025-10-31 17:46:13.846 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.846 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.846 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.846 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.846 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /video/system.mp4
+2025-10-31 17:46:13.846 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /video/rest.mp4
+2025-10-31 17:46:13.846 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/video/system.mp4", parameters={}
+2025-10-31 17:46:13.847 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/video/rest.mp4", parameters={}
+2025-10-31 17:46:13.847 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.847 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.900 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Failed to complete request: org.apache.catalina.connector.ClientAbortException: java.io.IOException: 현재 연결은 사용자의 호스트 시스템의 소프트웨어의 의해 중단되었습니다
+2025-10-31 17:46:13.900 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Failed to complete request: org.apache.catalina.connector.ClientAbortException: java.io.IOException: 현재 연결은 사용자의 호스트 시스템의 소프트웨어의 의해 중단되었습니다
+2025-10-31 17:46:13.900 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.900 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.900 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.900 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.905 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /video/interior.mp4
+2025-10-31 17:46:13.906 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.906 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.906 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /video/interior.mp4
+2025-10-31 17:46:13.906 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/video/interior.mp4", parameters={}
+2025-10-31 17:46:13.906 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.907 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.907 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:13.908 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.908 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.913 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.916 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Failed to complete request: org.apache.catalina.connector.ClientAbortException: java.io.IOException: 현재 연결은 사용자의 호스트 시스템의 소프트웨어의 의해 중단되었습니다
+2025-10-31 17:46:13.916 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:13.917 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.917 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.917 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.918 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Failed to complete request: org.apache.catalina.connector.ClientAbortException: java.io.IOException: 현재 연결은 사용자의 호스트 시스템의 소프트웨어의 의해 중단되었습니다
+2025-10-31 17:46:13.919 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.919 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.918 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.921 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.923 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:13.925 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:13.925 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:13.944 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:13.944 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:13.944 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:13.945 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:13.945 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:13.946 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:13.967 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.004 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:14.005 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.005 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:14.008 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:14.008 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:14.008 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:14.008 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:14.009 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:14.011 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:14.019 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.051 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /video/rest.mp4
+2025-10-31 17:46:14.052 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:14.052 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:14.052 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /video/rest.mp4
+2025-10-31 17:46:14.052 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/video/rest.mp4", parameters={}
+2025-10-31 17:46:14.053 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:14.061 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.061 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /video/interior.mp4
+2025-10-31 17:46:14.062 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:14.062 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:14.065 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /video/interior.mp4
+2025-10-31 17:46:14.067 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/video/interior.mp4", parameters={}
+2025-10-31 17:46:14.069 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:14.074 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.076 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:14.077 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.077 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:14.102 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:14.104 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.104 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:14.108 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:14.109 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.109 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:14.143 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /video/system.mp4
+2025-10-31 17:46:14.144 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:14.144 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:14.144 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /video/system.mp4
+2025-10-31 17:46:14.144 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/video/system.mp4", parameters={}
+2025-10-31 17:46:14.145 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:14.154 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.322 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:14.322 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.322 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:14.731 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /register
+2025-10-31 17:46:14.731 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:14.732 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:14.732 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /register
+2025-10-31 17:46:14.732 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/register", parameters={}
+2025-10-31 17:46:14.732 DEBUG 8772 --- [http-nio-8082-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#registerForm()
+2025-10-31 17:46:14.733 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:46:14.734 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.view.JstlView            : View name 'auth/register', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:46:14.734 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/auth/register.jsp]
+2025-10-31 17:46:14.736 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.737 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:14.737 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.737 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:14.894 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:46:14.895 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:14.896 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:14.896 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:46:14.896 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:46:14.897 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:14.900 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.902 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:14.902 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:14.902 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.867 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /index
+2025-10-31 17:46:16.867 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.867 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.867 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /index
+2025-10-31 17:46:16.867 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/index", parameters={}
+2025-10-31 17:46:16.867 DEBUG 8772 --- [http-nio-8082-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#index()
+2025-10-31 17:46:16.868 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:46:16.868 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.view.JstlView            : View name 'common/index', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:46:16.868 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/common/index.jsp]
+2025-10-31 17:46:16.868 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.869 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.869 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.869 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.914 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:46:16.914 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.914 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.914 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:46:16.914 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:46:16.915 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.916 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.916 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /img/reserve.png
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /img/Cleansmall.png
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /img/reserve.png
+2025-10-31 17:46:16.917 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /img/Cleansmall.png
+2025-10-31 17:46:16.918 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/img/reserve.png", parameters={}
+2025-10-31 17:46:16.918 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/img/Cleansmall.png", parameters={}
+2025-10-31 17:46:16.918 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.918 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /img/location.png
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /img/Clean.png
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /img/interior.png
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /img/location.png
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /img/interior.png
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /img/Clean.png
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/img/location.png", parameters={}
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/img/Clean.png", parameters={}
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/img/interior.png", parameters={}
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.920 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.922 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.922 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.922 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.923 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.923 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.925 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.928 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /img/remote.jpg
+2025-10-31 17:46:16.928 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.929 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.929 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /img/remote.jpg
+2025-10-31 17:46:16.929 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/img/remote.jpg", parameters={}
+2025-10-31 17:46:16.929 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.932 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.933 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.933 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.933 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.936 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.936 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.936 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.939 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /img/print.jpg
+2025-10-31 17:46:16.940 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.940 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.940 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /img/print.jpg
+2025-10-31 17:46:16.940 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/img/print.jpg", parameters={}
+2025-10-31 17:46:16.940 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.944 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.944 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.944 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.945 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.948 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /img/register.jpg
+2025-10-31 17:46:16.948 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.948 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.948 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /img/register.jpg
+2025-10-31 17:46:16.948 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/img/register.jpg", parameters={}
+2025-10-31 17:46:16.949 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.949 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.949 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.949 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.950 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.951 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.952 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.952 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.952 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.952 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.952 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.952 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:16.952 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.952 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /video/interior.mp4
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /video/system.mp4
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /video/interior.mp4
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /video/system.mp4
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/video/interior.mp4", parameters={}
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /video/rest.mp4
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:16.968 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/video/system.mp4", parameters={}
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /video/rest.mp4
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/video/rest.mp4", parameters={}
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.969 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:16.971 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.971 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.971 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.971 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.980 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:16.981 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.981 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:16.990 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:16.990 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:16.991 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:17.008 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:17.008 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:17.008 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:17.014 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:17.014 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:17.014 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:17.029 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:17.030 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:17.030 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:17.030 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:17.030 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:17.030 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:17.032 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:17.033 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:17.033 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:17.033 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:20.385 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /login
+2025-10-31 17:46:20.385 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:20.386 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:20.386 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /login
+2025-10-31 17:46:20.386 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/login", parameters={}
+2025-10-31 17:46:20.387 DEBUG 8772 --- [http-nio-8082-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#loginForm()
+2025-10-31 17:46:20.389 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:46:20.390 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.view.JstlView            : View name 'auth/login', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:46:20.391 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/auth/login.jsp]
+2025-10-31 17:46:20.396 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:20.397 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:20.397 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:20.397 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /img/google_logo.png
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /img/google_logo.png
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/img/google_logo.png", parameters={}
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:20.480 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:20.482 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:20.562 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:20.563 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:20.563 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:20.563 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:20.563 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:20.563 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:20.563 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:22.578 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /index
+2025-10-31 17:46:22.579 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:22.579 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:22.579 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /index
+2025-10-31 17:46:22.579 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/index", parameters={}
+2025-10-31 17:46:22.579 DEBUG 8772 --- [http-nio-8082-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#index()
+2025-10-31 17:46:22.579 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:46:22.579 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.view.JstlView            : View name 'common/index', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:46:22.580 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/common/index.jsp]
+2025-10-31 17:46:22.581 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:22.582 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:22.582 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:22.582 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:22.799 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:46:22.799 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:22.799 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:22.799 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:46:22.799 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:46:22.800 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:22.801 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /img/Clean.png
+2025-10-31 17:46:22.801 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /img/location.png
+2025-10-31 17:46:22.801 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /img/reserve.png
+2025-10-31 17:46:22.801 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /img/interior.png
+2025-10-31 17:46:22.801 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /img/Cleansmall.png
+2025-10-31 17:46:23.062 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.062 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.062 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.062 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.062 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /img/reserve.png
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /img/Clean.png
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /img/interior.png
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /img/Cleansmall.png
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/img/interior.png", parameters={}
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/img/reserve.png", parameters={}
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /img/location.png
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/img/Clean.png", parameters={}
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/img/Cleansmall.png", parameters={}
+2025-10-31 17:46:23.063 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/img/location.png", parameters={}
+2025-10-31 17:46:23.064 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.064 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.064 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.064 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.064 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.067 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.067 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.067 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.067 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.068 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.068 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.068 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.068 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.068 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.069 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.069 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.069 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.077 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /img/remote.jpg
+2025-10-31 17:46:23.077 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.077 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.077 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /img/remote.jpg
+2025-10-31 17:46:23.077 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/img/remote.jpg", parameters={}
+2025-10-31 17:46:23.077 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.079 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.079 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.079 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.080 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.084 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.084 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.084 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.085 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.085 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.085 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.087 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.087 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.087 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.090 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /img/print.jpg
+2025-10-31 17:46:23.090 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.090 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.090 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /img/print.jpg
+2025-10-31 17:46:23.091 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/img/print.jpg", parameters={}
+2025-10-31 17:46:23.091 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.091 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /img/register.jpg
+2025-10-31 17:46:23.091 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.091 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.091 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /img/register.jpg
+2025-10-31 17:46:23.091 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/img/register.jpg", parameters={}
+2025-10-31 17:46:23.092 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.092 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.092 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.092 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.093 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.094 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.095 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.096 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.096 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.098 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.098 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.098 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.143 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /video/interior.mp4
+2025-10-31 17:46:23.143 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /video/system.mp4
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /video/rest.mp4
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /video/interior.mp4
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /video/rest.mp4
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /video/system.mp4
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/video/rest.mp4", parameters={}
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/video/system.mp4", parameters={}
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/video/interior.mp4", parameters={}
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.144 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:23.147 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.147 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.147 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.159 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:23.159 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.159 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.160 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:23.161 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.161 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.162 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.176 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:23.177 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.177 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.192 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:23.193 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.193 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.756 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /register
+2025-10-31 17:46:23.756 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.756 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.757 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /register
+2025-10-31 17:46:23.757 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/register", parameters={}
+2025-10-31 17:46:23.757 DEBUG 8772 --- [http-nio-8082-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#registerForm()
+2025-10-31 17:46:23.759 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:46:23.759 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.view.JstlView            : View name 'auth/register', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:46:23.759 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/auth/register.jsp]
+2025-10-31 17:46:23.761 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.766 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:23.767 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:23.767 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:23.837 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:46:23.838 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:23.838 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:23.838 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:46:23.838 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:46:23.839 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:24.013 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:24.013 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:24.013 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:24.013 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.275 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /index
+2025-10-31 17:46:25.275 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.275 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.275 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /index
+2025-10-31 17:46:25.275 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/index", parameters={}
+2025-10-31 17:46:25.275 DEBUG 8772 --- [http-nio-8082-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#index()
+2025-10-31 17:46:25.276 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:46:25.277 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.view.JstlView            : View name 'common/index', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:46:25.278 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/common/index.jsp]
+2025-10-31 17:46:25.279 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.279 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.279 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.279 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /img/Cleansmall.png
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /img/reserve.png
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:46:25.331 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /img/location.png
+2025-10-31 17:46:25.331 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /img/interior.png
+2025-10-31 17:46:25.331 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.331 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /img/Clean.png
+2025-10-31 17:46:25.330 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /img/Cleansmall.png
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/img/Cleansmall.png", parameters={}
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /img/location.png
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /img/reserve.png
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /img/interior.png
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/img/reserve.png", parameters={}
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /img/Clean.png
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/img/location.png", parameters={}
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/img/interior.png", parameters={}
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/img/Clean.png", parameters={}
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.332 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.335 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.335 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.335 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.335 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.335 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.335 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.335 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.336 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.336 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.336 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.336 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.337 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.342 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.343 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.343 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.346 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.346 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.346 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.348 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.348 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.348 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.349 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.349 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.349 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.351 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /img/remote.jpg
+2025-10-31 17:46:25.351 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /img/print.jpg
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /img/print.jpg
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /img/remote.jpg
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/img/remote.jpg", parameters={}
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/img/print.jpg", parameters={}
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.352 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.353 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /img/register.jpg
+2025-10-31 17:46:25.353 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.353 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.353 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /img/register.jpg
+2025-10-31 17:46:25.354 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/img/register.jpg", parameters={}
+2025-10-31 17:46:25.354 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.355 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.355 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.355 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.356 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.357 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.357 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.358 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.358 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:46:25.359 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.359 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.359 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.359 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.415 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /video/system.mp4
+2025-10-31 17:46:25.415 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:25.415 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /video/interior.mp4
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /video/rest.mp4
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /video/interior.mp4
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /video/system.mp4
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/video/interior.mp4", parameters={}
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/video/system.mp4", parameters={}
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /video/rest.mp4
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:25.416 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/video/rest.mp4", parameters={}
+2025-10-31 17:46:25.417 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.417 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.417 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.417 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.420 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.420 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.420 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.420 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.441 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:25.442 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.442 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Failed to complete request: org.apache.catalina.connector.ClientAbortException: java.io.IOException: 현재 연결은 사용자의 호스트 시스템의 소프트웨어의 의해 중단되었습니다
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.449 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /video/system.mp4
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /video/system.mp4
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/video/system.mp4", parameters={}
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.451 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.453 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.453 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.454 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:25.454 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:25.454 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.454 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.454 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.454 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.463 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:46:25.463 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.463 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.463 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:46:25.464 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:46:25.464 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.466 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.472 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /video/system.mp4
+2025-10-31 17:46:25.472 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:46:25.472 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:46:25.472 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /video/system.mp4
+2025-10-31 17:46:25.472 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/video/system.mp4", parameters={}
+2025-10-31 17:46:25.473 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:46:25.477 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.486 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:25.486 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.486 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:46:25.490 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:46:25.491 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:46:25.492 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:48:24.432 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:48:24.433 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:48:24.433 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:48:24.433 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:48:24.434 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:48:24.435 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:48:24.448 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:48:24.479 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:48:24.479 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:48:24.480 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:04.199 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /index
+2025-10-31 17:49:04.200 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:04.200 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:04.200 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /index
+2025-10-31 17:49:04.201 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/index", parameters={}
+2025-10-31 17:49:04.202 DEBUG 8772 --- [http-nio-8082-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#index()
+2025-10-31 17:49:04.225 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:49:04.233 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.view.JstlView            : View name 'common/index', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:49:04.235 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/common/index.jsp]
+2025-10-31 17:49:05.416 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.417 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.418 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.418 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.466 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:49:05.466 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.466 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.466 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:49:05.466 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:49:05.467 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.468 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /img/reserve.png
+2025-10-31 17:49:05.468 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /img/Cleansmall.png
+2025-10-31 17:49:05.468 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.468 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.468 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.468 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /img/reserve.png
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /img/Cleansmall.png
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/img/reserve.png", parameters={}
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/img/Cleansmall.png", parameters={}
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /img/location.png
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /img/location.png
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/img/location.png", parameters={}
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.469 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.471 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.473 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /img/interior.png
+2025-10-31 17:49:05.473 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /img/Clean.png
+2025-10-31 17:49:05.473 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.473 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.473 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.473 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.474 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /img/interior.png
+2025-10-31 17:49:05.474 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /img/Clean.png
+2025-10-31 17:49:05.474 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/img/Clean.png", parameters={}
+2025-10-31 17:49:05.474 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/img/interior.png", parameters={}
+2025-10-31 17:49:05.475 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.474 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.477 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.478 DEBUG 8772 --- [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.479 DEBUG 8772 --- [http-nio-8082-exec-1] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.479 DEBUG 8772 --- [http-nio-8082-exec-1] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.481 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.482 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /img/remote.jpg
+2025-10-31 17:49:05.483 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.483 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.483 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /img/remote.jpg
+2025-10-31 17:49:05.483 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/img/remote.jpg", parameters={}
+2025-10-31 17:49:05.484 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.492 DEBUG 8772 --- [http-nio-8082-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.493 DEBUG 8772 --- [http-nio-8082-exec-9] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.493 DEBUG 8772 --- [http-nio-8082-exec-9] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.496 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /img/print.jpg
+2025-10-31 17:49:05.496 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.496 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.496 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /img/print.jpg
+2025-10-31 17:49:05.497 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/img/print.jpg", parameters={}
+2025-10-31 17:49:05.497 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.500 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.506 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.507 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.507 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.510 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /img/register.jpg
+2025-10-31 17:49:05.511 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:49:05.511 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:49:05.511 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /img/register.jpg
+2025-10-31 17:49:05.511 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/img/register.jpg", parameters={}
+2025-10-31 17:49:05.511 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:49:05.513 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.514 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.514 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.517 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.518 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.518 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.525 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.525 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.525 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.525 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.526 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.526 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.526 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.526 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.536 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.536 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.536 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.556 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.557 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.557 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:49:05.622 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.626 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:49:05.626 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:49:05.626 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:04.088 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /login
+2025-10-31 17:50:04.088 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:04.088 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:04.088 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /login
+2025-10-31 17:50:04.088 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/login", parameters={}
+2025-10-31 17:50:04.089 DEBUG 8772 --- [http-nio-8082-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#loginForm()
+2025-10-31 17:50:04.090 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:50:04.090 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.view.JstlView            : View name 'auth/login', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:50:04.091 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/auth/login.jsp]
+2025-10-31 17:50:04.096 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:04.097 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:04.097 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:04.097 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:04.144 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:50:04.144 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /img/google_logo.png
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /img/google_logo.png
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/img/google_logo.png", parameters={}
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:50:04.145 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:50:04.147 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:04.149 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:04.149 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:04.149 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:04.150 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:04.150 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:04.151 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:04.151 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:14.166 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /register
+2025-10-31 17:50:14.166 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:14.167 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:14.167 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /register
+2025-10-31 17:50:14.201 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/register", parameters={}
+2025-10-31 17:50:14.201 DEBUG 8772 --- [http-nio-8082-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.HomeController#registerForm()
+2025-10-31 17:50:14.202 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:50:14.202 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.view.JstlView            : View name 'auth/register', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:50:14.202 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/auth/register.jsp]
+2025-10-31 17:50:14.203 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:14.203 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:14.203 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:14.204 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:14.234 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:50:14.234 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:14.234 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:14.235 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:50:14.235 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:50:14.235 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:50:14.236 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:14.543 DEBUG 8772 --- [http-nio-8082-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:14.543 DEBUG 8772 --- [http-nio-8082-exec-10] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:14.543 DEBUG 8772 --- [http-nio-8082-exec-10] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:25.035 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /video/office.mp4
+2025-10-31 17:50:25.036 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:25.036 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:25.036 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /video/office.mp4
+2025-10-31 17:50:25.036 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/video/office.mp4", parameters={}
+2025-10-31 17:50:25.037 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:50:25.099 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.135 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 206 PARTIAL_CONTENT
+2025-10-31 17:50:25.136 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.137 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:25.615 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /reviews
+2025-10-31 17:50:25.615 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:25.615 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:25.615 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /reviews
+2025-10-31 17:50:25.615 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/reviews", parameters={}
+2025-10-31 17:50:25.616 DEBUG 8772 --- [http-nio-8082-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.review.ReviewController#reviewListPage(Long, int, int, String, String, Integer, Model)
+2025-10-31 17:50:25.647 DEBUG 8772 --- [http-nio-8082-exec-7] org.mybatis.spring.SqlSessionUtils       : Creating a new SqlSession
+2025-10-31 17:50:25.651 DEBUG 8772 --- [http-nio-8082-exec-7] org.mybatis.spring.SqlSessionUtils       : SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@613fa920] was not registered for synchronization because synchronization is not active
+2025-10-31 17:50:25.683 DEBUG 8772 --- [http-nio-8082-exec-7] o.m.s.t.SpringManagedTransaction         : JDBC Connection [HikariProxyConnection@411951504 wrapping oracle.jdbc.driver.T4CConnection@180bb06] will not be managed by Spring
+2025-10-31 17:50:25.745 DEBUG 8772 --- [http-nio-8082-exec-7] org.mybatis.spring.SqlSessionUtils       : Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@613fa920]
+2025-10-31 17:50:25.747 DEBUG 8772 --- [http-nio-8082-exec-7] org.mybatis.spring.SqlSessionUtils       : Creating a new SqlSession
+2025-10-31 17:50:25.747 DEBUG 8772 --- [http-nio-8082-exec-7] org.mybatis.spring.SqlSessionUtils       : SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1857110b] was not registered for synchronization because synchronization is not active
+2025-10-31 17:50:25.748 DEBUG 8772 --- [http-nio-8082-exec-7] o.m.s.t.SpringManagedTransaction         : JDBC Connection [HikariProxyConnection@71159176 wrapping oracle.jdbc.driver.T4CConnection@180bb06] will not be managed by Spring
+2025-10-31 17:50:25.772 DEBUG 8772 --- [http-nio-8082-exec-7] org.mybatis.spring.SqlSessionUtils       : Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1857110b]
+2025-10-31 17:50:25.777 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:50:25.779 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.view.JstlView            : View name 'review/review-list', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), data=[ReviewResponseDTO(id=5, userName=Bro, roomId=1, rating=1, content=ㄴㅁㄴㅇㅂ, imgUrl=/uploads/reviews/1761890168222_screencapture-localhost-8082-reviews-2025-10-31-11_07_43.png, createdAt=2025-10-31), ReviewResponseDTO(id=4, userName=Bro, roomId=1, rating=3, content=ㅁㄴㅇ, imgUrl=/uploads/reviews/1761890156220_screencapture-pantone-kr-ColoroftheYear2025-html-2025-10-29-10_14_33.png,/uploads/reviews/1761890156223_제목 없는 디자인.png,/uploads/reviews/1761890156223_#Core.png, createdAt=2025-10-31), ReviewResponseDTO(id=3, userName=Bro, roomId=1, rating=5, content=아따 좋구만, imgUrl=/uploads/reviews/1761889431652_20251029.png,/uploads/reviews/1761889431658_screencapture-localhost-8082-index-2025-10-29-15_51_01.png,/uploads/reviews/1761889431659_screencapture-hermes-kr-ko-2025-10-29-12_52_04.png,/uploads/reviews/1761889431660_screencapture-gucci-kr-ko-2025-10-29-12_50_01.png,/uploads/reviews/1761889431660_screencapture-localhost-8082-index-2025-10-29-12_08_02.png, createdAt=2025-10-31), ReviewResponseDTO(id=2, userName=Bro, roomId=1, rating=3, content=구찌, imgUrl=/uploads/reviews/1761888893770_screencapture-gucci-kr-ko-2025-10-29-12_50_01.png, createdAt=2025-10-31), ReviewResponseDTO(id=1, userName=Bro, roomId=1, rating=1, content=최악, imgUrl=null, createdAt=2025-10-31)], pageInfo=PageInfoDTO(currentPage=1, totalPages=7, totalCount=35, hasNext=true, hasPrevious=false), filterFields=[keyword, userName, rating], roomId=1, baseUrl=/reviews?roomId=1, org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors, org.springframework.validation.BindingResult.pageInfo=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:50:25.779 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/review/review-list.jsp]
+2025-10-31 17:50:25.794 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.800 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:25.800 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.800 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:25.825 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /img/Cleansmall.png
+2025-10-31 17:50:25.825 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:50:25.826 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:25.826 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:25.826 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:25.826 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:25.826 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:50:25.827 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /img/Cleansmall.png
+2025-10-31 17:50:25.827 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:50:25.827 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/img/Cleansmall.png", parameters={}
+2025-10-31 17:50:25.827 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:50:25.827 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:50:25.827 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /js/reviewList.js
+2025-10-31 17:50:25.828 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:25.828 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:25.828 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /js/reviewList.js
+2025-10-31 17:50:25.828 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/js/reviewList.js", parameters={}
+2025-10-31 17:50:25.828 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:50:25.829 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.830 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:25.830 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.830 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:25.830 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.832 DEBUG 8772 --- [http-nio-8082-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:25.833 DEBUG 8772 --- [http-nio-8082-exec-8] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.833 DEBUG 8772 --- [http-nio-8082-exec-8] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:25.834 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.836 DEBUG 8772 --- [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:25.836 DEBUG 8772 --- [http-nio-8082-exec-2] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.837 DEBUG 8772 --- [http-nio-8082-exec-2] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/reviews/rooms/1/summary
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/reviews/rooms/1?page=1&limit=5
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/reviews/rooms/1/summary
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/reviews/rooms/1?page=1&limit=5
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/reviews/rooms/1/summary", parameters={}
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.review.ReviewRestController#getReviewSummary(Long)
+2025-10-31 17:50:25.849 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/reviews/rooms/1?page=1&limit=5", parameters={masked}
+2025-10-31 17:50:25.850 DEBUG 8772 --- [http-nio-8082-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.review.ReviewRestController#getReviews(Long, int, int, String, String, Integer)
+2025-10-31 17:50:25.859 DEBUG 8772 --- [http-nio-8082-exec-6] org.mybatis.spring.SqlSessionUtils       : Creating a new SqlSession
+2025-10-31 17:50:25.859 DEBUG 8772 --- [http-nio-8082-exec-5] org.mybatis.spring.SqlSessionUtils       : Creating a new SqlSession
+2025-10-31 17:50:25.859 DEBUG 8772 --- [http-nio-8082-exec-6] org.mybatis.spring.SqlSessionUtils       : SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@432055e8] was not registered for synchronization because synchronization is not active
+2025-10-31 17:50:25.859 DEBUG 8772 --- [http-nio-8082-exec-5] org.mybatis.spring.SqlSessionUtils       : SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@789b04fc] was not registered for synchronization because synchronization is not active
+2025-10-31 17:50:25.861 DEBUG 8772 --- [http-nio-8082-exec-5] o.m.s.t.SpringManagedTransaction         : JDBC Connection [HikariProxyConnection@685758485 wrapping oracle.jdbc.driver.T4CConnection@180bb06] will not be managed by Spring
+2025-10-31 17:50:25.862 DEBUG 8772 --- [http-nio-8082-exec-5] org.mybatis.spring.SqlSessionUtils       : Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@789b04fc]
+2025-10-31 17:50:25.862 DEBUG 8772 --- [http-nio-8082-exec-5] org.mybatis.spring.SqlSessionUtils       : Creating a new SqlSession
+2025-10-31 17:50:25.862 DEBUG 8772 --- [http-nio-8082-exec-5] org.mybatis.spring.SqlSessionUtils       : SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3a86478b] was not registered for synchronization because synchronization is not active
+2025-10-31 17:50:25.862 DEBUG 8772 --- [http-nio-8082-exec-5] o.m.s.t.SpringManagedTransaction         : JDBC Connection [HikariProxyConnection@377937666 wrapping oracle.jdbc.driver.T4CConnection@180bb06] will not be managed by Spring
+2025-10-31 17:50:25.862 DEBUG 8772 --- [http-nio-8082-exec-6] o.m.s.t.SpringManagedTransaction         : JDBC Connection [HikariProxyConnection@2030025218 wrapping oracle.jdbc.driver.T4CConnection@71b73320] will not be managed by Spring
+2025-10-31 17:50:25.864 DEBUG 8772 --- [http-nio-8082-exec-5] org.mybatis.spring.SqlSessionUtils       : Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3a86478b]
+2025-10-31 17:50:25.874 DEBUG 8772 --- [http-nio-8082-exec-6] org.mybatis.spring.SqlSessionUtils       : Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@432055e8]
+2025-10-31 17:50:25.874 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-10-31 17:50:25.874 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [{pageInfo=PageInfoDTO(currentPage=1, totalPages=7, totalCount=35, hasNext=true, hasPrevious=false),  (truncated)...]
+2025-10-31 17:50:25.875 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-10-31 17:50:25.876 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ReviewSummaryDTO(avgRating=4.0, totalCount=35)]
+2025-10-31 17:50:25.882 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.885 DEBUG 8772 --- [http-nio-8082-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:25.885 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.885 DEBUG 8772 --- [http-nio-8082-exec-6] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.885 DEBUG 8772 --- [http-nio-8082-exec-6] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:50:25.885 DEBUG 8772 --- [http-nio-8082-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:50:25.886 DEBUG 8772 --- [http-nio-8082-exec-5] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:50:25.886 DEBUG 8772 --- [http-nio-8082-exec-5] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:51:12.945 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /reviews/create?roomId=1
+2025-10-31 17:51:12.946 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:51:12.946 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:51:12.946 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /reviews/create?roomId=1
+2025-10-31 17:51:12.946 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/reviews/create?roomId=1", parameters={masked}
+2025-10-31 17:51:12.946 DEBUG 8772 --- [http-nio-8082-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.spacecore.controller.review.ReviewController#reviewForm(Long, Model)
+2025-10-31 17:51:13.009 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.w.s.v.ContentNegotiatingViewResolver : Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.7, */*;q=0.8]
+2025-10-31 17:51:13.010 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.view.JstlView            : View name 'review/review-create', model {filter=SearchFilterDTO(page=1, limit=10, keyword=null, sortBy=null, sortDirection=desc, filters={}), roomId=1, org.springframework.validation.BindingResult.filter=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+2025-10-31 17:51:13.010 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.view.JstlView            : Forwarding to [/WEB-INF/views/review/review-create.jsp]
+2025-10-31 17:51:13.531 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:51:13.532 DEBUG 8772 --- [http-nio-8082-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:51:13.532 DEBUG 8772 --- [http-nio-8082-exec-4] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:51:13.532 DEBUG 8772 --- [http-nio-8082-exec-4] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:51:14.443 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /img/Cleansmall.png
+2025-10-31 17:51:14.443 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /css/style.css
+2025-10-31 17:51:14.443 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:51:14.443 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Set SecurityContextHolder to empty SecurityContext
+2025-10-31 17:51:14.443 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:51:14.443 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-31 17:51:14.443 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /img/Cleansmall.png
+2025-10-31 17:51:14.443 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /css/style.css
+2025-10-31 17:51:14.444 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/css/style.css", parameters={}
+2025-10-31 17:51:14.444 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/img/Cleansmall.png", parameters={}
+2025-10-31 17:51:14.444 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:51:14.444 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]
+2025-10-31 17:51:14.505 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:51:14.509 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:51:14.510 DEBUG 8772 --- [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:51:14.511 DEBUG 8772 --- [http-nio-8082-exec-3] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:51:14.511 DEBUG 8772 --- [http-nio-8082-exec-3] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:51:14.602 DEBUG 8772 --- [http-nio-8082-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-10-31 17:51:14.602 DEBUG 8772 --- [http-nio-8082-exec-7] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2025-10-31 17:51:14.602 DEBUG 8772 --- [http-nio-8082-exec-7] s.s.w.c.SecurityContextPersistenceFilter : Cleared SecurityContextHolder to complete request
+2025-10-31 17:55:13.111  INFO 8772 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-31 17:55:13.242  INFO 8772 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

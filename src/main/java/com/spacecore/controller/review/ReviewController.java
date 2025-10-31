@@ -22,7 +22,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     // ============================================================
-    // 📋 리뷰 목록 페이지
+    // 리뷰 목록 페이지
     // ============================================================
     @GetMapping
     public String reviewListPage(@RequestParam(required = false) Long roomId,
@@ -51,7 +51,7 @@ public class ReviewController {
     }
 
     // ============================================================
-    // 📝 리뷰 작성 폼
+    // 리뷰 작성 폼
     // ============================================================
     @GetMapping("/create")
     public String reviewForm(@RequestParam(value = "roomId", required = false) Long roomId, Model model) {
@@ -61,7 +61,7 @@ public class ReviewController {
     }
 
     // ============================================================
-    // 💾 리뷰 등록 처리
+    // 리뷰 등록 처리
     // ============================================================
     @PostMapping("/create")
     public String createReview(@ModelAttribute ReviewRequestDTO dto,
@@ -72,7 +72,7 @@ public class ReviewController {
                 throw new IllegalArgumentException("roomId 값이 누락되었습니다.");
             }
 
-            // ✅ 업로드 경로
+            // 업로드 경로
             String uploadDir = "C:/uploads/reviews/";
             Path uploadPath = Paths.get(uploadDir);
             if (Files.notExists(uploadPath)) {
@@ -80,7 +80,7 @@ public class ReviewController {
                 System.out.println("✅ 리뷰 업로드 폴더 생성됨: " + uploadPath);
             }
 
-            // ✅ 여러 이미지 파일 처리
+            // 여러 이미지 파일 처리
             if (imgFiles != null && !imgFiles.isEmpty()) {
                 StringBuilder imgPaths = new StringBuilder();
 
@@ -110,7 +110,7 @@ public class ReviewController {
         }
     }
     // ============================================================
-    // 🔍 리뷰 상세보기
+    // 리뷰 상세보기
     // ============================================================
     @GetMapping("/{reviewId}")
     public String reviewDetail(@PathVariable Long reviewId, Model model) {

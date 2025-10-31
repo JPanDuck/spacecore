@@ -35,7 +35,7 @@
         r.img_url AS imgUrl,
         TO_CHAR(r.created_at, 'YYYY-MM-DD HH24:MI:SS') AS createdAt
         FROM reviews r
-        <!-- ✅ LEFT JOIN 으로 변경 -->
+        <!-- LEFT JOIN 으로 변경 -->
         LEFT JOIN users u ON r.user_id = u.id
         WHERE 1=1
         <if test="roomId != null">
