@@ -23,7 +23,7 @@
             <source src="${pageContext.request.contextPath}/video/office.mp4" type="video/mp4"/>
         </video>
         <div class="overlay">
-            <h2>당신의 업무 공간을<br>더 따뜻하고 효율적으로.</h2>
+            <h2>당신의 업무 공간을<br>더 편안하고 효율적으로.</h2>
             <p>감각적인 디자인과 여유로운 공간감.<br>지금 바로 당신만의 오피스를 예약해보세요.</p>
             <button class="btn btn-brown">예약 바로가기</button>
         </div>

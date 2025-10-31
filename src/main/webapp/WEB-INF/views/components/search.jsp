@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- ✅ 검색 필터만 남긴 컴포넌트 -->
+<!-- 검색 필터만 남긴 컴포넌트 -->
 <div class="search-container">
     <form id="filterForm"
           class="filter-form flex-row"
@@ -35,7 +35,7 @@
             </c:choose>
         </c:forEach>
 
-        <!-- ✅ 버튼 -->
+        <!-- 버튼 -->
         <button id="searchBtn" type="button" class="btn btn-brown">검색</button>
         <button id="resetBtn" type="button" class="btn btn-outline">초기화</button>
     </form>

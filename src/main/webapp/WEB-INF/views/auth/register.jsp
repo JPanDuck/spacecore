@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입 | Space Core</title>
 
-    <!-- ✅ 공통 스타일 -->
+    <!-- 공통 스타일 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
     <style>
@@ -156,19 +156,5 @@
     </div>
 </div>
 
-<!-- ✅ 비밀번호 일치 검증 -->
-<script>
-    const form = document.querySelector("form");
-    const pw = document.getElementById("password");
-    const pwCheck = document.getElementById("confirmPassword");
-
-    form.addEventListener("submit", (e) => {
-        if (pw.value !== pwCheck.value) {
-            e.preventDefault();
-            alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
-            pwCheck.focus();
-        }
-    });
-</script>
 </body>
 </html>

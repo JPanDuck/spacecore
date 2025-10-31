@@ -43,10 +43,10 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void createReview(Long roomId, ReviewRequestDTO dto) {
-        // ✅ roomId 세팅
+        // roomId 세팅
         dto.setRoomId(roomId);
 
-        // ✅ null 방지 방어 코드
+        // null 방지 방어 코드
         if (dto.getRoomId() == null) {
             throw new IllegalArgumentException("roomId 값이 누락되었습니다.");
         }
@@ -60,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new IllegalArgumentException("별점 값이 유효하지 않습니다. (1~5 사이여야 함)");
         }
 
-        // ✅ 실제 DB 저장
+        // 실제 DB 저장
         reviewMapper.insertReview(dto);
     }
 

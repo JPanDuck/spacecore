@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(url);
 
-            // ✅ 200 이외 응답 처리
+            // 200 이외 응답 처리
             if (!res.ok) {
                 console.warn("서버 응답 코드:", res.status);
                 area.innerHTML = `<p class="text-center" style="color:var(--gray-600);">검색 결과를 찾을 수 없습니다.</p>`;
@@ -64,14 +64,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // ✅ 안전한 구조 접근
+            // 안전한 구조 접근
             const data = Array.isArray(result.data) ? result.data : [];
             const pageInfo = result.pageInfo || {};
             const isSearchActive = keyword || userName || rating;
 
             area.innerHTML = "";
 
-            // ✅ 검색 결과 없음 처리
+            // 검색 결과 없음 처리
             if (data.length === 0) {
                 const msg = isSearchActive
                     ? "검색 결과를 찾을 수 없습니다."
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // ✅ 정상 리스트 렌더링
+            // 정상 리스트 렌더링
             data.forEach(r => {
                 const user = r.userName?.trim() || "작성자 없음";
                 const content = r.content?.trim() || "내용이 없습니다.";
