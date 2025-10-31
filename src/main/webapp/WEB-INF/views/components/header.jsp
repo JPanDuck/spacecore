@@ -26,7 +26,7 @@
 
             <div class="header-actions">
                 <button class="btn btn-outline" onclick="location.href='${pageContext.request.contextPath}/login'">로그인</button>
-                <button class="btn btn-brown" onclick="location.href='${pageContext.request.contextPath}/signup'">회원가입</button>
+                <button class="btn btn-brown" onclick="location.href='${pageContext.request.contextPath}/register'">회원가입</button>
             </div>
         </div>
     </div>

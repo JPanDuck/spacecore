@@ -1,16 +1,18 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인 | Space Core</title>
+    <title>회원가입 | Space Core</title>
 
     <!-- ✅ 공통 스타일 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
     <style>
+        /* =========================
+           REGISTER PAGE STYLE
+        ========================== */
         body {
             background: linear-gradient(180deg, var(--cream-base), var(--cream-tan));
             display: flex;
@@ -20,8 +22,8 @@
             font-family: "Noto Sans KR", "Montserrat", sans-serif;
         }
 
-        .login-card {
-            width: 420px;
+        .register-card {
+            width: 460px;
             background: var(--white);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
@@ -29,14 +31,14 @@
             text-align: center;
         }
 
-        .login-card h2 {
+        .register-card h2 {
             font-size: 28px;
             font-weight: 700;
             color: var(--choco);
             margin-bottom: 20px;
         }
 
-        .login-card p {
+        .register-card p {
             color: var(--gray-600);
             margin-bottom: 40px;
             font-size: 15px;
@@ -57,7 +59,8 @@
         }
 
         input[type="text"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="email"] {
             width: 100%;
             padding: 12px 14px;
             border: 1px solid var(--sirocco);
@@ -74,7 +77,7 @@
             background: var(--white);
         }
 
-        .login-btn {
+        .register-btn {
             width: 100%;
             background: var(--mocha);
             color: var(--white);
@@ -88,53 +91,8 @@
             transition: 0.3s ease;
         }
 
-        .login-btn:hover {
+        .register-btn:hover {
             background: var(--amber);
-        }
-
-        .divider {
-            position: relative;
-            margin: 32px 0;
-            color: var(--gray-600);
-            font-size: 14px;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: var(--gray-300);
-        }
-
-        .divider::before { left: 0; }
-        .divider::after { right: 0; }
-
-        .google-btn {
-            width: 100%;
-            border: 1px solid var(--gray-300);
-            background: #fff;
-            border-radius: 9999px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: 0.3s ease;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .google-btn:hover {
-            background: var(--cream-tan);
-        }
-
-        .google-btn img {
-            width: 40px;
-            height: 40px;
         }
 
         .footer-link {
@@ -156,15 +114,19 @@
 </head>
 
 <body>
-<div class="login-card">
-    <h2>로그인</h2>
-    <p>당신의 업무 공간<br><strong>Space Core</strong>에 오신 것을 환영합니다.</p>
+<div class="register-card">
+    <h2>회원가입</h2>
+    <p>Space Core에 오신 것을 환영합니다.<br>아래 정보를 입력해 계정을 만들어주세요.</p>
 
-    <!-- 로그인 폼 -->
-    <form action="${pageContext.request.contextPath}/login" method="post">
+    <form action="${pageContext.request.contextPath}/register" method="post">
         <div class="form-group">
             <label for="username">아이디</label>
             <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" placeholder="example@spacecore.com" required>
         </div>
 
         <div class="form-group">
@@ -172,21 +134,32 @@
             <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
         </div>
 
-        <button type="submit" class="login-btn">로그인</button>
+        <div class="form-group">
+            <label for="confirmPassword">비밀번호 확인</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required>
+        </div>
+
+        <button type="submit" class="register-btn">회원가입</button>
     </form>
 
-    <!-- 소셜 로그인 -->
-    <div class="divider">또는</div>
-    <button type="button" class="google-btn"
-            onclick="location.href='${pageContext.request.contextPath}/oauth2/authorization/google'">
-        <img src="${pageContext.request.contextPath}/img/google_logo.png" alt="Google Logo">
-        Google 계정으로 로그인
-    </button>
-
-    <!-- 회원가입 링크 -->
     <div class="footer-link">
-        계정이 없으신가요? <a href="${pageContext.request.contextPath}/register">회원가입</a>
+        이미 계정이 있으신가요? <a href="${pageContext.request.contextPath}/login">로그인</a>
     </div>
 </div>
+
+<!-- ✅ 비밀번호 일치 검증 -->
+<script>
+    const form = document.querySelector("form");
+    const pw = document.getElementById("password");
+    const pwCheck = document.getElementById("confirmPassword");
+
+    form.addEventListener("submit", (e) => {
+        if (pw.value !== pwCheck.value) {
+            e.preventDefault();
+            alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+            pwCheck.focus();
+        }
+    });
+</script>
 </body>
 </html>
