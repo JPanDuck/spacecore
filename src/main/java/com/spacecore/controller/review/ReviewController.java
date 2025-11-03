@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 import java.nio.file.*;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     // ============================================================
-    // 리뷰 목록 페이지
+    // ✅ 리뷰 목록 (누구나 접근 가능)
     // ============================================================
     @GetMapping
     public String reviewListPage(@RequestParam(required = false) Long roomId,
@@ -51,36 +51,58 @@ public class ReviewController {
     }
 
     // ============================================================
-    // 리뷰 작성 폼
+    // ✅ 리뷰 작성 폼 (USER만 접근 가능)
     // ============================================================
     @GetMapping("/create")
-    public String reviewForm(@RequestParam(value = "roomId", required = false) Long roomId, Model model) {
+    public String reviewForm(@RequestParam(value = "roomId", required = false) Long roomId,
+                             HttpSession session,
+                             Model model) {
         if (roomId == null) roomId = 1L;
+
+        String role = (String) session.getAttribute("role");
+        if (role == null) {
+            // 비회원 → 로그인 유도
+            return "redirect:/auth/login";
+        } else if ("ADMIN".equals(role)) {
+            // 관리자 → 접근 불가
+            model.addAttribute("message", "관리자는 리뷰를 작성할 수 없습니다.");
+            return "error/403";
+        }
+
         model.addAttribute("roomId", roomId);
         return "review/review-create";
     }
 
     // ============================================================
-    // 리뷰 등록 처리
+    // ✅ 리뷰 등록 처리 (USER만 가능)
     // ============================================================
     @PostMapping("/create")
     public String createReview(@ModelAttribute ReviewRequestDTO dto,
-                               @RequestParam(value = "imgFiles", required = false) List<MultipartFile> imgFiles) {
+                               @RequestParam(value = "imgFiles", required = false) List<MultipartFile> imgFiles,
+                               HttpSession session,
+                               Model model) {
+
+        String role = (String) session.getAttribute("role");
+        if (role == null) {
+            return "redirect:/auth/login";
+        } else if ("ADMIN".equals(role)) {
+            model.addAttribute("message", "관리자는 리뷰를 작성할 수 없습니다.");
+            return "error/403";
+        }
 
         try {
             if (dto.getRoomId() == null) {
                 throw new IllegalArgumentException("roomId 값이 누락되었습니다.");
             }
 
-            // 업로드 경로
+            // 업로드 경로 생성
             String uploadDir = "C:/uploads/reviews/";
             Path uploadPath = Paths.get(uploadDir);
             if (Files.notExists(uploadPath)) {
                 Files.createDirectories(uploadPath);
-                System.out.println("✅ 리뷰 업로드 폴더 생성됨: " + uploadPath);
             }
 
-            // 여러 이미지 파일 처리
+            // 이미지 파일 업로드
             if (imgFiles != null && !imgFiles.isEmpty()) {
                 StringBuilder imgPaths = new StringBuilder();
 
@@ -89,18 +111,16 @@ public class ReviewController {
                         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                         Path filePath = uploadPath.resolve(fileName);
                         file.transferTo(filePath.toFile());
-                        imgPaths.append("/uploads/reviews/").append(fileName).append(","); // ,로 구분
+                        imgPaths.append("/uploads/reviews/").append(fileName).append(",");
                     }
                 }
 
-                // 마지막 콤마 제거
                 if (imgPaths.length() > 0) {
                     imgPaths.setLength(imgPaths.length() - 1);
                     dto.setImgUrl(imgPaths.toString());
                 }
             }
 
-            // ✅ 리뷰 저장
             reviewService.createReview(dto.getRoomId(), dto);
             return "redirect:/reviews?roomId=" + dto.getRoomId();
 
@@ -109,8 +129,9 @@ public class ReviewController {
             return "error/500";
         }
     }
+
     // ============================================================
-    // 리뷰 상세보기
+    // ✅ 리뷰 상세보기 (누구나 접근 가능)
     // ============================================================
     @GetMapping("/{reviewId}")
     public String reviewDetail(@PathVariable Long reviewId, Model model) {

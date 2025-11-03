@@ -31,7 +31,6 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     // ───── security ─────
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.security:spring-security-taglibs'
 
@@ -64,6 +63,10 @@ dependencies {
     implementation 'com.oracle.database.jdbc:ojdbc11:21.7.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+
+    // ───── OAuth2 Login ─────
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 
 }
 
