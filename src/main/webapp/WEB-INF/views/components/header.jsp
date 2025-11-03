@@ -5,7 +5,7 @@
 
             <!-- ✅ 중앙 로고 -->
             <div class="header-logo">
-                <a href="${pageContext.request.contextPath}/index">
+                <a href="${pageContext.request.contextPath}/auth/index">
                     <img src="${pageContext.request.contextPath}/img/Cleansmall.png" alt="로고">
                 </a>
             </div>

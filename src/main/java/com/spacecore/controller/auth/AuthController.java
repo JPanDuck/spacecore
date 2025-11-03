@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
-@RequestMapping("/auth")
 public class AuthController {
 
     /** ✅ 메인 페이지 (로그인 여부와 상관없이 접근 가능) */
-    @GetMapping({"/", "/index",""})
+    @GetMapping({"/", "/index", ""})
     public String indexPage(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             log.info("✅ 로그인된 사용자 메인 진입: {}", authentication.getName());
@@ -23,7 +22,7 @@ public class AuthController {
     }
 
     /** ✅ 로그인 페이지 */
-    @GetMapping("/login")
+    @GetMapping("/auth/login")
     public String loginPage(Authentication authentication) {
         // 이미 로그인된 사용자가 로그인 페이지에 접근하면 → 메인으로 이동
         if (authentication != null && authentication.isAuthenticated()) {
@@ -34,19 +33,21 @@ public class AuthController {
     }
 
     /** ✅ 회원가입 페이지 */
-    @GetMapping("/register")
+    @GetMapping("/auth/register")
     public String registerPage() {
+
         return "auth/register"; // 회원가입 JSP
     }
 
     /** ✅ 비밀번호 찾기 페이지 */
-    @GetMapping("/find-password")
+    @GetMapping("/auth/find-password")
     public String findPasswordPage() {
+
         return "auth/find-password"; // 비밀번호 찾기 JSP
     }
 
     /** ✅ 비밀번호 재설정 페이지 */
-    @GetMapping("/reset-password")
+    @GetMapping("/auth/reset-password")
     public String resetPasswordPage() {
         return "auth/reset-password"; // 비밀번호 재설정 JSP
     }
