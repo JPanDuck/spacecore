@@ -6,8 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인 | Space Core</title>
-
-    <!-- 공통 스타일 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
     <style>
@@ -160,8 +158,8 @@
     <h2>로그인</h2>
     <p>당신의 업무 공간<br><strong>Space Core</strong>에 오신 것을 환영합니다.</p>
 
-    <!-- 로그인 폼 -->
-    <form action="${pageContext.request.contextPath}/login" method="post">
+    <!-- ✅ 로그인 폼 -->
+    <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
             <label for="username">아이디</label>
             <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required>
@@ -175,27 +173,96 @@
         <button type="submit" class="login-btn">로그인</button>
     </form>
 
-    <!-- 소셜 로그인 -->
     <div class="divider">또는</div>
+
+    <!-- ✅ 구글 로그인 -->
     <button type="button" class="google-btn"
             onclick="location.href='${pageContext.request.contextPath}/oauth2/authorization/google'">
         <img src="${pageContext.request.contextPath}/img/google_logo.png" alt="Google Logo">
         Google 계정으로 로그인
     </button>
 
-    <!-- 회원가입 링크 -->
     <div class="footer-link">
-        계정이 없으신가요? <a href="${pageContext.request.contextPath}/register">회원가입</a>
+        계정이 없으신가요? <a href="${pageContext.request.contextPath}/auth/register">회원가입</a>
     </div>
 
-    <!-- 메인으로 돌아가기 버튼 -->
     <div style="margin-top: 20px;">
-        <a href="${pageContext.request.contextPath}/index"
+        <a href="${pageContext.request.contextPath}/auth/index"
            class="btn btn-outline"
            style="width: 100%; height: 44px; font-size: 15px; font-weight: 600;">
             ← 메인으로 돌아가기
         </a>
     </div>
 </div>
+
+<script>
+    // ✅ 로그인 처리 함수
+    async function handleLogin(event) {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (!username || !password) {
+            alert("아이디와 비밀번호를 입력하세요.");
+            return;
+        }
+
+        try {
+            const response = await fetch("${pageContext.request.contextPath}/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+                credentials: "include" // ✅ 쿠키(Access/Refresh Token) 자동 포함
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                alert(error || "로그인 실패");
+                localStorage.clear(); // 실패 시 캐시 초기화
+                return;
+            }
+
+            const data = await response.json();
+
+            // ✅ JWT 쿠키 외에도 localStorage에 정보 저장
+            localStorage.setItem("accessToken", data.accessToken);
+            localStorage.setItem("refreshToken", data.refreshToken);
+            localStorage.setItem("username", data.username);
+            localStorage.setItem("role", data.role);
+
+            alert(`${data.username}님, 환영합니다!`);
+            location.href = "${pageContext.request.contextPath}/auth/index";
+        } catch (err) {
+            console.error("로그인 오류:", err);
+            alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        }
+    }
+
+    // ✅ 이미 로그인된 사용자 자동 리다이렉트 (서버 검증 포함)
+    document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("accessToken");
+        const username = localStorage.getItem("username");
+
+        if (token && username) {
+            try {
+                const res = await fetch("${pageContext.request.contextPath}/api/auth/validate", {
+                    method: "GET",
+                    credentials: "include"
+                });
+
+                // 서버에서 실제 유효한 JWT인지 확인
+                if (res.ok) {
+                    window.location.href = "${pageContext.request.contextPath}/auth/index";
+                } else {
+                    localStorage.clear(); // 만료/삭제된 토큰이면 초기화
+                }
+            } catch (err) {
+                console.warn("토큰 검증 실패:", err);
+                localStorage.clear();
+            }
+        }
+    });
+</script>
 </body>
 </html>

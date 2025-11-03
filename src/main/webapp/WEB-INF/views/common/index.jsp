@@ -8,11 +8,17 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+
     <!-- 폰트 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- ✅ 파비콘 -->
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}favicon.ico">
 </head>
+
 <body>
 
+<!-- ✅ 헤더 include -->
 <%@ include file="../components/header.jsp" %>
 
 <main class="container-1980">
@@ -29,7 +35,7 @@
         </div>
     </section>
 
-    <!-- ===== Section 1 : 예약 / 지점 탐색 / 오피스 / 미정 ===== -->
+    <!-- ===== Section 1 ===== -->
     <section class="section mt-80 text-center">
         <br>
         <h2 class="section-title">당신의 공간을 선택하세요</h2>
@@ -57,16 +63,15 @@
         </div>
     </section>
 
-    <!-- ===== Section 2 : 인테리어 / 시스템 / 휴식 ===== -->
+    <!-- ===== Section 2 ===== -->
     <section class="section mt-80 text-center">
         <br>
         <h2 class="section-title">공간의 품격, 디테일에서 완성됩니다</h2>
         <div class="grid-3 mt-40">
-
             <div class="card-image scroll-fade">
                 <video autoplay muted loop playsinline>
                     <source src="${pageContext.request.contextPath}/video/interior.mp4" type="video/mp4"/>
-                    </video>
+                </video>
                 <h3>편안한 인테리어</h3>
                 <p>따뜻한 색감과 부드러운 조명. 집보다 편안한 오피스 환경을 제공합니다.</p>
             </div>
@@ -87,7 +92,7 @@
         </div>
     </section>
 
-    <!-- ===== Section 3 : 특별한 온라인 서비스 ===== -->
+    <!-- ===== Section 3 ===== -->
     <section class="section mt-80 text-center">
         <br>
         <h2 class="section-title">특별한 온라인 서비스</h2>
@@ -111,46 +116,113 @@
     </section>
 
 </main>
+
+<%@ include file="../components/footer.jsp" %>
+
+<!-- ✅ 기존 스크롤 애니메이션 유지 -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const elements = document.querySelectorAll('.scroll-fade');
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // 스크롤 진입 시 활성화
                     entry.target.classList.add('active');
                 } else {
-                    // 벗어나면 비활성화
                     entry.target.classList.remove('active');
                 }
             });
         }, { threshold: 0.1 });
-
         elements.forEach(el => observer.observe(el));
     });
-</script>
-<%@ include file="../components/footer.jsp" %>
-<script>
+
     document.addEventListener("DOMContentLoaded", () => {
         const titles = document.querySelectorAll('.section-title');
-
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // 화면에 들어오면 fade-in
                         entry.target.classList.add('visible');
                     } else {
-                        // 화면에서 사라지면 다시 초기화
                         entry.target.classList.remove('visible');
                     }
                 });
             },
-            { threshold: 0.3 } // 30% 이상 보일 때
+            { threshold: 0.3 }
         );
-
         titles.forEach(title => observer.observe(title));
+    });
+</script>
+
+<!-- ✅ 로그인 처리 스크립트 추가 -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("accessToken");
+        const username = localStorage.getItem("username");
+        const role = localStorage.getItem("role");
+        const topActions = document.getElementById("topActions");
+        const headerUserActions = document.getElementById("headerUserActions");
+
+        if (token && username) {
+            if (role === "ADMIN") {
+                topActions.innerHTML = `
+                    <span class="user-name">${username} (관리자)</span>
+                    <a href="${pageContext.request.contextPath}/admin/list" class="btn btn-outline" style="margin-left:10px;">사용자 관리</a>
+                `;
+            } else {
+                topActions.innerHTML = `<span class="user-name">${username}님</span>`;
+            }
+
+            headerUserActions.innerHTML = `
+                <a href="${pageContext.request.contextPath}/user/mypage" class="btn btn-brown">마이페이지</a>
+                <button id="logoutBtn" class="btn btn-outline">로그아웃</button>
+            `;
+        } else {
+            topActions.innerHTML = `
+                <a href="${pageContext.request.contextPath}/auth/login" class="btn btn-outline">로그인</a>
+                <a href="${pageContext.request.contextPath}/auth/register" class="btn btn-brown">회원가입</a>
+            `;
+            if (headerUserActions) headerUserActions.innerHTML = "";
+        }
+
+        document.body.addEventListener("click", async (e) => {
+            if (e.target.id === "logoutBtn") {
+                try {
+                    await fetch("${pageContext.request.contextPath}/api/auth/logout", {
+                        method: "POST",
+                        credentials: "include"
+                    });
+
+                    localStorage.clear();
+                    document.cookie.split(";").forEach(c => {
+                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                    });
+
+                    alert("로그아웃 되었습니다.");
+                    window.location.reload();
+                } catch (err) {
+                    console.error("로그아웃 오류:", err);
+                    alert("로그아웃 중 오류가 발생했습니다.");
+                }
+            }
+        });
+
+        (async () => {
+            if (token && username && window.location.pathname.includes("/auth/login")) {
+                try {
+                    const res = await fetch("${pageContext.request.contextPath}/api/auth/validate", {
+                        method: "GET",
+                        credentials: "include"
+                    });
+                    if (res.ok) {
+                        window.location.href = "${pageContext.request.contextPath}/auth/index";
+                    } else {
+                        localStorage.clear();
+                    }
+                } catch (e) {
+                    localStorage.clear();
+                }
+            }
+        })();
     });
 </script>
 </body>

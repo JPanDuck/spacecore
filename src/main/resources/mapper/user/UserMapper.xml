@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spacecore.mapper.user.UserMapper">
+
+    <!-- 공통 resultMap 정의 -->
+    <resultMap id="UserResultMap" type="com.spacecore.domain.user.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="role" column="role"/>
+        <result property="status" column="status"/>
+        <result property="isTempPassword" column="is_temp_password"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 회원가입 -->
+    <insert id="insert" parameterType="com.spacecore.domain.user.User">
+        <selectKey keyProperty="id" order="BEFORE" resultType="long">
+            SELECT seq_users.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO users (
+            id, username, email, password, name, phone, role, status, is_temp_password, created_at
+        )
+        VALUES (
+                     #{id},
+                     #{username},
+                     #{email},
+                     #{password},
+                     #{name},
+                     #{phone, jdbcType=VARCHAR},
+                     #{role},
+                     #{status},
+                     #{isTempPassword},
+                     SYSTIMESTAMP
+                 )
+    </insert>
+
+    <!-- username으로 사용자 조회 -->
+    <select id="findByUsername" parameterType="string" resultMap="UserResultMap">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <!-- email로 사용자 조회 -->
+    <select id="findByEmail" parameterType="string" resultMap="UserResultMap">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+
+    <!-- id로 사용자 조회 -->
+    <select id="findById" parameterType="long" resultMap="UserResultMap">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <!-- 전체 사용자 조회 -->
+    <select id="findAll" resultMap="UserResultMap">
+        SELECT * FROM users ORDER BY id DESC
+    </select>
+
+    <!-- 사용자 정보 수정 -->
+    <update id="update" parameterType="com.spacecore.domain.user.User">
+        UPDATE users
+        <set>
+            <if test="email != null">email = #{email},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="role != null">role = #{role},</if>
+            <if test="status != null">status = #{status},</if>
+            updated_at = SYSTIMESTAMP
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 사용자 삭제 -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+    <!-- 비밀번호 변경 -->
+    <update id="updatePassword">
+        UPDATE users
+        SET
+            password = #{password},
+            is_temp_password = 'N',
+            updated_at = SYSTIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <!-- 관리자 임시비밀번호 발급 -->
+    <update id="updateTempPassword">
+        UPDATE users
+        SET
+            password = #{encodedPassword},
+            is_temp_password = #{isTempPw},
+            updated_at = SYSTIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <!-- 아이디 중복 확인 -->
+    <select id="existsByUsername" parameterType="string" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM users
+        WHERE username = #{username}
+    </select>
+
+    <!-- 이메일 중복 확인 -->
+    <select id="existsByEmail" parameterType="string" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM users
+        WHERE email = #{email}
+    </select>
+
+
+</mapper>

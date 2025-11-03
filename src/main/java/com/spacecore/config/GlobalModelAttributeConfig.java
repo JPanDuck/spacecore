@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class GlobalModelAttributeConfig {
 
     /**
-     * 모든 Controller에서 @ModelAttribute SearchFilterDTO filter 자동 주입됨
+     * 모든 Controller에서 @ModelAttribute SearchFilterDTO filter 자동 주입
      */
     @ModelAttribute("filter")
     public SearchFilterDTO defaultSearchFilter() {

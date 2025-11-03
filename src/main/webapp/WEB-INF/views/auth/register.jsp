@@ -5,14 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입 | Space Core</title>
-
-    <!-- 공통 스타일 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-
     <style>
-        /* =========================
-           REGISTER PAGE STYLE
-        ========================== */
         body {
             background: linear-gradient(180deg, var(--cream-base), var(--cream-tan));
             display: flex;
@@ -58,9 +52,7 @@
             font-size: 15px;
         }
 
-        input[type="text"],
-        input[type="password"],
-        input[type="email"] {
+        input[type="text"], input[type="password"], input[type="email"] {
             width: 100%;
             padding: 12px 14px;
             border: 1px solid var(--sirocco);
@@ -76,6 +68,15 @@
             border-color: var(--mocha);
             background: var(--white);
         }
+
+        .msg {
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .text-red { color: #d93025; }
+        .text-green { color: #0b8043; }
 
         .register-btn {
             width: 100%;
@@ -118,7 +119,12 @@
     <h2>회원가입</h2>
     <p><strong>Space Core</strong>에 오신 것을 환영합니다.<br>아래 정보를 입력해 계정을 만들어주세요.</p>
 
-    <form action="${pageContext.request.contextPath}/register" method="post">
+    <form id="registerForm">
+        <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
+        </div>
+
         <div class="form-group">
             <label for="username">아이디</label>
             <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required>
@@ -132,23 +138,25 @@
         <div class="form-group">
             <label for="password">비밀번호</label>
             <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            <p id="passwordLengthMsg" class="msg text-red">비밀번호는 최소 8자 이상이어야 합니다.</p>
         </div>
 
         <div class="form-group">
             <label for="confirmPassword">비밀번호 확인</label>
             <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required>
+            <p id="passwordMatchMsg" class="msg"></p>
         </div>
 
         <button type="submit" class="register-btn">회원가입</button>
     </form>
 
     <div class="footer-link">
-        이미 계정이 있으신가요? <a href="${pageContext.request.contextPath}/login">로그인</a>
+        이미 계정이 있으신가요?
+        <a href="${pageContext.request.contextPath}/auth/login">로그인</a>
     </div>
 
-    <!-- 메인으로 돌아가기 버튼 -->
     <div style="margin-top: 20px;">
-        <a href="${pageContext.request.contextPath}/index"
+        <a href="${pageContext.request.contextPath}/auth/index"
            class="btn btn-outline"
            style="width: 100%; height: 44px; font-size: 15px; font-weight: 600;">
             ← 메인으로 돌아가기
@@ -156,5 +164,86 @@
     </div>
 </div>
 
+<script>
+    const pw = document.getElementById("password");
+    const cpw = document.getElementById("confirmPassword");
+    const lengthMsg = document.getElementById("passwordLengthMsg");
+    const matchMsg = document.getElementById("passwordMatchMsg");
+
+    // ✅ 비밀번호 길이 체크
+    pw.addEventListener("input", () => {
+        lengthMsg.style.display = pw.value.length > 0 && pw.value.length < 8 ? "block" : "none";
+    });
+
+    // ✅ 비밀번호 일치 여부 실시간 체크
+    cpw.addEventListener("input", () => {
+        const p = pw.value.trim(), c = cpw.value.trim();
+
+        if (c.length === 0) {
+            matchMsg.style.display = "none";
+            return;
+        }
+
+        matchMsg.style.display = "block";
+        if (p.length < 8) {
+            matchMsg.textContent = "비밀번호는 8자 이상이어야 합니다.";
+            matchMsg.className = "msg text-red";
+        } else if (p === c) {
+            matchMsg.textContent = "비밀번호가 일치합니다.";
+            matchMsg.className = "msg text-green";
+        } else {
+            matchMsg.textContent = "비밀번호가 일치하지 않습니다.";
+            matchMsg.className = "msg text-red";
+        }
+    });
+
+    // ✅ 회원가입 폼 제출
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = pw.value.trim();
+        const confirmPassword = cpw.value.trim();
+
+        if (password.length < 8) {
+            lengthMsg.style.display = "block";
+            pw.focus();
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            matchMsg.textContent = "비밀번호가 일치하지 않습니다.";
+            matchMsg.className = "msg text-red";
+            matchMsg.style.display = "block";
+            cpw.focus();
+            return;
+        }
+
+        try {
+            const res = await fetch("${pageContext.request.contextPath}/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, username, email, password })
+            });
+
+            const result = await res.text();
+
+            if (!res.ok) {
+                alert(result || "회원가입 실패");
+                return;
+            }
+
+            alert("회원가입이 완료되었습니다!");
+            // ✅ 메인 페이지 이동
+            window.location.href = "${pageContext.request.contextPath}/auth/index";
+
+        } catch (err) {
+            console.error("회원가입 오류:", err);
+            alert("서버 오류가 발생했습니다.");
+        }
+    });
+</script>
 </body>
 </html>
