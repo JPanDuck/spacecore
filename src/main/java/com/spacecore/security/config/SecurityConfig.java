@@ -79,11 +79,30 @@ public class SecurityConfig {
                 // ✅ 요청별 인가 규칙
                 .authorizeRequests()
                 .antMatchers(
-                        "/", "/auth/**", "/api/auth/**",
-                        "/oauth2/**", "/error"
+                        "/",
+                        "/auth/**",
+                        "/oauth2/**",
+                        "/error",
+                        "/review/**",              // ✅ 비회원 접근 허용
+                        "/api/auth/login",
+                        "/api/auth/register",
+                        "/api/auth/validate",
+                        "/api/auth/refresh"
                 ).permitAll()
+
+                // 공개 조회(페이지)
+                .antMatchers(
+                        "/rooms/**",
+                        "/offices/**",
+                        "/reservations/", "/reservations/detail/**",
+                        "/notices/**",
+                        "/virtual-accounts/detail/**",
+                        "/reviews", "/reviews/**", "/api/reviews/**"
+                ).permitAll()
+
                 .anyRequest().authenticated()
                 .and()
+
 
                 // ✅ OAuth2 로그인
                 .oauth2Login()
