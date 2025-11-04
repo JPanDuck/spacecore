@@ -83,7 +83,7 @@ public class SecurityConfig {
                         "/auth/**",
                         "/oauth2/**",
                         "/error",
-                        "/review/**",              // ✅ 비회원 접근 허용
+                        "/reviews/**",              // ✅ 비회원 접근 허용
                         "/api/auth/login",
                         "/api/auth/register",
                         "/api/auth/validate",
@@ -99,6 +99,13 @@ public class SecurityConfig {
                         "/virtual-accounts/detail/**",
                         "/reviews", "/reviews/**", "/api/reviews/**"
                 ).permitAll()
+
+                // 관리자 전용
+                .antMatchers(
+                        "/admin/**",
+                        "/api/admin/**")
+                .hasRole("ADMIN")
+
 
                 .anyRequest().authenticated()
                 .and()

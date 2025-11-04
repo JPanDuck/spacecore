@@ -2,8 +2,6 @@ package com.spacecore.dto.review;
 
 import lombok.Data;
 
-import java.time.LocalDate;
-
 
 @Data
 public class ReviewResponseDTO {
@@ -13,5 +11,5 @@ public class ReviewResponseDTO {
     private Long rating;
     private String content;
     private String imgUrl;
-    private LocalDate createdAt;
+    private String createdAt;  // DB에서 TO_CHAR로 문자열로 변환하여 반환
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spacecore.mapper.payment.PaymentMapper">
+
+    <resultMap id="PaymentMap" type="com.spacecore.domain.payment.Payment">
+        <id column="id" property="id"/>
+        <result column="va_id" property="vaId"/>
+        <result column="amount" property="amount"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <select id="findAll" resultType="com.spacecore.domain.payment.Payment">
+        SELECT id, va_id, amount, status, created_at
+        FROM payments
+        ORDER BY id DESC
+    </select>
+
+    <select id="findById" parameterType="long" resultType="com.spacecore.domain.payment.Payment">
+        SELECT id, va_id, amount, status, created_at
+        FROM payments
+        WHERE id = #{id}
+    </select>
+
+
+    <!-- 입금 확정 로그 -->
+    <insert id="insertConfirm">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT seq_payments.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO payments (id, va_id, amount, status, created_at)
+        VALUES (#{id}, #{vaId}, #{amount}, 'CONFIRMED', SYSTIMESTAMP)
+    </insert>
+
+    <!-- 결제취소 로그 -->
+    <insert id="insertCancel">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT seq_payments.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO payments (id, va_id, amount, status, created_at)
+        VALUES (#{id}, #{vaId}, #{amount}, 'CANCELLED', SYSTIMESTAMP)
+    </insert>
+
+</mapper>

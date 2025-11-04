@@ -156,7 +156,7 @@
     </div>
 
     <div style="margin-top: 20px;">
-        <a href="${pageContext.request.contextPath}/auth/index"
+        <a href="${pageContext.request.contextPath}/"
            class="btn btn-outline"
            style="width: 100%; height: 44px; font-size: 15px; font-weight: 600;">
             ← 메인으로 돌아가기
@@ -228,20 +228,24 @@
                 body: JSON.stringify({ name, username, email, password })
             });
 
-            const result = await res.text();
+            const text = await res.text();
 
             if (!res.ok) {
-                alert(result || "회원가입 실패");
+                // 💡 서버에서 409(CONFLICT)면 중복으로 판단
+                if (res.status === 409) {
+                    alert("❌ 아이디 또는 이메일이 이미 존재합니다.");
+                } else {
+                    alert(text || "회원가입 실패");
+                }
                 return;
             }
 
-            alert("회원가입이 완료되었습니다!");
-            // ✅ 메인 페이지 이동
-            window.location.href = "${pageContext.request.contextPath}/auth/index";
+            alert("🎉 회원가입이 완료되었습니다!");
+            window.location.href = "${pageContext.request.contextPath}/";
 
         } catch (err) {
             console.error("회원가입 오류:", err);
-            alert("서버 오류가 발생했습니다.");
+            alert("⚠️ 서버 오류가 발생했습니다.");
         }
     });
 </script>

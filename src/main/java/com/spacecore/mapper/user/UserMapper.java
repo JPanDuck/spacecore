@@ -28,4 +28,5 @@ public interface UserMapper {
     // 기타
     boolean existsByUsername(@Param("username") String username); // 아이디 중복체크
     boolean existsByEmail(@Param("email") String email);          // 이메일 중복체크
+    boolean existsByPhone(@Param("phone") String phone);
 }

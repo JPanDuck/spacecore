@@ -5,6 +5,8 @@
 <!-- HEADER -->
 <%@ include file="/WEB-INF/views/components/header.jsp" %>
 
+ <!-- CSS -->
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <main class="container-1980 mt-40 mb-40">
     <!-- 페이지 헤더 -->
     <div class="flex-row" style="justify-content:space-between; align-items:center; margin-bottom:30px;">
@@ -14,34 +16,60 @@
 
     <!-- 본문 카드 -->
     <div class="card-basic" style="padding:30px;">
-        <div class="flex-row" style="justify-content:space-between; align-items:center;">
-            <h3 style="font-weight:600; color:var(--choco); font-size:18px;">${review.userName}</h3>
-            <span style="color:var(--amber); font-size:20px;">
+        <!-- 작성자 정보 및 평점 -->
+        <div class="flex-row" style="justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:15px; border-bottom:2px solid var(--gray-200);">
+            <div>
+                <h3 style="font-weight:600; color:var(--choco); font-size:20px; margin:0 0 5px 0;">${review.userName}</h3>
+                <p style="margin:0; color:var(--gray-600); font-size:14px;">
+                    작성일: ${review.createdAt}
+                </p>
+            </div>
+            <span style="color:var(--amber); font-size:24px; font-weight:bold;">
                 <c:forEach begin="1" end="${review.rating}">⭐</c:forEach>
             </span>
         </div>
 
-        <p style="margin-top:15px; white-space:pre-line; color:var(--text-primary); line-height:1.6;">
-            ${review.content}
-        </p>
+        <!-- 리뷰 내용 -->
+        <div style="margin-bottom:20px;">
+            <p style="white-space:pre-line; color:var(--text-primary); line-height:1.8; font-size:16px; margin:0;">
+                ${review.content}
+            </p>
+        </div>
 
         <!-- 이미지 목록 -->
         <c:if test="${not empty review.imgUrl}">
             <div style="margin-top:20px; display:flex; flex-wrap:wrap; gap:12px;">
                 <c:forEach var="imgPath" items="${fn:split(review.imgUrl, ',')}">
-                    <img src="${imgPath}" alt="리뷰 이미지"
-                         style="width:180px; height:180px; object-fit:cover; border-radius:10px;
-                                border:1px solid var(--gray-300); box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+                    <c:choose>
+                        <c:when test="${fn:startsWith(imgPath, '/uploads/')}">
+                            <!-- /uploads/로 시작하는 경우 contextPath 추가 -->
+                            <img src="${pageContext.request.contextPath}${imgPath}" alt="리뷰 이미지"
+                                 style="width:180px; height:180px; object-fit:cover; border-radius:10px;
+                                        border:1px solid var(--gray-300); box-shadow:0 2px 5px rgba(0,0,0,0.1);
+                                        cursor:pointer;" onclick="window.open(this.src, '_blank')">
+                        </c:when>
+                        <c:when test="${fn:startsWith(imgPath, 'data:')}">
+                            <!-- base64 이미지 -->
+                            <img src="${imgPath}" alt="리뷰 이미지"
+                                 style="width:180px; height:180px; object-fit:cover; border-radius:10px;
+                                        border:1px solid var(--gray-300); box-shadow:0 2px 5px rgba(0,0,0,0.1);
+                                        cursor:pointer;" onclick="window.open(this.src, '_blank')">
+                        </c:when>
+                        <c:otherwise>
+                            <!-- 상대 경로인 경우 -->
+                            <img src="${pageContext.request.contextPath}/uploads/${imgPath}" alt="리뷰 이미지"
+                                 style="width:180px; height:180px; object-fit:cover; border-radius:10px;
+                                        border:1px solid var(--gray-300); box-shadow:0 2px 5px rgba(0,0,0,0.1);
+                                        cursor:pointer;" onclick="window.open(this.src, '_blank')">
+                        </c:otherwise>
+                    </c:choose>
                 </c:forEach>
             </div>
         </c:if>
 
-        <p style="margin-top:20px; color:var(--gray-600); font-size:14px;">
-            작성일: ${review.createdAt}
-        </p>
-
-        <div class="text-right mt-20">
-            <a href="${pageContext.request.contextPath}/reviews" class="btn btn-outline">목록으로</a>
+        <!-- 하단 버튼 -->
+        <div class="text-right mt-20" style="padding-top:20px; border-top:1px solid var(--gray-200);">
+            <a href="${pageContext.request.contextPath}/reviews" class="btn btn-outline">← 목록으로</a>
         </div>
     </div>
 </main>

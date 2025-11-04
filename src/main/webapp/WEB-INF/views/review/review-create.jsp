@@ -1,7 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+ <!-- CSS -->
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <%
     String context = request.getContextPath();
     String roomIdParam = request.getParameter("roomId");
@@ -9,29 +10,66 @@
     if (roomIdParam != null && roomIdParam.trim().length() > 0) {
         roomId = Long.parseLong(roomIdParam);
     }
-    Long loginUserId = 1L; // 임시 사용자 ID
+    
+    // 세션에서 사용자 정보 가져오기
+    Object userObj = session.getAttribute("user");
+    String role = (String) session.getAttribute("role");
+    Long loginUserId = null;
+    
+    if (userObj != null) {
+        // User 객체에서 ID 추출 (도메인 객체에 따라 달라질 수 있음)
+        try {
+            java.lang.reflect.Method getIdMethod = userObj.getClass().getMethod("getId");
+            loginUserId = (Long) getIdMethod.invoke(userObj);
+        } catch (Exception e) {
+            // 리플렉션 실패 시 기본값 사용
+            loginUserId = 1L;
+        }
+    }
+    
+    // JSP에서도 권한 체크 (이중 보안)
+    if (userObj == null || role == null) {
+        // 비회원 → 로그인 페이지로 리다이렉트 (URL 인코딩)
+        String errorMsg = java.net.URLEncoder.encode("로그인 후 가능합니다", "UTF-8");
+        response.sendRedirect(context + "/auth/login?error=" + errorMsg);
+        return;
+    }
+    
+    if ("ADMIN".equals(role)) {
+        // 관리자 → 리뷰 목록으로 리다이렉트 (URL 인코딩)
+        String message = java.net.URLEncoder.encode("리뷰 작성 권한이 없습니다", "UTF-8");
+        response.sendRedirect(context + "/reviews?roomId=" + roomId + "&message=" + message);
+        return;
+    }
+    
+    if (!"USER".equals(role)) {
+        // USER가 아닌 경우 → 로그인 페이지로 리다이렉트 (URL 인코딩)
+        String errorMsg = java.net.URLEncoder.encode("로그인 후 가능합니다", "UTF-8");
+        response.sendRedirect(context + "/auth/login?error=" + errorMsg);
+        return;
+    }
 %>
 
 <!-- HEADER -->
 <%@ include file="/WEB-INF/views/components/header.jsp" %>
 
-<!-- USER만 접근 가능 -->
-<sec:authorize access="hasRole('USER')">
-    <main class="container-1980 mt-40 mb-40">
-        <!-- 페이지 헤더 -->
-        <div class="flex-row" style="justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h2 class="section-title" style="margin:0;">리뷰 작성하기</h2>
-            <a href="<%= context %>/reviews?roomId=<%= roomId %>" class="btn btn-outline">← 목록으로</a>
-        </div>
+<main class="container-1980 mt-40 mb-40">
+    <!-- 페이지 헤더 -->
+    <div class="flex-row" style="justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h2 class="section-title" style="margin:0;">리뷰 작성하기</h2>
+        <a href="<%= context %>/reviews<%= roomId != null ? "?roomId=" + roomId : "" %>" class="btn btn-outline">← 목록으로</a>
+    </div>
 
-        <!-- 본문 카드 -->
-        <div class="card-basic" style="padding:30px;">
-            <form id="reviewForm" action="${pageContext.request.contextPath}/reviews/create"
-                  method="post" enctype="multipart/form-data"
-                  style="display:flex; flex-direction:column; gap:20px;">
+    <!-- 본문 카드 -->
+    <div class="card-basic" style="padding:30px;">
+        <form id="reviewForm" action="${pageContext.request.contextPath}/reviews/create"
+              method="post" enctype="multipart/form-data"
+              style="display:flex; flex-direction:column; gap:20px;">
 
-                <input type="hidden" name="roomId" value="<%= roomId %>">
+            <input type="hidden" name="roomId" value="<%= roomId %>">
+            <% if (loginUserId != null) { %>
                 <input type="hidden" name="userId" value="<%= loginUserId %>">
+            <% } %>
 
                 <!-- 별점 -->
                 <div>
@@ -82,20 +120,6 @@
             </form>
         </div>
     </main>
-</sec:authorize>
-
-<!-- 비회원 또는 관리자 -->
-<sec:authorize access="!hasRole('USER')">
-    <main class="container-1980 mt-80 mb-80 text-center">
-        <h3 style="color:var(--gray-700); font-weight:500;">⚠️ 접근 권한이 없습니다.</h3>
-        <p style="color:var(--gray-500); margin-top:10px;">
-            리뷰 작성은 <strong>일반 사용자</strong>만 가능합니다.<br>
-            로그인 후 이용해주세요.
-        </p>
-        <a href="${pageContext.request.contextPath}/auth/login" class="btn btn-brown mt-20">로그인 페이지로 이동</a>
-    </main>
-</sec:authorize>
-
 
 <!-- FOOTER -->
 <%@ include file="/WEB-INF/views/components/footer.jsp" %>

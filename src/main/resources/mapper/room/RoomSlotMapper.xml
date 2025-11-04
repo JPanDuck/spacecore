@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spacecore.mapper.room.RoomSlotMapper">
+
+    <resultMap id="RoomSlotMap" type="com.spacecore.domain.room.RoomSlot">
+        <id column="id" property="id"/>
+        <result column="room_id" property="roomId"/>
+        <result column="reservation_id" property="reservationId"/>
+        <result column="slot_unit" property="slotUnit"/>
+        <result column="slot_start" property="slotStart"/>
+        <result column="slot_end" property="slotEnd"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 하루 슬롯 상태 조회 -->
+    <select id="findStatesOfDay" resultMap="RoomSlotMap">
+        SELECT rs.id,
+               rs.room_id,
+               rs.reservation_id,
+               rs.slot_unit,
+               rs.slot_start,
+               rs.slot_end,
+               rs.status
+        FROM room_slots rs
+                 LEFT JOIN reservations r ON rs.reservation_id = r.id
+        WHERE rs.room_id = #{roomId}
+          AND rs.slot_start &gt;= #{dayStart}
+          AND rs.slot_end &lt;= #{dayEnd}
+          AND (
+            rs.status = 'BLOCKED'
+                OR (rs.status = 'RESERVED' AND r.status = 'CONFIRMED')
+            )
+        ORDER BY rs.slot_start
+    </select>
+
+
+    <!-- 지정 구간 내 예약/차단 충돌 여부 확인 -->
+    <select id="countConflicts" resultType="int">
+        SELECT COUNT(*)
+        FROM room_slots rs
+                 LEFT JOIN reservations r ON rs.reservation_id = r.id
+        WHERE rs.room_id = #{roomId}
+          AND rs.slot_start &lt; #{endAt}
+          AND rs.slot_end &gt; #{startAt}
+          AND (
+            rs.status = 'BLOCKED'
+                OR (rs.status = 'RESERVED' AND r.status = 'CONFIRMED')
+            )
+    </select>
+
+    <!-- 단일 슬롯 INSERT (예약 / 차단 공통)-->
+    <insert id="insertSlot" parameterType="com.spacecore.domain.room.RoomSlot">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT seq_room_slots.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO room_slots (
+        id, room_id, reservation_id, slot_unit, slot_start, slot_end, status
+        ) VALUES (
+        #{id}, #{roomId}, #{reservationId}, #{slotUnit}, #{slotStart}, #{slotEnd}, #{status}
+        )
+    </insert>
+
+    <!-- 예약 취소 시 : 해당 예약으로 생성된 슬롯 전부 삭제 -->
+    <delete id="deleteByReservationId" parameterType="long">
+        DELETE
+        FROM room_slots
+        WHERE reservation_id = #{reservationId}
+    </delete>
+
+    <!-- 관리자 차단 해제 : 범위로 BLOCKED 삭제 -->
+    <delete id="deleteBlockedRange">
+        DELETE
+        FROM room_slots WHERE room_id = #{roomId}
+            AND slot_start &gt;= #{startAt}
+            AND slot_end &lt;= #{endAt}
+            AND status = 'BLOCKED'
+    </delete>
+
+    <!--=====================================================================-->
+    <!-- 주어진 구간에 '생성된' 슬롯 개수 -->
+    <select id="countOverlappingSlots" resultType="int">
+        SELECT COUNT(*)
+        FROM room_slots
+        WHERE room_id = #{roomId}
+          AND slot_start &gt;= #{startAt}
+          AND slot_end &lt;= #{endAt}
+    </select>
+
+    <!-- 같은 구간에서 'AVAILABLE' 슬롯 개수 -->
+    <select id="countAvailableSlots" resultType="int">
+        SELECT COUNT(*)
+        FROM room_slots
+        WHERE room_id = #{roomId}
+          AND slot_start &gt;= #{slotStart}
+          AND slot_end &lt;= #{slotEnd}
+          AND status = 'AVAILABLE'
+    </select>
+
+    <!--구간 내 AVAILABLE -> RESERVED -->
+    <update id="reserveSlots">
+        UPDATE room_slots
+        SET status         = 'RESERVED',
+            reservation_id = #{reservationId}
+        WHERE room_id = #{roomId}
+          AND slot_start &gt;= #{slotStart}
+          AND slot_end &lt;= #{slotEnd}
+          AND status = 'AVAILABLE'
+    </update>
+
+    <!--특정 예약으로 잠긴 슬롯 초기화(AVAILABLE) -->
+    <update id="clearSlots">
+        UPDATE room_slots
+        SET status = 'AVAILABLE' , reservation_id = NULL
+        WHERE reservation_id = #{reservationId}
+    </update>
+</mapper>

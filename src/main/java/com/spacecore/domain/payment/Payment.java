@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class Payment {
     private Long id;
     private Long vaId;
+    private Long amount;
     private String status;
     private LocalDate createdAt;
 }

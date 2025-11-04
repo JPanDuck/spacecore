@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spacecore.mapper.room.RoomMapper">
+
+    <resultMap id="RoomImageMap" type="com.spacecore.domain.room.RoomImage">
+        <id     column="id"         property="id"/>
+        <result column="room_id"    property="roomId"/>
+        <result column="file_id"    property="fileId"/>
+        <result column="path"       property="filePath"/>
+        <result column="is_primary" property="isPrimary"/>
+        <result column="sort_order" property="sortOrder"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <!-- 상세페이지용 전체 이미지 -->
+    <select id="findImagesByRoomId" resultMap="RoomImageMap" parameterType="long">
+        SELECT ri.id, ri.room_id, ri.file_id, f.path,
+               ri.is_primary, ri.sort_order, ri.created_at
+        FROM room_images ri
+                 JOIN files f ON f.id = ri.file_id
+        WHERE ri.room_id = #{roomId}
+        ORDER BY CASE WHEN ri.is_primary='Y' THEN 0 ELSE 1 END, ri.sort_order, ri.id
+    </select>
+
+    <!-- 목록 썸네일 1장 경로(필요 시 서비스에서 직접 호출 가능) -->
+    <select id="findThumbnailPathByRoomId" parameterType="long" resultType="string">
+        SELECT f.path
+        FROM room_images ri
+                 JOIN files f ON f.id = ri.file_id
+        WHERE ri.room_id = #{roomId}
+        ORDER BY CASE WHEN ri.is_primary='Y' THEN 0 ELSE 1 END, ri.sort_order
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+
+
+    <!-- 대표 교체 -->
+    <update id="unsetPrimaryByRoomId" parameterType="long">
+        UPDATE room_images SET is_primary='N'
+        WHERE room_id = #{roomId} AND is_primary='Y'
+    </update>
+
+    <update id="setPrimary" parameterType="long">
+        UPDATE room_images SET is_primary='Y' WHERE id = #{imageId}
+    </update>
+
+
+    <!-- 등록/삭제 (업로드 모듈 연동 후 사용) -->
+    <insert id="insertOne" parameterType="com.spacecore.domain.room.RoomImage">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT seq_room_images.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO room_images (id, room_id, file_id, is_primary, sort_order, created_at)
+        VALUES (#{id}, #{roomId}, #{fileId}, #{isPrimary}, #{sortOrder}, SYSDATE)
+    </insert>
+
+    <delete id="deleteOne" parameterType="long">
+        DELETE FROM room_images WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByRoomId" parameterType="long">
+        DELETE FROM room_images WHERE room_id = #{roomId}
+    </delete>
+
+</mapper>

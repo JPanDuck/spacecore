@@ -110,4 +110,11 @@ public class UserServiceImpl implements UserService {
     public boolean existsByEmail(String email) {
         return userMapper.existsByEmail(email);
     }
+
+    @Override
+    public boolean existsByPhone(String phone) {
+        return userMapper.existsByPhone(phone);
+    }
+
+
 }
