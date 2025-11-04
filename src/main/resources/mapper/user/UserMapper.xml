@@ -32,7 +32,7 @@
                      #{id},
                      #{username},
                      #{email},
-                     #{password},
+                     #{password, jdbcType=NULL},
                      #{name},
                      #{phone, jdbcType=VARCHAR},
                      #{role},
@@ -113,6 +113,13 @@
         SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
         FROM users
         WHERE email = #{email}
+    </select>
+
+    <!-- 휴대폰 중복 확인 -->
+    <select id="existsByPhone" parameterType="string" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM users
+        WHERE phone = #{phone}
     </select>
 
 

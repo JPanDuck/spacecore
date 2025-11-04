@@ -14,6 +14,15 @@
 
     <!-- ✅ 파비콘 -->
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}favicon.ico">
+
+<%-- 가시성 ++  --%>
+    <style>
+        .btn-brown:hover {
+        background-color: #5b3e31;
+        transform: scale(1.05);
+    }
+    </style>
+
 </head>
 
 <body>
@@ -31,7 +40,7 @@
         <div class="overlay">
             <h2>당신의 업무 공간을<br>더 편안하고 효율적으로.</h2>
             <p>감각적인 디자인과 여유로운 공간감.<br>지금 바로 당신만의 오피스를 예약해보세요.</p>
-            <button class="btn btn-brown">예약 바로가기</button>
+            <a href="${pageContext.request.contextPath}/offices" class="btn btn-brown"> 예약 바로가기 </a>
         </div>
     </section>
 
@@ -214,7 +223,7 @@
                         credentials: "include"
                     });
                     if (res.ok) {
-                        window.location.href = "${pageContext.request.contextPath}/auth/index";
+                        window.location.href = "${pageContext.request.contextPath}/index";
                     } else {
                         localStorage.clear();
                     }

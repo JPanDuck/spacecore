@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spacecore.mapper.virtualAccount.VirtualAccountMapper">
+
+    <resultMap id="VirtualAccountMap" type="com.spacecore.domain.virtualAccount.VirtualAccount">
+        <id column="id" property="id"/>
+        <result column="res_id" property="resId"/>
+        <result column="account_no" property="accountNo"/>
+        <result column="bank_code" property="bankCode"/>
+        <result column="expires_at" property="expiresAt"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <!-- 가상계좌 발급 -->
+    <insert id="insert">
+        INSERT INTO virtual_accounts (id, res_id, account_no, bank_code, expires_at, status, created_at)
+        VALUES (seq_virtual_accounts.NEXTVAL,
+                #{reservationId},
+                #{accountNo},
+                #{bankCode},
+                #{expiresAt},
+                'ISSUED',
+                SYSTIMESTAMP)
+    </insert>
+
+    <!-- 예약 ID로 계좌번호 조회 -->
+    <select id="findAccountNoByReservationId" parameterType="long" resultType="string">
+        SELECT account_no
+        FROM virtual_accounts
+        WHERE res_id = #{reservationId}
+          AND status IN ('ISSUED', 'USED')
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <!-- 가상계좌 ID로 예약 ID 조회 (입금 확인 시 사용) -->
+    <select id="findReservationIdByVaId" parameterType="long" resultType="long">
+        SELECT res_id
+        FROM virtual_accounts
+        WHERE id = #{vaId}
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <!-- 예약 ID로 가상계좌 ID 조회 -->
+    <select id="findVaIdByReservationId" parameterType="long" resultType="long">
+        SELECT id
+        FROM virtual_accounts
+        WHERE res_id = #{reservationId}
+          AND status IN ('ISSUED', 'USED')
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <!-- 만료시각 지난 ISSUED -> EXPIRED -->
+    <update id="expireIssuedAccounts">
+        UPDATE virtual_accounts
+        SET status = 'EXPIRED'
+        WHERE status = 'ISSUED'
+          AND expires_at &lt; SYSTIMESTAMP
+    </update>
+
+    <!-- EXPIRED 가상계좌에 예약된 예약을 EXPIRED로 변경 처리 -->
+    <update id="markReservationExpiredByVA">
+        UPDATE reservations r
+        SET r.status = 'EXPIRED'
+        WHERE r.status = 'AWAITING_PAYMENT'
+          AND EXISTS (SELECT 1
+                      FROM virtual_accounts va
+                      WHERE va.res_id = r.id
+                        AND va.status = 'EXPIRED')
+    </update>
+
+    <!-- 가상계좌 상태 변경 (입금 확인 시 USED로 변경) -->
+    <update id="updateStatus">
+        UPDATE virtual_accounts
+        SET status = #{status}
+        WHERE id = #{vaId}
+    </update>
+</mapper>

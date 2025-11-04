@@ -158,6 +158,19 @@
     <h2>로그인</h2>
     <p>당신의 업무 공간<br><strong>Space Core</strong>에 오신 것을 환영합니다.</p>
 
+    <!-- ✅ 에러 메시지 표시 -->
+    <%
+        String errorParam = request.getParameter("error");
+        if (errorParam != null && !errorParam.trim().isEmpty()) {
+            String decodedError = java.net.URLDecoder.decode(errorParam, "UTF-8");
+    %>
+    <div style="background-color: #fff3cd; border: 1px solid #ffc107; color: #856404; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+        ⚠️ <%= decodedError %>
+    </div>
+    <%
+        }
+    %>
+
     <!-- ✅ 로그인 폼 -->
     <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
@@ -187,7 +200,7 @@
     </div>
 
     <div style="margin-top: 20px;">
-        <a href="${pageContext.request.contextPath}/auth/index"
+        <a href="${pageContext.request.contextPath}/"
            class="btn btn-outline"
            style="width: 100%; height: 44px; font-size: 15px; font-weight: 600;">
             ← 메인으로 돌아가기
@@ -232,7 +245,7 @@
             localStorage.setItem("role", data.role);
 
             alert(`${data.username}님, 환영합니다!`);
-            location.href = "${pageContext.request.contextPath}/auth/index";
+            location.href = "${pageContext.request.contextPath}/";
         } catch (err) {
             console.error("로그인 오류:", err);
             alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");

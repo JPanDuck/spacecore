@@ -31,4 +31,5 @@ public interface UserService {
     // 중복체크
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
+    boolean existsByPhone(String phone);
 }

@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * CustomUserDetails
+ * ✅ CustomUserDetails
  * ------------------------
  * - Spring Security 인증 컨텍스트에 저장되는 사용자 세부정보
  * - JWT, SecurityContextHolder 에서 활용됨
@@ -24,7 +24,22 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-    // 권한 반환
+    // ✅ User PK 반환
+    public Long getId() {
+        return user.getId();
+    }
+
+    // ✅ 이름 반환
+    public String getName() {
+        return user.getName();
+    }
+
+    // ✅ User Role 반환
+    public String getRole() {
+        return user.getRole();
+    }
+
+    // ✅ 권한 반환 (Spring Security 표준)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));

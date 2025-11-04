@@ -3,6 +3,7 @@ package com.spacecore.domain.virtualAccount;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class VirtualAccount {
@@ -10,7 +11,7 @@ public class VirtualAccount {
     private Long resId;
     private String accountNo;
     private String bankCode;
-    private LocalDate expiresAt;
+    private LocalDateTime expiresAt;
     private String status;
     private LocalDate createdAt;
 }

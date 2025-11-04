@@ -2,7 +2,7 @@ package com.spacecore.domain.room;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class RoomSlot {
@@ -10,7 +10,7 @@ public class RoomSlot {
     private Long roomId;
     private Long reservationId;
     private String slotUnit;
-    private LocalDate slotStart;
-    private LocalDate slotEnd;
+    private LocalDateTime slotStart;
+    private LocalDateTime slotEnd;
     private String status;
 }

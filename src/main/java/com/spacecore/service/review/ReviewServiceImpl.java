@@ -22,7 +22,7 @@ public class ReviewServiceImpl implements ReviewService {
     public PaginationDTO<ReviewResponseDTO> getReviews(Long roomId, int page, int size,
                                                        String keyword, String userName, Integer rating) {
         if (page <= 0) page = 1;
-        if (size <= 0) size = 5;
+        if (size <= 0) size = 10;
 
         int totalCount = reviewMapper.countReviews(roomId, keyword, userName, rating);
         int offset = (page - 1) * size;
@@ -30,6 +30,15 @@ public class ReviewServiceImpl implements ReviewService {
         List<ReviewResponseDTO> reviews =
                 reviewMapper.findReviews(roomId, keyword, userName, rating, offset, size);
 
+        // 디버깅 로그
+        System.out.println("=== 리뷰 조회 디버깅 ===");
+        System.out.println("roomId: " + roomId);
+        System.out.println("page: " + page);
+        System.out.println("size(limit): " + size);
+        System.out.println("offset: " + offset);
+        System.out.println("totalCount: " + totalCount);
+        System.out.println("조회된 리뷰 개수: " + (reviews != null ? reviews.size() : 0));
+        System.out.println("======================");
 
         PageInfoDTO pageInfo = PaginationHelper.createPageInfo(totalCount, page, size);
 

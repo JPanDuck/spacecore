@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spacecore.mapper.room.RoomMapper">
+    <resultMap id="RoomMap" type="com.spacecore.domain.room.Room">
+        <id column="id" property="id"/>
+        <result column="office_id" property="officeId"/>
+        <result column="name" property="name"/>
+        <result column="capacity" property="capacity"/>
+        <result column="price_base" property="priceBase"/>
+        <result column="min_reservation_hours" property="minReservationHours"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <!-- 목록/단건용 대표 이미지 경로 -->
+        <result column="thumbnail" property="thumbnail"/>
+    </resultMap>
+
+    <!-- 룸 전체 조회 -->
+    <select id="findAll" resultMap="RoomMap">
+        SELECT r.id,
+               r.office_id,
+               r.name,
+               r.capacity,
+               r.price_base,
+               r.min_reservation_hours,
+               r.status,
+               r.created_at,
+               NULL AS thumbnail
+        FROM ROOMS r
+        ORDER BY r.id DESC
+    </select>
+
+    <!-- 지점별 조회 -->
+    <select id="findByOfficeId" parameterType="long" resultMap="RoomMap">
+        SELECT r.id,
+               r.office_id,
+               r.name,
+               r.capacity,
+               r.price_base,
+               r.min_reservation_hours,
+               r.status,
+               r.created_at,
+               NULL AS thumbnail
+        FROM ROOMS r
+        WHERE r.office_id = #{value}
+        ORDER BY r.id DESC
+    </select>
+
+    <!-- 단건 조회 -->
+    <select id="findById" parameterType="long" resultMap="RoomMap">
+        SELECT r.id,
+               r.office_id,
+               r.name,
+               r.capacity,
+               r.price_base,
+               r.min_reservation_hours,
+               r.status,
+               r.created_at,
+               NULL AS thumbnail
+        FROM rooms r
+        WHERE r.id = #{id}
+    </select>
+
+    <!-- 룸 등록 -->
+    <insert id="insert" parameterType="com.spacecore.domain.room.Room">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT seq_rooms.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO rooms (id, office_id, name, capacity, price_base,
+        min_reservation_hours, status, created_at)
+        VALUES (#{id}, #{officeId}, #{name}, #{capacity}, #{priceBase},
+        NVL(#{minReservationHours, jdbcType=NUMERIC}, 1), NVL(#{status}, 'ACTIVE'), SYSDATE)
+    </insert>
+
+    <!-- 룸 수정 -->
+    <update id="update" parameterType="com.spacecore.domain.room.Room">
+        UPDATE rooms
+        SET office_id             = #{officeId},
+            name                  = #{name},
+            capacity              = #{capacity},
+            price_base            = #{priceBase},
+            min_reservation_hours = NVL(#{minReservationHours, jdbcType=NUMERIC}, min_reservation_hours),
+            status                = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 룸 삭제 -->
+    <delete id="delete" parameterType="long">
+        DELETE
+        FROM rooms
+        WHERE id = #{id}
+    </delete>
+</mapper>

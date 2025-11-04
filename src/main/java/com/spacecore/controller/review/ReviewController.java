@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpSession;
+import java.net.URLEncoder;
 import java.nio.file.*;
 import java.util.List;
 
@@ -33,7 +35,8 @@ public class ReviewController {
                                  @RequestParam(required = false) Integer rating,
                                  Model model) {
 
-        if (roomId == null) roomId = 1L;
+        // roomId가 null이면 모든 리뷰를 조회 (필터 제거)
+        // if (roomId == null) roomId = 1L; // 이 줄 제거
 
         PaginationDTO<ReviewResponseDTO> result =
                 reviewService.getReviews(roomId, page, limit, keyword, userName, rating);
@@ -59,14 +62,40 @@ public class ReviewController {
                              Model model) {
         if (roomId == null) roomId = 1L;
 
+        // 세션에서 사용자 정보 확인
+        Object user = session.getAttribute("user");
         String role = (String) session.getAttribute("role");
-        if (role == null) {
-            // 비회원 → 로그인 유도
-            return "redirect:/auth/login";
-        } else if ("ADMIN".equals(role)) {
-            // 관리자 → 접근 불가
-            model.addAttribute("message", "관리자는 리뷰를 작성할 수 없습니다.");
-            return "error/403";
+        
+        // 비회원 체크 (role이 null이거나 user가 null인 경우)
+        if (user == null || role == null) {
+            // 비회원 → 로그인 페이지로 리다이렉트 (메시지 포함, URL 인코딩)
+            try {
+                String errorMsg = URLEncoder.encode("로그인 후 가능합니다", "UTF-8");
+                return "redirect:/auth/login?error=" + errorMsg;
+            } catch (Exception e) {
+                return "redirect:/auth/login?error=login_required";
+            }
+        }
+        
+        // 관리자 체크
+        if ("ADMIN".equals(role)) {
+            // 관리자 → 리뷰 목록으로 리다이렉트 (메시지 포함, URL 인코딩)
+            try {
+                String message = URLEncoder.encode("리뷰 작성 권한이 없습니다", "UTF-8");
+                return "redirect:/reviews?roomId=" + roomId + "&message=" + message;
+            } catch (Exception e) {
+                return "redirect:/reviews?roomId=" + roomId + "&message=no_permission";
+            }
+        }
+        
+        // USER 역할만 접근 가능
+        if (!"USER".equals(role)) {
+            try {
+                String errorMsg = URLEncoder.encode("로그인 후 가능합니다", "UTF-8");
+                return "redirect:/auth/login?error=" + errorMsg;
+            } catch (Exception e) {
+                return "redirect:/auth/login?error=login_required";
+            }
         }
 
         model.addAttribute("roomId", roomId);
@@ -82,12 +111,40 @@ public class ReviewController {
                                HttpSession session,
                                Model model) {
 
+        // 세션에서 사용자 정보 확인
+        Object user = session.getAttribute("user");
         String role = (String) session.getAttribute("role");
-        if (role == null) {
-            return "redirect:/auth/login";
-        } else if ("ADMIN".equals(role)) {
-            model.addAttribute("message", "관리자는 리뷰를 작성할 수 없습니다.");
-            return "error/403";
+        
+        // 비회원 체크
+        if (user == null || role == null) {
+            try {
+                String errorMsg = URLEncoder.encode("로그인 후 가능합니다", "UTF-8");
+                return "redirect:/auth/login?error=" + errorMsg;
+            } catch (Exception e) {
+                return "redirect:/auth/login?error=login_required";
+            }
+        }
+        
+        // 관리자 체크
+        if ("ADMIN".equals(role)) {
+            // 관리자 → 리뷰 목록으로 리다이렉트 (메시지 포함, URL 인코딩)
+            Long redirectRoomId = dto.getRoomId() != null ? dto.getRoomId() : 1L;
+            try {
+                String message = URLEncoder.encode("리뷰 작성 권한이 없습니다", StandardCharsets.UTF_8.toString());
+                return "redirect:/reviews?roomId=" + redirectRoomId + "&message=" + message;
+            } catch (Exception e) {
+                return "redirect:/reviews?roomId=" + redirectRoomId + "&message=no_permission";
+            }
+        }
+        
+        // USER 역할만 접근 가능
+        if (!"USER".equals(role)) {
+            try {
+                String errorMsg = URLEncoder.encode("로그인 후 가능합니다", "UTF-8");
+                return "redirect:/auth/login?error=" + errorMsg;
+            } catch (Exception e) {
+                return "redirect:/auth/login?error=login_required";
+            }
         }
 
         try {
@@ -122,7 +179,8 @@ public class ReviewController {
             }
 
             reviewService.createReview(dto.getRoomId(), dto);
-            return "redirect:/reviews?roomId=" + dto.getRoomId();
+            // 리다이렉트 시 페이지 번호를 포함하여 첫 페이지로 이동
+            return "redirect:/reviews?roomId=" + dto.getRoomId() + "&page=1";
 
         } catch (Exception e) {
             e.printStackTrace();

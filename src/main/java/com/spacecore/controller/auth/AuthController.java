@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 
 @Slf4j
 @Controller
@@ -27,7 +27,7 @@ public class AuthController {
         // 이미 로그인된 사용자가 로그인 페이지에 접근하면 → 메인으로 이동
         if (authentication != null && authentication.isAuthenticated()) {
             log.info("이미 로그인된 사용자: {}", authentication.getName());
-            return "redirect:/auth/index";
+            return "redirect:/index";
         }
         return "auth/login"; // 로그인 JSP
     }

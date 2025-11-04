@@ -38,16 +38,17 @@ public class ReviewRestController {
         return ResponseEntity.ok("리뷰가 등록되었습니다.");
     }
 
-    /** 리뷰 목록 조회 */
-    @GetMapping("/rooms/{roomId}")
-    public ResponseEntity<Map<String, Object>> getReviews(@PathVariable Long roomId,
-                                                          @RequestParam(defaultValue = "1") int page,
-                                                          @RequestParam(defaultValue = "5") int limit,
-                                                          @RequestParam(required = false) String keyword,
-                                                          @RequestParam(required = false) String userName,
-                                                          @RequestParam(required = false) Integer rating) {
+    /** 리뷰 목록 조회 (전체 리뷰) */
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getAllReviews(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "10") int limit,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String userName,
+            @RequestParam(required = false) Integer rating) {
+        // roomId가 null이면 모든 리뷰 조회
         PaginationDTO<ReviewResponseDTO> result =
-                reviewService.getReviews(roomId, page, limit, keyword, userName, rating);
+                reviewService.getReviews(null, page, limit, keyword, userName, rating);
 
         if (result == null) {
             return ResponseEntity.ok(Map.of(
@@ -62,7 +63,54 @@ public class ReviewRestController {
         ));
     }
 
-    /** 리뷰 요약 */
+    /** 리뷰 목록 조회 (특정 roomId) */
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<Map<String, Object>> getReviews(@PathVariable Long roomId,
+                                                          @RequestParam(defaultValue = "1") int page,
+                                                          @RequestParam(required = false, defaultValue = "10") int limit,
+                                                          @RequestParam(required = false) String keyword,
+                                                          @RequestParam(required = false) String userName,
+                                                          @RequestParam(required = false) Integer rating) {
+        // 디버깅: 요청 파라미터 확인
+        System.out.println("=== ReviewRestController 요청 파라미터 ===");
+        System.out.println("roomId: " + roomId);
+        System.out.println("page: " + page);
+        System.out.println("limit: " + limit);
+        System.out.println("keyword: " + keyword);
+        System.out.println("userName: " + userName);
+        System.out.println("rating: " + rating);
+        System.out.println("==========================================");
+        
+        PaginationDTO<ReviewResponseDTO> result =
+                reviewService.getReviews(roomId, page, limit, keyword, userName, rating);
+
+        if (result == null) {
+            System.out.println("⚠️ result가 null입니다!");
+            return ResponseEntity.ok(Map.of(
+                    "pageInfo", Collections.emptyMap(),
+                    "data", Collections.emptyList()
+            ));
+        }
+
+        // 디버깅: 응답 데이터 확인
+        System.out.println("=== ReviewRestController 응답 데이터 ===");
+        System.out.println("pageInfo: " + result.getPageInfo());
+        System.out.println("data 개수: " + (result.getData() != null ? result.getData().size() : 0));
+        System.out.println("========================================");
+
+        return ResponseEntity.ok(Map.of(
+                "pageInfo", result.getPageInfo(),
+                "data", result.getData() != null ? result.getData() : Collections.emptyList()
+        ));
+    }
+
+    /** 리뷰 요약 (전체) */
+    @GetMapping("/summary")
+    public ResponseEntity<ReviewSummaryDTO> getAllReviewSummary() {
+        return ResponseEntity.ok(reviewService.getReviewSummary(null));
+    }
+
+    /** 리뷰 요약 (특정 roomId) */
     @GetMapping("/rooms/{roomId}/summary")
     public ResponseEntity<ReviewSummaryDTO> getReviewSummary(@PathVariable Long roomId) {
         return ResponseEntity.ok(reviewService.getReviewSummary(roomId));
