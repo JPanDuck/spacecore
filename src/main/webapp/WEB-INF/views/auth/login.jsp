@@ -244,7 +244,8 @@
             localStorage.setItem("username", data.username);
             localStorage.setItem("role", data.role);
 
-            alert(`${data.username}님, 환영합니다!`);
+            const userName = data.name || data.username || "사용자";
+            alert(`${userName}님, 환영합니다!`);
             location.href = "${pageContext.request.contextPath}/";
         } catch (err) {
             console.error("로그인 오류:", err);

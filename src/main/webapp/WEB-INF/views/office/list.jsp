@@ -1,96 +1,890 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%
+    String context = request.getContextPath();
+%>
 
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>지점 목록 | SpaceCore</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-</head>
+<%@ include file="/WEB-INF/views/components/header.jsp" %>
+<link rel="stylesheet" href="<%=context%>/css/style.css">
 
-<body>
+<style>
+    /* 필터와 카드 섹션 카드 */
+    .filter-card-section {
+        background: white;
+        border: 1px solid var(--gray-300);
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .filter-section {
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .search-filter-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .search-filter-row .search-input {
+        width: 300px;
+        max-width: 100%;
+        padding: 10px 16px;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    
+    .price-filter-section {
+        margin-top: 20px;
+    }
+    
+    .filter-label {
+        font-weight: 600;
+        color: var(--choco);
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+    
+    .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+    
+    .result-summary {
+        font-size: 14px;
+        color: var(--gray-600);
+    }
+    
+    .card-section {
+        margin-top: 30px;
+    }
+    
+    /* 중앙 팝업 스타일 */
+    .map-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 1400px;
+        height: 85vh;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        z-index: 10000;
+        display: none;
+        overflow: hidden;
+    }
+    
+    .map-popup.active {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .map-popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        border-bottom: 1px solid var(--gray-200);
+        background: var(--cream-base);
+    }
+    
+    .map-popup-header h2 {
+        margin: 0;
+        color: var(--choco);
+        font-size: 20px;
+    }
+    
+    .map-popup-close {
+        background: none;
+        border: none;
+        font-size: 32px;
+        cursor: pointer;
+        color: var(--text-primary);
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s;
+    }
+    
+    .map-popup-close:hover {
+        color: var(--choco);
+    }
+    
+    .map-popup-content {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+    
+    .map-popup-filters {
+        width: 320px;
+        padding: 30px;
+        border-right: 1px solid var(--gray-200);
+        overflow-y: auto;
+        background: var(--cream-base);
+    }
+    
+    .map-popup-map {
+        flex: 1;
+        position: relative;
+        background: var(--gray-200);
+    }
+    
+    .map-popup-map #mapContainer {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .map-popup-filters .filter-group {
+        margin-bottom: 24px;
+    }
+    
+    .map-popup-filters .filter-group:last-child {
+        margin-bottom: 0;
+    }
+    
+    .map-popup-filters .search-input {
+        width: 100%;
+        padding: 10px 16px;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    
+    .map-popup-filters .price-filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .map-popup-filters .price-filter-btn {
+        width: 100%;
+        text-align: left;
+    }
+    
+    .map-popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        display: none;
+    }
+    
+    .map-popup-overlay.active {
+        display: block;
+    }
+    
+    /* 객실 카드 스타일 */
+    .room-card {
+        background: white;
+        border: 1px solid var(--gray-300);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+    .room-card:hover {
+        border-color: var(--choco);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    .room-card-image {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        background: var(--gray-200);
+    }
+    .room-card-content {
+        padding: 20px;
+    }
+    .room-card-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--choco);
+        margin-bottom: 8px;
+    }
+    .room-card-info {
+        font-size: 14px;
+        color: var(--gray-600);
+        margin-bottom: 8px;
+    }
+    .room-card-rating {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: var(--amber);
+    }
+    .room-card-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--choco);
+        margin-top: 12px;
+    }
+    .room-card-favorite {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255,255,255,0.9);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.2s;
+        z-index: 10;
+    }
+    .room-card-favorite:hover {
+        background: white;
+        transform: scale(1.1);
+    }
+    .room-card-favorite.active {
+        color: #e74c3c;
+    }
+    
+    /* 그리드 레이아웃 */
+    .room-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+        margin-top: 30px;
+    }
+    
+    /* 가격 필터 버튼 */
+    .price-filter-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+    .price-filter-btn {
+        padding: 10px 20px;
+        border: 1px solid var(--gray-300);
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+    }
+    .price-filter-btn:hover {
+        border-color: var(--choco);
+        color: var(--choco);
+    }
+    .price-filter-btn.active {
+        background: var(--choco);
+        color: white;
+        border-color: var(--choco);
+    }
+</style>
 
-<!-- ✅ 헤더 -->
-<%@ include file="../components/header.jsp" %>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 
 <main class="container-1980 mt-40 mb-40">
+    <!-- 필터와 카드 섹션을 하나의 카드로 묶기 -->
+    <div class="filter-card-section">
+        <!-- 필터 영역 -->
+        <div class="filter-section">
+            <!-- 검색/필터 -->
+            <div class="search-filter-row">
+                <input type="text" id="keyword" class="search-input" placeholder="지점명 검색" />
+                <button class="btn btn-brown" id="searchBtn">검색</button>
+                <button class="btn btn-outline" id="resetBtn">초기화</button>
+                <button class="btn btn-outline" id="mapToggleBtn">지도보기</button>
+                <span id="pricePreview" style="margin-left:8px;color:var(--amber);font-weight:600;"></span>
+            </div>
+            
+            <!-- 가격대 필터 -->
+            <div class="price-filter-section">
+                <p class="filter-label">가격대 선택</p>
+                <div class="price-filter-group">
+                    <button class="price-filter-btn" data-min="10000" data-max="30000">1만 ~ 3만</button>
+                    <button class="price-filter-btn" data-min="30000" data-max="60000">3만 ~ 6만</button>
+                    <button class="price-filter-btn" data-min="60000" data-max="100000">6만 ~ 10만</button>
+                    <button class="price-filter-btn" data-min="100000" data-max="200000">10만 ~ 20만</button>
+                    <button class="price-filter-btn" data-min="" data-max="">전체</button>
+                </div>
+            </div>
 
-    <!-- 제목 -->
-    <div class="flex-row" style="justify-content:space-between; align-items:center;">
-        <h2 class="section-title visible">공유오피스 지점 목록</h2>
-        <sec:authorize access="hasRole('ADMIN')">
-            <a href="${pageContext.request.contextPath}/offices/add" class="btn btn-brown" style="height:42px;">지점 등록</a>
-        </sec:authorize>
+            <!-- 결과 헤더 -->
+            <div class="result-header">
+                <h2 class="section-title">검색 결과</h2>
+                <p class="result-summary">
+                    총 <span id="totalOffices">0</span>개 지점
+                </p>
+            </div>
+        </div>
+
+        <!-- 리스트 영역 -->
+        <div class="card-section">
+            <section id="officeList" class="room-grid"></section>
+
+            <!-- 페이지네이션 -->
+            <div class="pagination mt-40">
+                <ul class="pagination-list" id="paginationArea"></ul>
+            </div>
+        </div>
     </div>
-
-    <!-- 리스트 카드 -->
-    <div class="card-basic shadow mt-20">
-        <c:choose>
-            <c:when test="${not empty officeList}">
-                <table class="table-basic w-full">
-                    <thead>
-                    <tr style="background: var(--cream-tan);">
-                        <th>ID</th>
-                        <th>지점명</th>
-                        <th>주소</th>
-                        <th>상태</th>
-                        <th>관리</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="o" items="${officeList}">
-                        <tr>
-                            <td>${o.id}</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/offices/${o.id}/rooms" style="color:var(--amber); font-weight:600;">
-                                    ${o.name}
-                                </a>
-                            </td>
-                            <td>${o.address}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${o.status == 'ACTIVE'}">
-                                        <span style="color: var(--amber); font-weight:600;">활성</span>
-                                    </c:when>
-                                    <c:when test="${o.status == 'INACTIVE'}">
-                                        <span style="color: var(--gray-600);">비활성</span>
-                                    </c:when>
-                                    <c:otherwise>${o.status}</c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/offices/detail/${o.id}" class="btn btn-outline btn-sm">상세</a>
-                                <sec:authorize access="hasRole('ADMIN')">
-                                    <a href="${pageContext.request.contextPath}/offices/edit/${o.id}" class="btn btn-brown btn-sm">수정</a>
-                                    <form action="${pageContext.request.contextPath}/offices/delete/${o.id}" method="post" style="display:inline;">
-                                        <button type="submit" class="btn btn-outline btn-sm"
-                                            onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-                                    </form>
-                                </sec:authorize>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </c:when>
-            <c:otherwise>
-                <div class="text-center text-gray mt-40">등록된 지점이 없습니다.</div>
-            </c:otherwise>
-        </c:choose>
-    </div>
-
-    <!-- ✅ 페이지네이션 -->
-    <jsp:include page="/WEB-INF/views/components/pagination.jsp">
-        <jsp:param name="pageInfo" value="${pageInfo}" />
-        <jsp:param name="baseUrl" value="/offices" />
-    </jsp:include>
-
 </main>
 
-<!-- ✅ 푸터 -->
-<%@ include file="../components/footer.jsp" %>
+<!-- 중앙 팝업 지도 -->
+<div class="map-popup-overlay" id="mapOverlay"></div>
+<div class="map-popup" id="mapPopup">
+    <div class="map-popup-header">
+        <h2>지도 보기</h2>
+        <button class="map-popup-close" id="mapCloseBtn">&times;</button>
+    </div>
+    
+    <div class="map-popup-content">
+        <!-- 좌측 필터 영역 -->
+        <div class="map-popup-filters">
+            <div class="filter-group">
+                <p class="filter-label">지점명 검색</p>
+                <input type="text" id="mapKeyword" class="search-input" placeholder="지점명 검색" style="width:100%; margin-bottom:16px;" />
+                <button class="btn btn-brown" id="mapSearchBtn" style="width:100%; margin-bottom:16px;">검색</button>
+                <button class="btn btn-outline" id="mapResetBtn" style="width:100%; margin-bottom:24px;">초기화</button>
+            </div>
+            
+            <div class="filter-group">
+                <p class="filter-label">가격대 선택</p>
+                <div class="price-filter-group">
+                    <button class="price-filter-btn" data-min="10000" data-max="30000">1만 ~ 3만</button>
+                    <button class="price-filter-btn" data-min="30000" data-max="60000">3만 ~ 6만</button>
+                    <button class="price-filter-btn" data-min="60000" data-max="100000">6만 ~ 10만</button>
+                    <button class="price-filter-btn" data-min="100000" data-max="200000">10만 ~ 20만</button>
+                    <button class="price-filter-btn" data-min="" data-max="">전체</button>
+                </div>
+            </div>
+            
+            <div class="filter-group" style="margin-top:24px;">
+                <p class="result-summary" style="font-size:13px;">
+                    총 <span id="mapTotalOffices">0</span>개 지점
+                </p>
+            </div>
+        </div>
+        
+        <!-- 우측 지도 영역 -->
+        <div class="map-popup-map">
+            <div id="mapContainer" style="width:100%; height:100%;"></div>
+        </div>
+    </div>
+</div>
 
-</body>
-</html>
+<%@ include file="/WEB-INF/views/components/footer.jsp" %>
+
+<!-- 구글맵 API 키를 설정하세요 -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY" async defer></script>
+<script>
+    (function() {
+        var ctx = "<%=context%>";
+        var qs = new URLSearchParams(location.search);
+        var $ = function(sel){ return document.querySelector(sel); };
+        var $all = function(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); };
+
+        var CSRF_TOKEN = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        var CSRF_HEADER = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        var state = {
+            page: parseInt(qs.get("page") || 1),
+            limit: parseInt(qs.get("limit") || 9),
+            keyword: qs.get("keyword") || "",
+            minPrice: qs.get("minPrice") || "",
+            maxPrice: qs.get("maxPrice") || ""
+        };
+
+        var allOffices = []; // 전체 지점 데이터 저장
+        var filteredOffices = []; // 필터링된 지점 데이터
+
+        $("#keyword").value = state.keyword;
+
+        function setPricePreview() {
+            var pv = $("#pricePreview");
+            if (state.minPrice && state.maxPrice) {
+                pv.textContent = Number(state.minPrice).toLocaleString() + " ~ " +
+                    Number(state.maxPrice).toLocaleString() + "원";
+            } else {
+                pv.textContent = "";
+            }
+        }
+        setPricePreview();
+        
+        // URL 파라미터에서 가격대 필터 초기화 (메인 페이지 + 지도 팝업 모두)
+        if (state.minPrice || state.maxPrice) {
+            $all(".price-filter-btn").forEach(function(btn){
+                var btnMin = btn.getAttribute("data-min") || "";
+                var btnMax = btn.getAttribute("data-max") || "";
+                if (btnMin === state.minPrice && btnMax === state.maxPrice) {
+                    btn.classList.add("active");
+                }
+            });
+        }
+        
+        // 지도 팝업 내 검색창 동기화
+        $("#mapKeyword").value = state.keyword;
+
+        function pushUrl() {
+            var params = new URLSearchParams({
+                page: state.page,
+                limit: state.limit,
+                keyword: state.keyword || "",
+                minPrice: state.minPrice || "",
+                maxPrice: state.maxPrice || ""
+            });
+            var url = location.pathname + "?" + params.toString();
+            history.pushState(state, "", url);
+        }
+
+        // 클라이언트 사이드 필터링
+        function filterOffices(offices) {
+            var filtered = offices;
+            
+            // 키워드 검색 (지점명)
+            if (state.keyword && state.keyword.trim()) {
+                var keyword = state.keyword.trim().toLowerCase();
+                filtered = filtered.filter(function(o) {
+                    return (o.name && o.name.toLowerCase().indexOf(keyword) !== -1) ||
+                           (o.address && o.address.toLowerCase().indexOf(keyword) !== -1);
+                });
+            }
+            
+            // 가격대 필터 (office의 room 가격 범위 기준)
+            if (state.minPrice || state.maxPrice) {
+                filtered = filtered.filter(function(o) {
+                    var officeMinPrice = o.minPrice || 0;
+                    var officeMaxPrice = o.maxPrice || 0;
+                    
+                    // office에 객실이 없으면 제외
+                    if (officeMinPrice === 0 && officeMaxPrice === 0) return false;
+                    
+                    // 가격 범위가 겹치면 포함
+                    if (state.minPrice && officeMaxPrice < Number(state.minPrice)) return false;
+                    if (state.maxPrice && officeMinPrice > Number(state.maxPrice)) return false;
+                    
+                    return true;
+                });
+            }
+            
+            return filtered;
+        }
+
+        // 지점의 모든 객실 리뷰 통계 및 가격 정보 가져오기
+        async function getOfficeReviewSummary(officeId) {
+            try {
+                // 해당 지점의 모든 객실 가져오기
+                var roomsRes = await fetch(ctx + "/api/rooms", { credentials: "same-origin" });
+                if (!roomsRes.ok) return { avgRating: 0, totalCount: 0, minPrice: 0, maxPrice: 0 };
+                var allRooms = await roomsRes.json();
+                
+                // 해당 지점의 객실만 필터링
+                var officeRooms = allRooms.filter(function(r) { return r.officeId === officeId; });
+                if (officeRooms.length === 0) return { avgRating: 0, totalCount: 0, minPrice: 0, maxPrice: 0 };
+                
+                // 객실 가격 범위 계산
+                var prices = officeRooms.map(function(r) { return r.priceBase || 0; }).filter(function(p) { return p > 0; });
+                var minPrice = prices.length > 0 ? Math.min.apply(Math, prices) : 0;
+                var maxPrice = prices.length > 0 ? Math.max.apply(Math, prices) : 0;
+                
+                // 각 객실의 리뷰 통계 가져오기
+                var totalRating = 0;
+                var totalCount = 0;
+                var roomCount = 0;
+                
+                for (var i=0; i<officeRooms.length; i++) {
+                    var roomId = officeRooms[i].id;
+                    var reviewRes = await fetch(ctx + "/api/reviews/rooms/" + roomId + "/summary", { credentials: "same-origin" });
+                    if (reviewRes.ok) {
+                        var reviewData = await reviewRes.json();
+                        if (reviewData.totalCount > 0) {
+                            totalRating += (reviewData.avgRating || 0) * reviewData.totalCount;
+                            totalCount += reviewData.totalCount || 0;
+                            roomCount++;
+                        }
+                    }
+                }
+                
+                var avgRating = totalCount > 0 ? (totalRating / totalCount) : 0;
+                return {
+                    avgRating: avgRating.toFixed(1),
+                    totalCount: totalCount,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice
+                };
+            } catch(e) {
+                console.error("지점 리뷰 통계 조회 실패:", e);
+                return { avgRating: 0, totalCount: 0, minPrice: 0, maxPrice: 0 };
+            }
+        }
+
+        async function fetchOffices(page) {
+            if (!page) page = 1;
+            state.page = page;
+
+            // 전체 지점 데이터가 없으면 한번에 가져오기
+            if (allOffices.length === 0) {
+                var res = await fetch(ctx + "/api/offices", { credentials: "same-origin" });
+                if (!res.ok) {
+                    console.error("지점 목록 로드 실패", res.status);
+                    return;
+                }
+                var offices = await res.json();
+                
+                // 각 지점의 리뷰 통계 및 가격 정보 가져오기
+                allOffices = await Promise.all(offices.map(async function(office) {
+                    var reviewInfo = await getOfficeReviewSummary(office.id);
+                    return {
+                        ...office,
+                        avgRating: reviewInfo.avgRating,
+                        reviewCount: reviewInfo.totalCount,
+                        minPrice: reviewInfo.minPrice,
+                        maxPrice: reviewInfo.maxPrice
+                    };
+                }));
+            }
+
+            // 필터링 적용
+            filteredOffices = filterOffices(allOffices);
+            
+            // 페이지네이션 적용
+            var start = (state.page - 1) * state.limit;
+            var end = start + state.limit;
+            var paginatedOffices = filteredOffices.slice(start, end);
+
+            renderOfficeCards(paginatedOffices);
+            renderPagination({
+                currentPage: state.page,
+                totalPages: Math.ceil(filteredOffices.length / state.limit),
+                totalCount: filteredOffices.length
+            });
+            $("#totalOffices").innerText = filteredOffices.length;
+            pushUrl();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return String(str).replace(/&/g,"&amp;")
+                .replace(/</g,"&lt;")
+                .replace(/>/g,"&gt;")
+                .replace(/"/g,"&quot;")
+                .replace(/'/g,"&#039;");
+        }
+
+        function renderOfficeCards(offices) {
+            var list = $("#officeList");
+            if (!offices || offices.length === 0) {
+                list.innerHTML = '<div class="card-basic" style="grid-column:1/-1;text-align:center;">검색 결과가 없습니다.</div>';
+                return;
+            }
+
+            var html = "";
+            for (var i=0; i<offices.length; i++) {
+                var o = offices[i];
+                var id = o.id;
+                var name = escapeHtml(o.name || "이름 없음");
+                var address = escapeHtml(o.address || "");
+                var img = ctx + "/img/no_image.jpg"; // Office는 thumbnail이 없으므로 기본 이미지 사용
+                var rating = o.avgRating ? Number(o.avgRating).toFixed(1) : "0.0";
+                var rcnt = o.reviewCount || 0;
+                var minPrice = o.minPrice || 0;
+                var maxPrice = o.maxPrice || 0;
+                var priceText = "";
+                if (minPrice > 0 && maxPrice > 0) {
+                    if (minPrice === maxPrice) {
+                        priceText = Number(minPrice).toLocaleString() + "원 ~";
+                    } else {
+                        priceText = Number(minPrice).toLocaleString() + " ~ " + Number(maxPrice).toLocaleString() + "원";
+                    }
+                } else if (minPrice > 0) {
+                    priceText = Number(minPrice).toLocaleString() + "원 ~";
+                } else {
+                    priceText = "문의";
+                }
+
+                html += '<div class="room-card" onclick="SC.goDetail(' + id + ')">' +
+                    '<img src="' + img + '" alt="' + name + '" class="room-card-image">' +
+                    '<div class="room-card-content">' +
+                    '<div class="room-card-title">' + name + '</div>' +
+                    '<div class="room-card-info">' + address + '</div>' +
+                    '<div class="room-card-rating">' +
+                    '⭐ ' + rating + ' (' + rcnt + '개 리뷰)' +
+                    '</div>' +
+                    '<div class="room-card-price">' + priceText + '</div>' +
+                    '</div></div>';
+            }
+            list.innerHTML = html;
+        }
+
+        function renderPagination(info) {
+            var area = $("#paginationArea");
+            if (!info || !info.totalPages || info.totalPages <= 1) {
+                area.innerHTML = "";
+                return;
+            }
+            var cur = parseInt(info.currentPage || state.page || 1);
+            var total = parseInt(info.totalPages);
+            var prev = (cur > 1) ? (cur - 1) : 1;
+            var next = (cur < total) ? (cur + 1) : total;
+
+            var pages = "";
+            var start = info.startPage || 1;
+            var end = info.endPage || total;
+            for (var i=start; i<=end; i++) {
+                pages += '<li><a href="#" class="' + (i == cur ? 'btn-brown' : '') +
+                    '" onclick="SC.fetch(' + i + ');return false;">' + i + '</a></li>';
+            }
+
+            area.innerHTML =
+                '<li><a href="#" onclick="SC.fetch(1);return false;">«</a></li>' +
+                '<li><a href="#" onclick="SC.fetch(' + prev + ');return false;">‹</a></li>' +
+                pages +
+                '<li><a href="#" onclick="SC.fetch(' + next + ');return false;">›</a></li>' +
+                '<li><a href="#" onclick="SC.fetch(' + total + ');return false;">»</a></li>';
+        }
+
+        var map = null;
+        function initMap() {
+            // 구글맵 초기화는 콜백으로 처리
+        }
+        
+        function ensureMap() {
+            var container = document.getElementById('mapContainer');
+            if (!map && container) {
+                map = new google.maps.Map(container, {
+                    center: { lat: 37.5665, lng: 126.9780 },
+                    zoom: 5
+                });
+            }
+            return map;
+        }
+
+        async function drawMarkers() {
+            // 전체 지점 데이터가 없으면 가져오기
+            if (allOffices.length === 0) {
+                var res = await fetch(ctx + "/api/offices", { credentials: "same-origin" });
+                if (!res.ok) return;
+                var offices = await res.json();
+                
+                // 각 지점의 리뷰 통계 및 가격 정보 가져오기
+                allOffices = await Promise.all(offices.map(async function(office) {
+                    var reviewInfo = await getOfficeReviewSummary(office.id);
+                    return {
+                        ...office,
+                        avgRating: reviewInfo.avgRating,
+                        reviewCount: reviewInfo.totalCount,
+                        minPrice: reviewInfo.minPrice,
+                        maxPrice: reviewInfo.maxPrice
+                    };
+                }));
+            }
+            
+            // 필터링 적용
+            var offices = filterOffices(allOffices);
+            var map = ensureMap();
+            
+            // 지도 팝업 내 총 개수 업데이트
+            $("#mapTotalOffices").innerText = offices.length;
+            
+            if (!map) return;
+
+            // 기존 마커 제거
+            if (window.markers) {
+                window.markers.forEach(function(marker) {
+                    marker.setMap(null);
+                });
+            }
+            window.markers = [];
+
+            var bounds = new google.maps.LatLngBounds();
+
+            for (var i=0; i<offices.length; i++) {
+                var o = offices[i];
+                // 위도/경도가 있다면 마커 추가 (현재 Office 엔티티에 위도/경도가 없으므로 기본 위치 사용)
+                // TODO: Office 엔티티에 latitude, longitude 필드 추가 필요
+                // 임시로 기본 위치 사용
+                var pos = { lat: 37.5665 + (i * 0.01), lng: 126.9780 + (i * 0.01) }; // 임시 위치
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: o.name
+                });
+                
+                var infoWindow = new google.maps.InfoWindow({
+                    content: '<div style="padding:8px 12px;font-size:14px;">' +
+                        escapeHtml(o.name) + '<br>' +
+                        escapeHtml(o.address || '') + '<br>' +
+                        '<a href="' + ctx + '/offices/detail/' + o.id + '" style="color:#5B3B31;font-weight:700;">상세보기</a></div>'
+                });
+                
+                marker.addListener('click', function() {
+                    infoWindow.open(map, marker);
+                });
+                
+                window.markers.push(marker);
+                bounds.extend(pos);
+            }
+            
+            if (window.markers.length > 0) {
+                map.fitBounds(bounds);
+            }
+        }
+
+        // 이벤트
+        function closeMapPopup() {
+            document.getElementById("mapPopup").classList.remove("active");
+            document.getElementById("mapOverlay").classList.remove("active");
+            document.body.style.overflow = "";
+        }
+        
+        $("#mapToggleBtn").addEventListener("click", function(){
+            document.getElementById("mapPopup").classList.add("active");
+            document.getElementById("mapOverlay").classList.add("active");
+            document.body.style.overflow = "hidden";
+            // 지도 팝업 내 검색창 동기화
+            $("#mapKeyword").value = state.keyword;
+            setTimeout(function(){ 
+                ensureMap(); 
+                drawMarkers(); 
+            }, 100);
+        });
+        
+        $("#mapCloseBtn").addEventListener("click", function(){
+            closeMapPopup();
+        });
+        
+        $("#mapOverlay").addEventListener("click", function(){
+            closeMapPopup();
+        });
+
+        // 가격대 필터 버튼 이벤트 (메인 페이지)
+        $all(".filter-card-section .price-filter-btn").forEach(function(btn){
+            btn.addEventListener("click", function(){
+                $all(".price-filter-btn").forEach(function(b){ b.classList.remove("active"); });
+                btn.classList.add("active");
+                // 지도 팝업 내 동일한 버튼도 활성화
+                var btnMin = btn.getAttribute("data-min") || "";
+                var btnMax = btn.getAttribute("data-max") || "";
+                $all(".map-popup-filters .price-filter-btn").forEach(function(b){
+                    if (b.getAttribute("data-min") === btnMin && b.getAttribute("data-max") === btnMax) {
+                        b.classList.add("active");
+                    }
+                });
+                state.minPrice = btnMin;
+                state.maxPrice = btnMax;
+                state.page = 1;
+                setPricePreview();
+                fetchOffices(1);
+                setTimeout(function(){ drawMarkers(); }, 100);
+            });
+        });
+        
+        // 지도 팝업 내 가격 필터 버튼 이벤트
+        $all(".map-popup-filters .price-filter-btn").forEach(function(btn){
+            btn.addEventListener("click", function(){
+                $all(".price-filter-btn").forEach(function(b){ b.classList.remove("active"); });
+                btn.classList.add("active");
+                // 메인 페이지의 동일한 버튼도 활성화
+                var btnMin = btn.getAttribute("data-min") || "";
+                var btnMax = btn.getAttribute("data-max") || "";
+                $all(".filter-card-section .price-filter-btn").forEach(function(b){
+                    if (b.getAttribute("data-min") === btnMin && b.getAttribute("data-max") === btnMax) {
+                        b.classList.add("active");
+                    }
+                });
+                state.minPrice = btnMin;
+                state.maxPrice = btnMax;
+                state.page = 1;
+                setPricePreview();
+                fetchOffices(1);
+                setTimeout(function(){ drawMarkers(); }, 100);
+            });
+        });
+        
+        // 지도 팝업 내 검색/초기화 이벤트
+        $("#mapKeyword").addEventListener("keydown", function(e){
+            if (e.key == "Enter") $("#mapSearchBtn").click();
+        });
+        
+        $("#mapSearchBtn").addEventListener("click", function(){
+            state.keyword = $("#mapKeyword").value.trim();
+            state.page = 1;
+            $("#keyword").value = state.keyword; // 메인 검색창도 동기화
+            setPricePreview();
+            fetchOffices(1);
+            setTimeout(function(){ drawMarkers(); }, 100);
+        });
+        
+        $("#mapResetBtn").addEventListener("click", function(){
+            state.keyword = "";
+            state.minPrice = "";
+            state.maxPrice = "";
+            state.page = 1;
+            $("#keyword").value = "";
+            $("#mapKeyword").value = "";
+            $all(".price-filter-btn").forEach(function(b){ b.classList.remove("active"); });
+            setPricePreview();
+            fetchOffices(1);
+            setTimeout(function(){ drawMarkers(); }, 100);
+        });
+
+        $("#searchBtn").addEventListener("click", function(){
+            state.keyword = $("#keyword").value.trim();
+            state.page = 1;
+            $("#mapKeyword").value = state.keyword; // 지도 팝업 검색창도 동기화
+            setPricePreview();
+            fetchOffices(1);
+            setTimeout(function(){ drawMarkers(); }, 100);
+        });
+        $("#keyword").addEventListener("keydown", function(e){
+            if (e.key == "Enter") $("#searchBtn").click();
+        });
+        $("#resetBtn").addEventListener("click", function(){
+            state.keyword = "";
+            state.minPrice = "";
+            state.maxPrice = "";
+            state.page = 1;
+            $("#keyword").value = "";
+            $("#mapKeyword").value = ""; // 지도 팝업 검색창도 초기화
+            $all(".price-filter-btn").forEach(function(b){ b.classList.remove("active"); });
+            setPricePreview();
+            fetchOffices(1);
+            setTimeout(function(){ drawMarkers(); }, 100);
+        });
+
+        window.SC = {
+            fetch: function(p){ fetchOffices(p); },
+            goDetail: function(id){ 
+                location.href = ctx + "/offices/detail/" + id;
+            }
+        };
+
+        // 구글맵 API가 로드되면 초기화
+        if (typeof google !== 'undefined' && google.maps) {
+            ensureMap();
+        }
+
+        fetchOffices(state.page);
+    })();
+</script>

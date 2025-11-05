@@ -130,7 +130,15 @@
         }
 
         // 검증 통과
-        const today = new Date().toISOString().split('T')[0];
+        // 선택된 날짜 가져오기 (첫 번째 시간 슬롯의 datetime에서 추출)
+        const firstSlot = document.querySelector('.time-slot.selected');
+        let selectedDate = new Date().toISOString().split('T')[0]; // 기본값: 오늘
+        
+        if (firstSlot && firstSlot.dataset.datetime) {
+            const dateTime = firstSlot.dataset.datetime;
+            selectedDate = dateTime.split('T')[0];
+        }
+        
         const startHour = Math.min(...selectedSlots);
         const endHour = Math.max(...selectedSlots) + 1;
         const startTime = `${String(startHour).padStart(2, '0')}:00`;
@@ -146,8 +154,8 @@
         elements.submitBtn.disabled = false;
 
         // 폼 데이터 설정
-        elements.startAt.value = `${today}T${String(startHour).padStart(2, '0')}:00:00`;
-        elements.endAt.value = `${today}T${String(endHour).padStart(2, '0')}:00:00`;
+        elements.startAt.value = `${selectedDate}T${String(startHour).padStart(2, '0')}:00:00`;
+        elements.endAt.value = `${selectedDate}T${String(endHour).padStart(2, '0')}:00:00`;
         elements.amount.value = totalAmount;
     }
 })();

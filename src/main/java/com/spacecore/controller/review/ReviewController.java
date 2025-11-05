@@ -130,7 +130,7 @@ public class ReviewController {
             // 관리자 → 리뷰 목록으로 리다이렉트 (메시지 포함, URL 인코딩)
             Long redirectRoomId = dto.getRoomId() != null ? dto.getRoomId() : 1L;
             try {
-                String message = URLEncoder.encode("리뷰 작성 권한이 없습니다", StandardCharsets.UTF_8.toString());
+                String message = URLEncoder.encode("리뷰 작성 권한이 없습니다", "UTF-8");
                 return "redirect:/reviews?roomId=" + redirectRoomId + "&message=" + message;
             } catch (Exception e) {
                 return "redirect:/reviews?roomId=" + redirectRoomId + "&message=no_permission";
@@ -150,6 +150,14 @@ public class ReviewController {
         try {
             if (dto.getRoomId() == null) {
                 throw new IllegalArgumentException("roomId 값이 누락되었습니다.");
+            }
+
+            // 세션에서 userId 가져오기
+            if (user instanceof com.spacecore.domain.user.User) {
+                com.spacecore.domain.user.User userObj = (com.spacecore.domain.user.User) user;
+                dto.setUserId(userObj.getId());
+            } else {
+                throw new IllegalArgumentException("사용자 정보를 가져올 수 없습니다.");
             }
 
             // 업로드 경로 생성

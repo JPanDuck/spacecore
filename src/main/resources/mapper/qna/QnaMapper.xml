@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spacecore.mapper.qna.QnaMapper">
+    <resultMap id="qnaMap" type="com.spacecore.domain.qna.Qna">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="name" column="name" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="isPrivate" column="is_private" />
+        <result property="status" column="status" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <resultMap id="qnaReplyMap" type="com.spacecore.domain.qna.QnaReply">
+        <id property="id" column="id" />
+        <result property="qnaId" column="qna_id" />
+        <result property="userId" column="user_id" />
+        <result property="name" column="name" />
+        <result property="isAdmin" column="is_admin" />
+        <result property="parentReplyId" column="parent_reply_id" />
+        <result property="content" column="content" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+    
+    <!-- 문의글 등록 -->
+    <insert id="insertQna" parameterType="com.spacecore.domain.qna.Qna">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT seq_qna.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO qna (id, user_id, title, content, is_private, status, created_at)
+        VALUES (#{id}, #{userId}, #{title}, #{content}, #{isPrivate}, 'PENDING', SYSTIMESTAMP)
+    </insert>
+
+    <!-- 문의글 목록 조회 -->
+    <select id="selectQnaList" resultMap="qnaMap">
+        SELECT q.id, q.user_id, u.name, q.title, q.is_private, q.status, q.created_at
+        FROM qna q
+        JOIN users u ON q.user_id = u.id
+        WHERE q.status = 'PENDING'
+        OR q.status = 'ANSWERED'
+<!--        <choose>-->
+<!--            <when test="currentUserRole == 'ADMIN'">-->
+<!--                &lt;!&ndash; 관리자는 모든 글 조회 가능 / 추가 WHERE절 불필요 &ndash;&gt;-->
+<!--            </when>-->
+<!--            <when test="currentUserId != null and currentUserId != 0">-->
+<!--                &lt;!&ndash; 로그인 사용자에게는 자신이 작성한 비공개 글 또는 공개글 노출 &ndash;&gt;-->
+<!--                AND (q.is_private = 'N' OR q.user_id = #{currentUserId})-->
+<!--            </when>-->
+<!--            <otherwise>-->
+<!--                &lt;!&ndash; 비로그인 사용자에게는 공개글만 노출 &ndash;&gt;-->
+<!--                AND q.is_private = 'N'-->
+<!--            </otherwise>-->
+<!--        </choose>-->
+        ORDER BY q.created_at DESC
+    </select>
+
+    <!-- 문의글 상세조회 / 권한 확인 로직 포함 -->
+    <select id="selectQnaById" resultMap="qnaMap">
+        SELECT q.id, q.user_id, u.name, q.title, q.content, q.is_private, q.status, q.created_at
+        FROM qna q
+        JOIN users u ON q.user_id = u.id
+        WHERE q.id = #{id}
+        <choose>
+            <when test="currentUserRole == 'ADMIN'">
+                <!-- 관리자는 모든 글 조회 가능 / 추가 WHERE절 불필요 -->
+            </when>
+            <when test="currentUserId != null and currentUserId != 0">
+                <!-- 로그인 사용자에게는 자신이 작성한 비공개 글 또는 공개글 노출 -->
+                AND (q.is_private = 'N' OR q.user_id = #{currentUserId})
+            </when>
+            <otherwise>
+                <!-- 비로그인 사용자에게는 공개글만 노출 -->
+                AND q.is_private = 'N'
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 문의글 단건 조회 / 댓글, 알림 처리용 단순 조회 -->
+    <select id="selectQnaByIdSimple" resultMap="qnaMap">
+        SELECT id, user_id, title, content, is_private, status
+        FROM qna
+        WHERE id = #{id}
+    </select>
+
+    <!-- 문의글 수정 / 답변 완료된 문의글은 수정 불가 -->
+    <update id="updateQna">
+        UPDATE qna
+        SET
+            title = #{title},
+            content = #{content},
+            is_private = #{isPrivate}
+        WHERE id = #{id}
+        AND user_id = #{userId}
+        AND status = 'PENDING'
+    </update>
+
+    <!-- 문의글 상태 변경 -->
+    <update id="updateQnaStatus">
+        UPDATE qna
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 문의글 삭제 -->
+    <delete id="deleteQna">
+        DELETE FROM qna
+        WHERE id = #{id}
+        AND user_id = #{userId}
+    </delete>
+
+    <!-- ===== QnaReply ===== -->
+
+    <!-- 특정 문의글의 모든 답변/댓글 조회 (계층형 구조 포함 - start with ~ connect by) -->
+    <select id="selectQnaReplies" resultMap="qnaReplyMap">
+        SELECT r.id, r.qna_id, r.user_id, u.name, r.is_admin, r.parent_reply_id, r.content, r.created_at
+        FROM qna_reply r
+        JOIN users u ON r.user_id = u.id
+        WHERE r.qna_id = #{qnaId}
+        START WITH r.parent_reply_id IS NULL
+        CONNECT BY PRIOR r.id = r.parent_reply_id
+        ORDER SIBLINGS BY r.created_at ASC
+    </select>
+
+    <!-- 답변/댓글 등록 -->
+    <insert id="insertReply" parameterType="com.spacecore.domain.qna.QnaReply">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT seq_qna_reply.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO qna_reply (id, qna_id, user_id, is_admin, parent_reply_id, content)
+        VALUES (#{id}, #{qnaId}, #{userId}, #{isAdmin}, #{parentReplyId, jdbcType=NUMERIC}, #{content})
+    </insert>
+
+    <!-- 답변/댓글 수정 -->
+    <update id="updateReply">
+        UPDATE qna_reply
+        SET content = #{content}
+        WHERE id = #{id}
+        AND user_id = #{userId}
+    </update>
+
+    <!-- 답변/댓글 삭제 -->
+    <delete id="deleteReply">
+        DELETE FROM qna_reply
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 특정 댓글 ID로 댓글 정보 조회 / 단건 조회 (삭제/수정/알림 처리용) -->
+    <select id="selectReplyById" resultMap="qnaReplyMap">
+        SELECT id, qna_id, user_id, is_admin, parent_reply_id, content, created_at
+        FROM qna_reply
+        WHERE id = #{id}
+    </select>
+
+    <!-- 특정 문의글에 달린 답변/답글 개수 카운트 -->
+    <select id="getReplyCountByQnaId" resultType="int">
+        SELECT COUNT(*)
+        FROM qna_reply
+        WHERE qna_id = #{qnaId}
+    </select>
+
+</mapper>

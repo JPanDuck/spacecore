@@ -26,20 +26,20 @@
             SELECT seq_users.NEXTVAL FROM dual
         </selectKey>
         INSERT INTO users (
-            id, username, email, password, name, phone, role, status, is_temp_password, created_at
+        id, username, email, password, name, phone, role, status, is_temp_password, created_at
         )
         VALUES (
-                     #{id},
-                     #{username},
-                     #{email},
-                     #{password, jdbcType=NULL},
-                     #{name},
-                     #{phone, jdbcType=VARCHAR},
-                     #{role},
-                     #{status},
-                     #{isTempPassword},
-                     SYSTIMESTAMP
-                 )
+        #{id},
+        #{username},
+        #{email},
+        #{password, jdbcType=NULL},
+        #{name},
+        #{phone, jdbcType=VARCHAR},
+        #{role},
+        #{status},
+        #{isTempPassword},
+        SYSTIMESTAMP
+        )
     </insert>
 
     <!-- username으로 사용자 조회 -->
@@ -122,5 +122,25 @@
         WHERE phone = #{phone}
     </select>
 
+    <select id="findIdByEmail" parameterType="string" resultType="long">
+        SELECT id
+        FROM users
+        WHERE email = #{email}
+    </select>
+
+    <!-- 내 계정을 제외한 휴대폰 중복검사   -->
+    <select id="existsByPhoneExcludingId" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM users
+        WHERE phone = #{phone}
+          AND id != #{excludeId}
+    </select>
+
+    <!-- (알림 기능) 모든 관리자에게 알림 발송용 -->
+    <select id="selectAllAdminIds" resultType="Long">
+        SELECT id
+        FROM users
+        WHERE role = 'ADMIN'
+    </select>
 
 </mapper>

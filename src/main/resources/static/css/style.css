@@ -111,15 +111,23 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 /* =========================
-   HEADER ICON BAR (GUCCI STYLE)
+   HEADER ICON BAR
 ========================= */
 
 .header-top-row {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
     padding: 18px 0;
+}
+
+/* 좌측 고객 서비스 버튼 */
+.header-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .header-left .header-link {
@@ -131,19 +139,22 @@ img { display: block; max-width: 100%; height: auto; }
     color: var(--text-primary);
     transition: color 0.3s ease;
 }
+
 .header-left .header-link:hover {
     color: var(--amber);
 }
 
-.header-icons {
-    display: flex;
-    align-items: center;
-    gap: 18px;
+/* 중앙 로고 */
+.header-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
 }
 
 .header-logo img {
     width: auto;
-    max-width: 180px; /* 기본 최대 크기 제한 */
+    max-width: 180px;
     height: auto;
     object-fit: contain;
     transition: transform 0.3s ease;
@@ -153,19 +164,16 @@ img { display: block; max-width: 100%; height: auto; }
     transform: scale(1.05);
 }
 
-/* 반응형 (태블릿 이하에서는 더 작게) */
-@media (max-width: 1024px) {
-    .header-logo img {
-        max-width: 150px;
-    }
+/* 우측 메뉴 (로그인 / 로그아웃 / 마이페이지 등) */
+.header-icons {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 18px;
 }
 
-@media (max-width: 768px) {
-    .header-logo img {
-        max-width: 130px;
-    }
-}
-
+/* 아이콘 버튼 */
 .icon-btn {
     background: none;
     border: none;
@@ -174,11 +182,13 @@ img { display: block; max-width: 100%; height: auto; }
     color: var(--text-primary);
     transition: transform 0.2s ease, color 0.3s ease;
 }
+
 .icon-btn:hover {
     color: var(--amber);
     transform: scale(1.1);
 }
 
+/* 텍스트 메뉴 */
 .menu-text {
     font-family: "Montserrat", sans-serif;
     font-size: 12px;
@@ -186,6 +196,92 @@ img { display: block; max-width: 100%; height: auto; }
     margin-left: 4px;
     letter-spacing: 1px;
 }
+
+/* =========================
+   offices 전용 헤더 구조 재정렬
+========================= */
+.offices-header {
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+/* 중앙 고정 로고 해제 */
+.offices-header .header-logo {
+    position: static !important;
+    transform: none !important;
+}
+
+
+/* 우측 아이콘 그룹 */
+.offices-header .header-icons {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 18px;
+}
+
+/* 반응형 조정 */
+@media (max-width: 1024px) {
+    .offices-header .header-logo img {
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .offices-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .offices-header .header-search {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+    .offices-header .header-search input {
+        width: 100%;
+    }
+}
+
+
+/* =========================
+   반응형 조정
+========================= */
+
+/* 태블릿 크기 이하 */
+@media (max-width: 1024px) {
+    .header-logo img {
+        max-width: 150px;
+    }
+}
+
+/* 모바일 크기 이하 */
+@media (max-width: 768px) {
+    .header-top-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header-left {
+        justify-content: center;
+    }
+
+    .header-logo {
+        position: static;
+        transform: none;
+    }
+
+    .header-logo img {
+        max-width: 130px;
+    }
+
+    .header-icons {
+        justify-content: center;
+        gap: 14px;
+    }
+}
+
 
 /* =========================
    MENU POPUP (Slide-in)
@@ -362,6 +458,59 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .logout-btn:hover {
     background: var(--cream-tan);
+}
+
+/* =========================
+   OFFICES PAGE HEADER CUSTOM
+========================= */
+.header-search {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    justify-content: center;
+}
+
+.search-input {
+    width: 220px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--sirocco);
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--white);
+    color: var(--text-primary);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--amber);
+}
+
+.calendar-input {
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid var(--sirocco);
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--white);
+    color: var(--text-primary);
+}
+
+.calendar-input:focus {
+    outline: none;
+    border-color: var(--amber);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .header-search {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .search-input {
+        width: 100%;
+    }
 }
 
 

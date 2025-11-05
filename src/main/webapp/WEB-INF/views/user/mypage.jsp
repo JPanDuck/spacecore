@@ -1,77 +1,246 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>마이페이지</title>
-    <style>
-        body {
-            font-family: "Pretendard", sans-serif;
-            margin: 40px;
-            line-height: 1.6;
-        }
-        table {
-            border-collapse: collapse;
-            width: 60%;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f8f8f8;
-            width: 150px;
-        }
-        .actions a, .actions button {
-            margin-right: 10px;
-            text-decoration: none;
-            color: #007bff;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .actions a:hover, .actions button:hover {
-            text-decoration: underline;
-        }
-        button.delete-btn {
-            color: #d9534f;
-            font-weight: bold;
-        }
-        button.delete-btn:hover {
-            color: #c9302c;
-        }
-    </style>
-</head>
+<%
+    String context = request.getContextPath();
+%>
 
-<body>
-<h2>내 정보</h2>
+<!-- ✅ 공통 헤더 -->
+<%@ include file="/WEB-INF/views/components/header.jsp" %>
+<link rel="stylesheet" href="<%=context%>/css/style.css">
 
-<table>
-    <tr><th>아이디</th><td>${user.username}</td></tr>
-    <tr><th>이름</th><td>${user.name}</td></tr>
-    <tr><th>이메일</th><td>${user.email}</td></tr>
-    <tr><th>전화번호</th><td>${user.phone}</td></tr>
-    <tr><th>역할</th><td>${user.role}</td></tr>
-</table>
+<style>
+    .mypage-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+    }
 
-<div class="actions">
-    <a href="/user/edit">정보 수정</a> |
-    <a href="/user/change-password">비밀번호 변경</a> |
-    <button type="button" class="delete-btn" onclick="deleteAccount()">회원 탈퇴</button>
-</div>
+    .mypage-header {
+        margin-bottom: 30px;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .mypage-header h1 {
+        color: var(--choco);
+        font-size: 28px;
+        margin: 0 0 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .mypage-header .subtitle {
+        color: var(--gray-600);
+        font-size: 14px;
+    }
+
+    .info-section {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+    .info-section h2 {
+        color: var(--choco);
+        font-size: 20px;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--choco);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .info-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .info-table tr {
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .info-table tr:last-child {
+        border-bottom: none;
+    }
+
+    .info-table th {
+        width: 180px;
+        padding: 16px 20px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--gray-800);
+        background: var(--gray-50);
+        font-size: 14px;
+    }
+
+    .info-table td {
+        padding: 16px 20px;
+        color: var(--gray-700);
+        font-size: 14px;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .role-USER {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .role-ADMIN {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .actions-section {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .actions-section h2 {
+        color: var(--choco);
+        font-size: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--choco);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: var(--choco);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: var(--amber);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .btn-secondary {
+        background: var(--gray-200);
+        color: var(--gray-700);
+    }
+
+    .btn-secondary:hover {
+        background: var(--gray-300);
+    }
+
+    .btn-danger {
+        background: #e74c3c;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #c0392b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+</style>
+
+<main class="mypage-container">
+    <div class="mypage-header">
+        <h1><i class="ph ph-user-circle"></i> 마이페이지</h1>
+        <p class="subtitle">내 정보를 확인하고 관리할 수 있습니다.</p>
+    </div>
+
+    <div class="info-section">
+        <h2><i class="ph ph-identification-card"></i> 내 정보</h2>
+        <table class="info-table">
+            <tr>
+                <th>아이디</th>
+                <td><c:out value="${user.username}" default="정보 없음"/></td>
+            </tr>
+            <tr>
+                <th>이름</th>
+                <td><c:out value="${user.name}" default="정보 없음"/></td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td><c:out value="${user.email}" default="정보 없음"/></td>
+            </tr>
+            <tr>
+                <th>전화번호</th>
+                <td><c:out value="${user.phone != null && !user.phone.isEmpty() ? user.phone : '정보 없음'}" default="정보 없음"/></td>
+            </tr>
+            <tr>
+                <th>역할</th>
+                <td>
+                    <c:choose>
+                        <c:when test="${user.role == 'USER'}">
+                            <span class="role-badge role-USER">일반 사용자</span>
+                        </c:when>
+                        <c:when test="${user.role == 'ADMIN'}">
+                            <span class="role-badge role-ADMIN">관리자</span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="role-badge"><c:out value="${user.role}" default="정보 없음"/></span>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="actions-section">
+        <h2><i class="ph ph-gear"></i> 계정 관리</h2>
+        <div class="action-buttons">
+            <a href="<%=context%>/user/edit" class="btn btn-primary">
+                <i class="ph ph-pencil"></i> 정보 수정
+            </a>
+            <a href="<%=context%>/user/change-password" class="btn btn-secondary">
+                <i class="ph ph-key"></i> 비밀번호 변경
+            </a>
+            <button type="button" class="btn btn-danger" onclick="deleteAccount()">
+                <i class="ph ph-trash"></i> 회원 탈퇴
+            </button>
+        </div>
+    </div>
+</main>
 
 <script>
     async function deleteAccount() {
         if (!confirm("⚠ 정말 탈퇴하시겠습니까?\n이 작업은 되돌릴 수 없습니다.")) return;
 
         try {
-            const res = await fetch("/api/user/me", {
+            const res = await fetch("<%=context%>/api/user/me", {
                 method: "DELETE",
-                credentials: "include", // ✅ 쿠키 인증 포함
+                credentials: "include",
                 headers: { "Content-Type": "application/json" }
             });
 
@@ -79,18 +248,15 @@
             alert(msg);
 
             if (res.ok) {
-                // ✅ 쿠키 완전 삭제
                 clearCookie("access_token");
                 clearCookie("refresh_token");
                 clearCookie("JSESSIONID");
 
-                // ✅ localStorage 및 sessionStorage 완전 초기화
                 localStorage.clear();
                 sessionStorage.clear();
 
-                // ✅ 삭제 반영 보장 후 로그인 페이지로 이동
                 setTimeout(() => {
-                    window.location.replace("/auth/login");
+                    window.location.replace("<%=context%>/auth/login");
                 }, 150);
             }
         } catch (err) {
@@ -99,10 +265,9 @@
         }
     }
 
-    // ✅ 안전한 쿠키 삭제 (SameSite=Lax 옵션 포함)
     function clearCookie(name) {
         document.cookie = name + "=; Max-Age=0; path=/; SameSite=Lax;";
     }
 </script>
-</body>
-</html>
+
+<%@ include file="/WEB-INF/views/components/footer.jsp" %>

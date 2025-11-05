@@ -62,6 +62,7 @@ public class AuthRestController {
                     .body(Map.of(
                             "message", "로그인 성공",
                             "username", user.getUsername(),
+                            "name", user.getName() != null ? user.getName() : user.getUsername(),
                             "role", user.getRole()
                     ));
         } catch (BadCredentialsException e) {
@@ -101,7 +102,13 @@ public class AuthRestController {
         if (authentication != null && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-            return ResponseEntity.ok(Map.of("valid", true, "username", user.getUsername(), "role", user.getRole()));
+            User userEntity = userService.findById(user.getId());
+            return ResponseEntity.ok(Map.of(
+                    "valid", true,
+                    "username", user.getUsername(),
+                    "name", userEntity.getName() != null ? userEntity.getName() : user.getUsername(),
+                    "role", user.getRole()
+            ));
         }
         return ResponseEntity.status(401).body(Map.of("valid", false));
     }

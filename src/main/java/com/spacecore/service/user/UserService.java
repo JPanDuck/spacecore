@@ -32,4 +32,9 @@ public interface UserService {
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
+    /** ✅ 내 계정을 제외한 중복 전화번호 검사 */
+    boolean existsByPhoneExcludingId(String phone, Long excludeId);
+
+    //(알림 기능) 모든 관리자에게 알림 발송용
+    List<Long> getAllAdminIds();
 }

@@ -14,6 +14,9 @@ public interface UserMapper {
     User findById(@Param("id") Long id);                      // 마이페이지 / 관리자 상세조회
     List<User> findAll();                                     // 관리자 전체 조회
 
+    // ✅ 추가 — OAuth2AuthorizedClientService에서 사용 (이메일 → userId 변환)
+    Long findIdByEmail(@Param("email") String email);
+
     // 등록 / 수정 / 삭제
     void insert(User user);                                   // 회원가입
     void update(User user);                                   // 프로필 수정
@@ -29,4 +32,11 @@ public interface UserMapper {
     boolean existsByUsername(@Param("username") String username); // 아이디 중복체크
     boolean existsByEmail(@Param("email") String email);          // 이메일 중복체크
     boolean existsByPhone(@Param("phone") String phone);
+
+    //내 계정을 제외한 중복 전화번호 검사
+    boolean existsByPhoneExcludingId(@Param("phone") String phone, @Param("excludeId") Long excludeId);
+
+    //(알림 기능) 모든 관리자에게 알림 발송용
+    List<Long> selectAllAdminIds();
+
 }

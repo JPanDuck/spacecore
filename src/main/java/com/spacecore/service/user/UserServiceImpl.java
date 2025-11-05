@@ -116,5 +116,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.existsByPhone(phone);
     }
 
+    @Override
+    public boolean existsByPhoneExcludingId(String phone, Long excludeId) {
+        return userMapper.existsByPhoneExcludingId(phone, excludeId);
+    }
 
+    //(알림 기능) 모든 관리자에게 알림 발송용
+    @Override
+    public List<Long> getAllAdminIds() {
+        return userMapper.selectAllAdminIds();
+    }
 }
