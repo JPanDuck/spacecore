@@ -283,6 +283,16 @@
 
 <!-- ✅ CSS -->
 <style>
+    /* 헤더 sticky 스타일 추가 */
+    .app-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: var(--cream-base);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+    }
+
     .support-popup {
         position: fixed;
         top: 0;
