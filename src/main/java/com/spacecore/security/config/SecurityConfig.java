@@ -18,6 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * ✅ SpaceCore Security Configuration
+ * JWT + OAuth2 + Stateless 통합 보안 설정
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,25 +32,19 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    /**
-     * ✅ 비밀번호 암호화
-     */
+    /** ✅ 비밀번호 암호화 */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * ✅ 인증 매니저 등록 (로그인 시 AuthenticationBuilder에서 사용)
-     */
+    /** ✅ AuthenticationManager 등록 */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-    /**
-     * ✅ 정적 리소스 보안 필터 완전 제외 (성능 향상)
-     */
+    /** ✅ 정적 리소스 보안 제외 */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers(
@@ -60,73 +58,87 @@ public class SecurityConfig {
         );
     }
 
-    /**
-     * ✅ 보안 필터 체인 설정 (JWT + OAuth2 + Stateless)
-     */
+    /** ✅ 보안 필터 체인 (JWT + OAuth2 + Stateless) */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 기본 시큐리티 기능 비활성화
+                // 기본 보안 비활성화
                 .csrf().disable()
                 .httpBasic().disable()
                 .formLogin().disable()
 
-                // ✅ 세션 사용 안 함 (JWT 기반)
+                // 세션 비활성화 (JWT 기반)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-                // ✅ 요청별 인가 규칙
+                // 인가 규칙 설정
                 .authorizeRequests()
+
+                // ✅ 공개 경로 (비회원 접근 가능)
                 .antMatchers(
-                        "/",
+                        "/", "/index",
                         "/auth/**",
                         "/oauth2/**",
                         "/error",
-                        "/reviews/**",              // ✅ 비회원 접근 허용
                         "/api/auth/login",
                         "/api/auth/register",
                         "/api/auth/validate",
-                        "/api/auth/refresh"
-                ).permitAll()
-
-                // 공개 조회(페이지)
-                .antMatchers(
+                        "/api/auth/refresh",
+                        "/reviews/**",
+                        "/api/reviews/**",
+                        "/chatbot/**",
+                        "/map/**",
                         "/rooms/**",
                         "/offices/**",
+                        "/api/offices", "/api/offices/**",
+                        "/api/rooms", "/api/rooms/**",
                         "/reservations/", "/reservations/detail/**",
                         "/notices/**",
-                        "/virtual-accounts/detail/**",
-                        "/reviews", "/reviews/**", "/api/reviews/**"
+                        "/virtual-accounts/detail/**"
                 ).permitAll()
 
-                // 관리자 전용
+                // ✅ 회원만 접근 가능한 영역 (JWT 인증 필요)
+                .antMatchers(
+                        "/user/**",
+                        "/api/user/**",
+                        "/favorites/**",
+                        "/notifications/**",
+                        "/api/notifications/**",
+                        "/reservations/add/**",
+                        "/reservations/edit/**",
+                        "/api/reservations",
+                        "/api/reservations/**/cancel",
+                        "/payments/**",
+                        "/api/payments/**"
+                ).hasAnyRole("USER", "ADMIN")
+
+                // ✅ 관리자 전용 영역
                 .antMatchers(
                         "/admin/**",
-                        "/api/admin/**")
-                .hasRole("ADMIN")
+                        "/api/admin/**"
+                ).hasRole("ADMIN")
 
-
+                // ✅ 그 외 요청은 인증 필요
                 .anyRequest().authenticated()
                 .and()
 
-
-                // ✅ OAuth2 로그인
+                // ✅ OAuth2 로그인 설정
                 .oauth2Login()
                 .loginPage("/auth/login")
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
-
-                // ✅ 로그아웃 설정 (JWT 기반이라 실제 동작은 AuthRestController에서 처리)
                 .and()
+
+                // ✅ 로그아웃 (JWT 기반)
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/auth/login")
                 .deleteCookies("access_token", "refresh_token");
 
-        // ✅ JWT 인증 필터를 UsernamePasswordAuthenticationFilter보다 먼저 등록
+        // ✅ JWT 필터 등록 (UsernamePasswordAuthenticationFilter보다 앞에)
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

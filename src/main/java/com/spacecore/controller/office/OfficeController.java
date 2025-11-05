@@ -3,6 +3,7 @@ package com.spacecore.controller.office;
 
 import com.spacecore.domain.office.Office;
 import com.spacecore.service.office.OfficeService;
+import com.spacecore.service.room.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class OfficeController {
 
     private final OfficeService officeService;
+    private final RoomService roomService;
 
     /// 목록 페이지
     @GetMapping({"","/"})
@@ -27,6 +29,8 @@ public class OfficeController {
     @GetMapping("/detail/{id}")
     public String officeDetail(@PathVariable Long id, Model model) {
         model.addAttribute("office", officeService.get(id));
+        // 해당 지점의 객실 목록 추가
+        model.addAttribute("roomList", roomService.listByOffice(id));
         return "office/detail";
     }
 

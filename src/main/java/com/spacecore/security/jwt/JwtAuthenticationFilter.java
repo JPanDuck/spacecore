@@ -77,6 +77,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // ✅ 7️⃣ 세션에 사용자 정보 저장 (Controller에서 HttpSession 사용을 위해)
+                request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute("role", role);
+                request.getSession().setAttribute("userName", user.getName() != null ? user.getName() : username);
+                
                 log.debug("✅ JWT 인증 성공: {} (Role: {})", username, role);
             } else {
                 log.trace("⚪ JWT 토큰 없음 - 익명 요청: {}", request.getRequestURI());

@@ -48,9 +48,10 @@
         <button class="menu-close" id="menuClose"><i class="ph ph-x"></i></button>
         <nav class="menu-content">
             <a href="${pageContext.request.contextPath}/about">회사 소개</a>
-            <a href="${pageContext.request.contextPath}/office">오피스</a>
-            <a href="${pageContext.request.contextPath}/reserve">예약하기</a>
+            <a href="${pageContext.request.contextPath}/notices">공지사항</a>
+            <a href="${pageContext.request.contextPath}/offices">오피스</a>
             <a href="${pageContext.request.contextPath}/reviews">커뮤니티</a>
+            <a href="${pageContext.request.contextPath}/qna">Q&A</a>
             <a href="${pageContext.request.contextPath}/support">고객센터</a>
             <hr>
             <div class="menu-extra" id="menuExtra"></div>
@@ -83,26 +84,34 @@
             document.body.style.overflow = "";
         };
 
-        // ✅ 로그인 상태 표시
-        const username = localStorage.getItem("username");
-        if (username) {
-            headerIcons.innerHTML = `
-            <span class="welcome-text">환영합니다, <strong>${username}</strong>님</span>
-            <a href="${pageContext.request.contextPath}/reservations" class="nav-link">예약조회</a>
-            <a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>
-            <a href="#" class="nav-link logout-link">로그아웃</a>
-            <button id="menuToggle" class="icon-btn"><i class="ph ph-list"></i><span class="menu-text">MENU</span></button>
-        `;
-            menuExtra.innerHTML = `
-            <a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>
-            <a href="#" class="nav-link logout-link">로그아웃</a>
-        `;
-        } else {
-            menuExtra.innerHTML = `
-            <a href="${pageContext.request.contextPath}/auth/login" class="nav-link">로그인</a>
-            <a href="${pageContext.request.contextPath}/auth/register" class="nav-link">회원가입</a>
-        `;
+
+        // 🚨 (추가) 안 읽은 알림 개수 조회 함수
+        async function getUnreadNotificationCount() {
+            try {
+                const url = "${pageContext.request.contextPath}/api/notifications/unread/count";
+                console.log(`[Notification] API 호출 시도: ${url}`); // 호출 URL 확인
+
+                const res = await fetch(url, {
+                    method: "GET",
+                    credentials: "include"
+                });
+                const data = await res.json();
+                console.log("[Notification] API 응답 데이터:", data); // 응답 데이터 전체 확인
+
+                if (res.ok) {
+                    // 만약 Controller가 {count: 5} 형태로 보낸다면, data.count로 바꿔야 함
+                    const count = data.unreadCount || data.count || 0;
+                    console.log(`[Notification] 최종 카운트 값: ${count}`); // 최종 카운트 값 확인
+                    return count;
+                } else {
+                    console.error(`[Notification] API 응답 실패: 상태 ${res.status}`);
+                }
+            } catch (err) {
+                console.error("[Notification] 안 읽은 알림 개수 조회 실패:", err);
+            }
+            return 0;
         }
+
 
         // ✅ 메뉴 버튼 재바인딩
         const bindMenuEvents = () => {
@@ -111,8 +120,110 @@
                 menuBtn.addEventListener("click", () => openPopup(menuPopup, menuOverlay));
             }
         };
+
+        // ✅ 로그인 상태 확인 (토큰 검증 필수)
+        async function checkLoginStatus() {
+            const token = localStorage.getItem("accessToken");
+
+            // 토큰이 없으면 무조건 비로그인 상태
+            if (!token) {
+                // localStorage 정리
+                localStorage.removeItem("username");
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
+                localStorage.removeItem("role");
+                showLoggedOutUI();
+                return;
+            }
+
+            // 토큰이 있으면 서버에서 검증
+            try {
+                const res = await fetch("${pageContext.request.contextPath}/api/auth/validate", {
+                    method: "GET",
+                    credentials: "include"
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.valid === true) {
+                        // 유효한 토큰이면 로그인 상태 표시
+                        // data.name을 우선 사용, 없거나 빈 문자열이면 username 사용
+                        let displayName = data.name;
+                        if (!displayName || displayName.trim() === "") {
+                            displayName = data.username || "사용자";
+                        }
+                        console.log("로그인 사용자 정보:", { name: data.name, username: data.username, displayName: displayName });
+
+                        // 🚨 (추가) 알림 개수 비동기 조회 및 전달
+                        const unreadCount = await getUnreadNotificationCount();
+
+                        showLoggedInUI(displayName, unreadCount);
+                        return;
+                    }
+                }
+                // 토큰이 유효하지 않으면 정리
+                localStorage.clear();
+                showLoggedOutUI();
+            } catch (err) {
+                console.error("토큰 검증 실패:", err);
+                localStorage.clear();
+                showLoggedOutUI();
+            }
+        }
+
+        function showLoggedInUI(userName, unreadCount) {
+            // 알림 아이콘 HTML 생성
+            const notificationCountHtml = (unreadCount > 0) 
+                ? '<span class="notification-badge">' + unreadCount + '</span>' 
+                : '';
+            const notificationIconHtml = 
+                '<a href="${pageContext.request.contextPath}/notifications" class="nav-link notification-icon" style="position: relative; display: inline-flex; align-items: center;">' +
+                '<i class="ph ph-bell"></i>' + notificationCountHtml + '</a>';
+
+            headerIcons.innerHTML = `
+            <span class="welcome-text">환영합니다, <strong>${userName}</strong>님</span>
+            <a href="${pageContext.request.contextPath}/reservations" class="nav-link">예약조회</a>
+            ${notificationIconHtml}
+            <a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>
+            <a href="#" class="nav-link logout-link">로그아웃</a>
+            <button id="menuToggle" class="icon-btn"><i class="ph ph-list"></i><span class="menu-text">MENU</span></button>
+        `;
+
+            //🚨 (추가)
+            var countHtml = (unreadCount > 0)
+                ? ' <span class="notification-count">' + unreadCount + '</span>'
+                : '';
+            var notificationLinkHtml =
+                '<a href="${pageContext.request.contextPath}/notifications" class="nav-link">' +
+                '알림' + countHtml +
+                '</a>';
+
+            menuExtra.innerHTML = notificationLinkHtml + '\n' +
+                '<a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>\n' +
+                '<a href="#" class="nav-link logout-link">로그아웃</a>';
+            bindMenuEvents();
+        }
+
+        function showLoggedOutUI() {
+            headerIcons.innerHTML = `
+            <a href="${pageContext.request.contextPath}/auth/login" class="nav-link">로그인</a>
+            <a href="${pageContext.request.contextPath}/auth/register" class="nav-link">회원가입</a>
+            <button id="menuToggle" class="icon-btn"><i class="ph ph-list"></i><span class="menu-text">MENU</span></button>
+        `;
+            menuExtra.innerHTML = `
+            <a href="${pageContext.request.contextPath}/auth/login" class="nav-link">로그인</a>
+            <a href="${pageContext.request.contextPath}/auth/register" class="nav-link">회원가입</a>
+        `;
+            bindMenuEvents();
+        }
+
+        // 초기 바인딩
         bindMenuEvents();
-        new MutationObserver(bindMenuEvents).observe(headerIcons, { childList: true });
+        // 동적으로 추가된 요소를 위한 Observer
+        new MutationObserver(bindMenuEvents).observe(headerIcons, {childList: true});
+
+        // 초기 로그인 상태 확인
+        checkLoginStatus();
 
         // ✅ 팝업 닫기
         menuClose.addEventListener("click", () => closePopup(menuPopup, menuOverlay));
@@ -148,6 +259,25 @@
                 }
             }
         });
+        // ✅ /offices 전용 헤더 구성
+        const currentPath = window.location.pathname;
+
+        // /offices 페이지일 경우 헤더 재배치
+        if (currentPath.includes("/offices")) {
+            const headerRow = document.querySelector(".header-top-row");
+            headerRow.classList.add("offices-header");
+
+            // 기존 요소들 가져오기
+            const logo = document.querySelector(".header-logo");
+            const icons = document.querySelector(".header-icons");
+            const searchBox = document.createElement("div");
+
+            // 헤더 순서 재배치: 로고 - 검색영역 - 마이페이지 등
+            headerRow.innerHTML = ""; // 기존 비우기
+            headerRow.appendChild(logo);
+            headerRow.appendChild(icons);
+        }
+
     });
 </script>
 
@@ -160,18 +290,22 @@
         width: 360px;
         height: 100vh;
         background: var(--cream-base);
-        box-shadow: -2px 0 10px rgba(0,0,0,0.15);
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
         transition: right 0.4s ease;
         z-index: 999;
         padding: 40px 30px;
     }
-    .support-popup.active { right: 0; }
+
+    .support-popup.active {
+        right: 0;
+    }
 
     .support-content h3 {
         font-size: 20px;
         color: var(--choco);
         margin-bottom: 16px;
     }
+
     .support-content p {
         font-size: 14px;
         color: var(--text-primary);
@@ -185,7 +319,10 @@
         color: var(--text-primary);
         transition: color 0.25s ease;
     }
-    .nav-link:hover { color: var(--amber); }
+
+    .nav-link:hover {
+        color: var(--amber);
+    }
 
     .welcome-text {
         font-size: 14px;
@@ -218,12 +355,63 @@
         color: var(--text-primary);
         transition: color 0.3s ease;
     }
-    .icon-btn:hover { color: var(--amber); }
+
+    .icon-btn:hover {
+        color: var(--amber);
+    }
 
     .menu-text {
         font-size: 10px;
         font-weight: 700;
         margin-left: 4px;
         letter-spacing: 0.5px;
+    }
+
+    /* 안 읽은 알림 개수 뱃지 스타일 */
+    .notification-count {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        margin-left: 6px;
+        background-color: var(--amber);
+        color: white;
+        border-radius: 9px;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+        vertical-align: middle;
+    }
+
+    /* 알림 아이콘 스타일 */
+    .notification-icon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .notification-icon i {
+        font-size: 20px;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        background-color: #e74c3c;
+        color: white;
+        border-radius: 9px;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+        border: 2px solid white;
     }
 </style>
