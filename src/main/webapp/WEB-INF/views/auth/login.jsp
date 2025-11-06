@@ -183,6 +183,13 @@
             <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
         </div>
 
+        <div style="text-align: right; margin-bottom: 16px;">
+            <a href="${pageContext.request.contextPath}/auth/find-password" 
+               style="color: var(--mocha); font-size: 13px; font-weight: 500; text-decoration: none;">
+                비밀번호 찾기
+            </a>
+        </div>
+
         <button type="submit" class="login-btn">로그인</button>
     </form>
 

@@ -103,6 +103,11 @@
 <div class="find-card">
     <h2>비밀번호 찾기</h2>
 
+    <p style="color: var(--gray-600); font-size: 14px; margin-bottom: 30px; line-height: 1.6;">
+        가입 시 등록하신 아이디와 이메일을 입력하시면<br>
+        비밀번호를 재설정할 수 있습니다.
+    </p>
+
     <form id="findForm" onsubmit="findPassword(event)">
         <label for="username">아이디</label>
         <input type="text" id="username" placeholder="아이디를 입력하세요" required>
@@ -113,7 +118,7 @@
         <button type="submit">확인</button>
     </form>
 
-    <p id="message"></p>
+    <p id="message" style="min-height: 20px; margin-top: 16px; font-weight: 600; font-size: 14px;"></p>
 
     <div class="footer-link">
         로그인 화면으로 돌아가기 →

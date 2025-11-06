@@ -28,24 +28,26 @@
     <select id="findReviews" resultType="com.spacecore.dto.review.ReviewResponseDTO">
         SELECT
         r.id,
-        u.name AS userName,
+        NVL(u.name, '익명') AS userName,
         r.room_id AS roomId,
         r.rating,
-        r.content,
+        CASE 
+            WHEN r.content IS NULL THEN NULL
+            ELSE DBMS_LOB.SUBSTR(r.content, 4000, 1)
+        END AS content,
         r.img_url AS imgUrl,
         TO_CHAR(r.created_at, 'YYYY-MM-DD HH24:MI:SS') AS createdAt
         FROM reviews r
-        <!-- LEFT JOIN 으로 변경 -->
         LEFT JOIN users u ON r.user_id = u.id
         WHERE 1=1
         <if test="roomId != null">
             AND r.room_id = #{roomId, jdbcType=NUMERIC}
         </if>
         <if test="keyword != null and keyword != ''">
-            AND LOWER(r.content) LIKE '%' || LOWER(#{keyword}) || '%'
+            AND LOWER(DBMS_LOB.SUBSTR(r.content, 4000, 1)) LIKE '%' || LOWER(#{keyword}) || '%'
         </if>
         <if test="userName != null and userName != ''">
-            AND LOWER(u.name) LIKE '%' || LOWER(#{userName}) || '%'
+            AND LOWER(NVL(u.name, '')) LIKE '%' || LOWER(#{userName}) || '%'
         </if>
         <if test="rating != null">
             AND r.rating = #{rating, jdbcType=NUMERIC}
@@ -66,10 +68,10 @@
             AND r.room_id = #{roomId, jdbcType=NUMERIC}
         </if>
         <if test="keyword != null and keyword != ''">
-            AND LOWER(r.content) LIKE '%' || LOWER(#{keyword}) || '%'
+            AND LOWER(DBMS_LOB.SUBSTR(r.content, 4000, 1)) LIKE '%' || LOWER(#{keyword}) || '%'
         </if>
         <if test="userName != null and userName != ''">
-            AND LOWER(u.name) LIKE '%' || LOWER(#{userName}) || '%'
+            AND LOWER(NVL(u.name, '')) LIKE '%' || LOWER(#{userName}) || '%'
         </if>
         <if test="rating != null">
             AND r.rating = #{rating, jdbcType=NUMERIC}
@@ -96,14 +98,17 @@
     <select id="findById" resultType="com.spacecore.dto.review.ReviewResponseDTO">
         SELECT
             r.id,
-            u.name AS userName,
+            NVL(u.name, '익명') AS userName,
             r.room_id AS roomId,
             r.rating,
-            r.content,
+            CASE 
+                WHEN r.content IS NULL THEN NULL
+                ELSE DBMS_LOB.SUBSTR(r.content, 4000, 1)
+            END AS content,
             r.img_url AS imgUrl,
             TO_CHAR(r.created_at, 'YYYY-MM-DD HH24:MI:SS') AS createdAt
         FROM reviews r
-                 LEFT JOIN users u ON r.user_id = u.id
+        LEFT JOIN users u ON r.user_id = u.id
         WHERE r.id = #{reviewId, jdbcType=NUMERIC}
     </select>
 

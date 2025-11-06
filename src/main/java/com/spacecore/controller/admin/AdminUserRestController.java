@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,13 +30,13 @@ public class AdminUserRestController {
     /** 사용자 상세 조회 */
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
-        try {
-            User user = userService.findById(id);
-            return ResponseEntity.ok(user);
-        } catch (Exception e) {
-            log.warn("사용자 조회 실패: {}", e.getMessage());
-            return ResponseEntity.status(404).body("사용자를 찾을 수 없습니다.");
+        User user = userService.findById(id);
+        if (user == null) {
+            log.warn("사용자 조회 실패 - 존재하지 않음: id={}", id);
+            return ResponseEntity.status(404).body(Map.of("message", "사용자를 찾을 수 없습니다."));
         }
+        log.info("👁 사용자 조회 성공: id={}", id);
+        return ResponseEntity.ok(user);
     }
 
     /** 사용자 수정 */
@@ -43,29 +44,34 @@ public class AdminUserRestController {
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User formUser) {
         try {
             User existingUser = userService.findById(id);
+            if (existingUser == null) {
+                return ResponseEntity.status(404).body(Map.of("message", "해당 사용자를 찾을 수 없습니다."));
+            }
+
             if (formUser.getName() != null) existingUser.setName(formUser.getName());
             if (formUser.getEmail() != null) existingUser.setEmail(formUser.getEmail());
-            existingUser.setPhone(formUser.getPhone());
-            existingUser.setStatus(formUser.getStatus());
+            if (formUser.getPhone() != null) existingUser.setPhone(formUser.getPhone());
+            if (formUser.getStatus() != null) existingUser.setStatus(formUser.getStatus());
 
             userService.update(existingUser);
-            log.info("관리자 - 사용자 수정: {}", existingUser.getUsername());
-            return ResponseEntity.ok("사용자 정보가 수정되었습니다.");
+            log.info("관리자 - 사용자 수정 완료: {}", existingUser.getUsername());
+            return ResponseEntity.ok(Map.of("message", "사용자 정보가 수정되었습니다."));
         } catch (Exception e) {
-            log.error("사용자 수정 실패: {}", e.getMessage());
-            return ResponseEntity.status(500).body("사용자 수정 중 오류 발생");
+            log.error("사용자 수정 실패: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of("message", "사용자 수정 중 오류 발생"));
         }
     }
 
-    /** 비밀번호 초기화 */
+    /** 비밀번호 초기화 (관리자 전용) */
     @PostMapping("/{id}/reset-password")
     public ResponseEntity<?> resetPassword(@PathVariable Long id) {
         try {
-            // 서비스가 랜덤 임시 비밀번호 생성
-            userService.resetPassword(id);
-
-            log.info("관리자 - 비밀번호 초기화: userId={}", id);
-            return ResponseEntity.ok("비밀번호가 임시 비밀번호로 초기화되었습니다.");
+            String tempPassword = userService.resetPasswordByAdmin(id);
+            log.info("관리자 - 비밀번호 초기화 완료: userId={}", id);
+            return ResponseEntity.ok(Map.of(
+                    "message", "비밀번호가 임시 비밀번호로 초기화되었습니다.",
+                    "tempPassword", tempPassword
+            ));
         } catch (Exception e) {
             log.error("비밀번호 초기화 실패: {}", e.getMessage());
             return ResponseEntity.status(500).body("비밀번호 초기화 중 오류 발생");
@@ -77,11 +83,14 @@ public class AdminUserRestController {
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             userService.delete(id);
-            log.info("관리자 - 사용자 삭제: userId={}", id);
-            return ResponseEntity.ok("사용자가 삭제되었습니다.");
+            log.info("관리자 - 사용자 삭제 완료: userId={}", id);
+            return ResponseEntity.ok(Map.of("message", "사용자가 삭제되었습니다."));
+        } catch (IllegalArgumentException e) {
+            log.warn("⚠사용자 삭제 실패(존재하지 않음): {}", e.getMessage());
+            return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
         } catch (Exception e) {
-            log.error("사용자 삭제 실패: {}", e.getMessage());
-            return ResponseEntity.status(500).body("사용자 삭제 중 오류 발생");
+            log.error("사용자 삭제 중 오류 발생", e);
+            return ResponseEntity.internalServerError().body(Map.of("message", "사용자 삭제 중 오류 발생"));
         }
     }
 }

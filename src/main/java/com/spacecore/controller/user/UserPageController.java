@@ -31,6 +31,9 @@ public class UserPageController {
         boolean isOauthUser = user.getPassword() != null && user.getPassword().contains("OAUTH");
         model.addAttribute("isOauthUser", isOauthUser);
 
+        // ✅ 계정 상태 (예: ACTIVE, INACTIVE, SUSPENDED 등)
+        model.addAttribute("accountStatus", user.getStatus());
+
         log.info("📄 마이페이지 진입: {} (OAuth 계정 여부: {})", user.getUsername(), isOauthUser);
         return "user/mypage";
     }

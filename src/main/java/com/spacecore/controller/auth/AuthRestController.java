@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.Duration;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -43,7 +42,23 @@ public class AuthRestController {
                     .orElseThrow(() -> new BadCredentialsException("존재하지 않는 사용자"));
 
             if ("SUSPENDED".equalsIgnoreCase(user.getStatus())) {
-                return ResponseEntity.status(403).body("정지된 계정입니다.");
+                log.warn("🚫 로그인 시도 차단: 정지된 계정 [{}]", user.getUsername());
+                refreshTokenService.deleteByUserId(user.getId());
+
+                ResponseCookie expiredAccess = ResponseCookie.from("access_token", "")
+                        .httpOnly(true).secure(false).path("/").maxAge(0).sameSite("Lax").build();
+                ResponseCookie expiredRefresh = ResponseCookie.from("refresh_token", "")
+                        .httpOnly(true).secure(false).path("/").maxAge(0).sameSite("Lax").build();
+
+                return ResponseEntity.status(403)
+                        .header(HttpHeaders.SET_COOKIE, expiredAccess.toString())
+                        .header(HttpHeaders.SET_COOKIE, expiredRefresh.toString())
+                        .body(Map.of("message", "정지된 계정입니다. 관리자에게 문의하세요."));
+            }
+
+            // ✅ 임시 비밀번호 로그인 감지
+            if ("Y".equals(user.getIsTempPassword())) {
+                log.warn("⚠️ 임시 비밀번호 로그인: {}", user.getUsername());
             }
 
             String accessToken = jwtTokenProvider.generateToken(user, Duration.ofHours(1));
@@ -56,6 +71,7 @@ public class AuthRestController {
 
             log.info("✅ 로그인 성공: {}", user.getUsername());
 
+            // ✅ 응답 본문에 isTempPassword 추가
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
                     .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
@@ -63,7 +79,10 @@ public class AuthRestController {
                             "message", "로그인 성공",
                             "username", user.getUsername(),
                             "name", user.getName() != null ? user.getName() : user.getUsername(),
-                            "role", user.getRole()
+                            "role", user.getRole(),
+                            "accessToken", accessToken,
+                            "refreshToken", refreshToken.getToken(),
+                            "isTemp", "Y".equals(user.getIsTempPassword())
                     ));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body("아이디 또는 비밀번호가 올바르지 않습니다.");
@@ -102,13 +121,7 @@ public class AuthRestController {
         if (authentication != null && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-            User userEntity = userService.findById(user.getId());
-            return ResponseEntity.ok(Map.of(
-                    "valid", true,
-                    "username", user.getUsername(),
-                    "name", userEntity.getName() != null ? userEntity.getName() : user.getUsername(),
-                    "role", user.getRole()
-            ));
+            return ResponseEntity.ok(Map.of("valid", true, "username", user.getUsername(), "role", user.getRole()));
         }
         return ResponseEntity.status(401).body(Map.of("valid", false));
     }
@@ -131,21 +144,27 @@ public class AuthRestController {
         ));
     }
 
-    /** ✅ 로그아웃 (RefreshToken 삭제 + 쿠키 만료) */
+    /** ✅ 로그아웃 (RefreshToken 삭제 + 쿠키 만료 + 세션 무효화) */
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@CookieValue(name = "refresh_token", required = false) String refreshToken) {
+    public ResponseEntity<?> logout(
+            javax.servlet.http.HttpServletRequest request,
+            @CookieValue(name = "refresh_token", required = false) String refreshToken) {
         try {
             if (refreshToken != null) {
                 refreshTokenService.findByToken(refreshToken)
                         .ifPresent(token -> refreshTokenService.deleteByUserId(token.getUserId()));
             }
 
+            // ✅ 세션 무효화 추가
+            request.getSession().invalidate();
+
+            // ✅ 쿠키 만료
             ResponseCookie expiredAccess = ResponseCookie.from("access_token", "")
                     .httpOnly(true).secure(false).path("/").maxAge(0).sameSite("Lax").build();
             ResponseCookie expiredRefresh = ResponseCookie.from("refresh_token", "")
                     .httpOnly(true).secure(false).path("/").maxAge(0).sameSite("Lax").build();
 
-            log.info("🚪 로그아웃 완료 (쿠키 삭제)");
+            log.info("🚪 로그아웃 완료 (세션 + 쿠키 삭제)");
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, expiredAccess.toString())
                     .header(HttpHeaders.SET_COOKIE, expiredRefresh.toString())
@@ -155,6 +174,45 @@ public class AuthRestController {
             return ResponseEntity.status(500).body(Map.of("message", "로그아웃 오류 발생"));
         }
     }
+
+    /** ✅ 비밀번호 찾기 (아이디 + 이메일 확인) */
+    @PostMapping("/find-password")
+    public ResponseEntity<Map<String, String>> findPassword(@RequestBody Map<String, String> req) {
+        String username = req.get("username");
+        String email = req.get("email");
+
+        // ✅ 아이디 + 이메일 일치 여부 확인
+        boolean match = userService.checkUsernameAndEmail(username, email);
+
+        if (!match) {
+            log.warn("❌ 비밀번호 찾기 실패 - 아이디 또는 이메일 불일치: username={}, email={}", username, email);
+            return ResponseEntity.badRequest().body(Map.of("message", "입력하신 정보가 일치하지 않습니다."));
+        }
+
+        log.info("✅ 비밀번호 찾기 성공 - username={}, email={}", username, email);
+        return ResponseEntity.ok(Map.of(
+                "message", "확인되었습니다. 비밀번호 재설정 페이지로 이동합니다.",
+                "redirectUrl", "/auth/reset-password?username=" + username + "&email=" + email
+        ));
+    }
+
+    /** ✅ 비밀번호 재설정 */
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> req) {
+        String username = req.get("username");
+        String newPassword = req.get("newPassword");
+
+        try {
+            userService.resetPasswordByUser(username, newPassword);
+            log.info("비밀번호 재설정 완료: {}", username);
+            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+        } catch (Exception e) {
+            log.error("비밀번호 재설정 실패: {}", e.getMessage());
+            return ResponseEntity.status(500).body("비밀번호 재설정 중 오류가 발생했습니다.");
+        }
+    }
+
+
 
     /** ✅ 토큰 재발급 */
     @PostMapping("/refresh")

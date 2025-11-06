@@ -103,17 +103,24 @@
 <div class="reset-card">
     <h2>비밀번호 재설정</h2>
 
+    <p style="color: var(--gray-600); font-size: 14px; margin-bottom: 30px; line-height: 1.6;">
+        새로운 비밀번호를 입력해주세요.<br>
+        비밀번호는 8자 이상이어야 합니다.
+    </p>
+
     <form id="resetForm" onsubmit="resetPassword(event)">
         <label for="newPassword">새 비밀번호</label>
-        <input type="password" id="newPassword" placeholder="새 비밀번호를 입력하세요" required>
+        <input type="password" id="newPassword" placeholder="새 비밀번호를 입력하세요 (8자 이상)" required minlength="8">
 
         <label for="confirmPassword">비밀번호 확인</label>
         <input type="password" id="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required>
 
+        <div id="passwordMatch" style="margin-top: -16px; margin-bottom: 16px; font-size: 12px; color: var(--gray-500);"></div>
+
         <button type="submit">비밀번호 변경</button>
     </form>
 
-    <p id="message"></p>
+    <p id="message" style="min-height: 20px; margin-top: 16px; font-weight: 600; font-size: 14px;"></p>
 
     <div class="footer-link">
         로그인 화면으로 돌아가기 →
@@ -122,6 +129,27 @@
 </div>
 
 <script>
+    // 비밀번호 일치 확인
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = this.value;
+        const matchDiv = document.getElementById('passwordMatch');
+
+        if (confirmPassword.length === 0) {
+            matchDiv.textContent = '';
+            matchDiv.style.color = '';
+            return;
+        }
+
+        if (newPassword === confirmPassword) {
+            matchDiv.textContent = '✓ 비밀번호가 일치합니다';
+            matchDiv.style.color = '#27ae60';
+        } else {
+            matchDiv.textContent = '✗ 비밀번호가 일치하지 않습니다';
+            matchDiv.style.color = '#e74c3c';
+        }
+    });
+
     async function resetPassword(event) {
         event.preventDefault();
 
@@ -138,6 +166,12 @@
         if (!newPassword || !confirmPassword) {
             messageArea.style.color = "red";
             messageArea.textContent = "모든 필드를 입력하세요.";
+            return;
+        }
+
+        if (newPassword.length < 8) {
+            messageArea.style.color = "red";
+            messageArea.textContent = "비밀번호는 8자 이상이어야 합니다.";
             return;
         }
 

@@ -84,23 +84,54 @@ public class UserServiceImpl implements UserService {
      * ✅ 비밀번호 변경 (Controller에서 이미 인코딩된 상태로 전달됨)
      */
     @Override
-    public void changePassword(Long id, String encodedPassword) {
+    public void changePassword(Long id, String rawNewPassword) {
+        User user = userMapper.findById(id);
+        if (user == null) {
+            throw new RuntimeException("해당 사용자를 찾을 수 없습니다. (id=" + id + ")");
+        }
+
+        // ✅ 새 비밀번호가 기존 비밀번호와 같은지 검사
+        if (passwordEncoder.matches(rawNewPassword, user.getPassword())) {
+            throw new IllegalArgumentException("기존 비밀번호와 동일한 비밀번호로 변경할 수 없습니다.");
+        }
+
+        // ✅ 비밀번호 인코딩 후 저장
+        String encodedPassword = passwordEncoder.encode(rawNewPassword);
         userMapper.updatePassword(id, encodedPassword);
-        log.info("🔑 비밀번호 변경 완료: userId={}", id);
+        log.info("🔑 비밀번호 변경 완료 (userId={}): 기존과 다른 비밀번호로 변경됨", id);
+    }
+
+    // 사용자 비밀번호 재설정
+    @Override
+    public void resetPasswordByUser(String username, String newPassword) {
+        User user = userMapper.findByUsername(username);
+        if (user == null) throw new RuntimeException("사용자를 찾을 수 없습니다.");
+
+        String encoded = passwordEncoder.encode(newPassword);
+        userMapper.updatePassword(user.getId(), encoded);
+        log.info("🔑 사용자 직접 비밀번호 재설정 완료: {}", username);
     }
 
     /**
-     * ✅ 임시 비밀번호 재설정 (관리자용)
+     * 임시 비밀번호 발급 (관리자용)
      */
     @Override
-    public void resetPassword(Long id) {
-        String tempPassword = UUID.randomUUID().toString().substring(0, 8);
-        String encoded = passwordEncoder.encode(tempPassword);
-        userMapper.updatePassword(id, encoded);
+    public String resetPasswordByAdmin(Long id) {
+        User user = userMapper.findById(id);
+        if (user == null) throw new RuntimeException("사용자를 찾을 수 없습니다. id=" + id);
 
-        log.info("🧩 관리자용 비밀번호 초기화: userId={} → 임시 비밀번호: {}", id, tempPassword);
+        // UUID에서 하이픈을 제거하고 앞 8자리만 사용하여 임시 비밀번호 생성
+        String tempPassword = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        String encoded = passwordEncoder.encode(tempPassword);
+        // 임시 비밀번호 설정 및 is_temp_password 플래그를 "Y"로 설정
+        userMapper.updateTempPassword(id, encoded, "Y");
+
+        log.info("🧩 관리자 비밀번호 초기화 완료: userId={} → 임시비밀번호={}", id, tempPassword);
+        return tempPassword;
     }
 
+
+    // 중복체크
     @Override
     public boolean existsByUsername(String username) {
         return userMapper.existsByUsername(username);
@@ -116,9 +147,18 @@ public class UserServiceImpl implements UserService {
         return userMapper.existsByPhone(phone);
     }
 
+    /** ✅ 내 계정을 제외한 중복 전화번호 검사 */
     @Override
     public boolean existsByPhoneExcludingId(String phone, Long excludeId) {
         return userMapper.existsByPhoneExcludingId(phone, excludeId);
+    }
+
+    /** ✅ 아이디와 이메일이 일치하는지 확인 (비밀번호 찾기용) */
+    @Override
+    public boolean checkUsernameAndEmail(String username, String email) {
+        return findByUsername(username)
+                .filter(user -> user.getEmail() != null && user.getEmail().equalsIgnoreCase(email))
+                .isPresent();
     }
 
     //(알림 기능) 모든 관리자에게 알림 발송용
@@ -126,4 +166,5 @@ public class UserServiceImpl implements UserService {
     public List<Long> getAllAdminIds() {
         return userMapper.selectAllAdminIds();
     }
+
 }

@@ -27,8 +27,14 @@ public class ReviewServiceImpl implements ReviewService {
         int totalCount = reviewMapper.countReviews(roomId, keyword, userName, rating);
         int offset = (page - 1) * size;
 
-        List<ReviewResponseDTO> reviews =
-                reviewMapper.findReviews(roomId, keyword, userName, rating, offset, size);
+        List<ReviewResponseDTO> reviews = null;
+        try {
+            reviews = reviewMapper.findReviews(roomId, keyword, userName, rating, offset, size);
+        } catch (Exception e) {
+            System.err.println("❌ 리뷰 매퍼 조회 중 예외 발생:");
+            e.printStackTrace();
+            throw e;
+        }
 
         // 디버깅 로그
         System.out.println("=== 리뷰 조회 디버깅 ===");
@@ -38,6 +44,20 @@ public class ReviewServiceImpl implements ReviewService {
         System.out.println("offset: " + offset);
         System.out.println("totalCount: " + totalCount);
         System.out.println("조회된 리뷰 개수: " + (reviews != null ? reviews.size() : 0));
+        
+        if (reviews != null && reviews.size() > 0) {
+            System.out.println("=== 첫 번째 리뷰 데이터 ===");
+            ReviewResponseDTO firstReview = reviews.get(0);
+            System.out.println("id: " + firstReview.getId());
+            System.out.println("userName: " + firstReview.getUserName() + " (type: " + (firstReview.getUserName() != null ? firstReview.getUserName().getClass().getName() : "null") + ")");
+            System.out.println("content: " + firstReview.getContent() + " (type: " + (firstReview.getContent() != null ? firstReview.getContent().getClass().getName() : "null") + ")");
+            System.out.println("rating: " + firstReview.getRating());
+            System.out.println("roomId: " + firstReview.getRoomId());
+            System.out.println("imgUrl: " + firstReview.getImgUrl());
+            System.out.println("createdAt: " + firstReview.getCreatedAt());
+            System.out.println("========================");
+        }
+        
         System.out.println("======================");
 
         PageInfoDTO pageInfo = PaginationHelper.createPageInfo(totalCount, page, size);

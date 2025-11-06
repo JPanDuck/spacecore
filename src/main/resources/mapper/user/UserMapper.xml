@@ -14,6 +14,8 @@
         <result property="name" column="name"/>
         <result property="phone" column="phone"/>
         <result property="role" column="role"/>
+        <result property="provider" column="provider"/>
+        <result property="providerId" column="provider_id"/>
         <result property="status" column="status"/>
         <result property="isTempPassword" column="is_temp_password"/>
         <result property="createdAt" column="created_at"/>
@@ -26,7 +28,7 @@
             SELECT seq_users.NEXTVAL FROM dual
         </selectKey>
         INSERT INTO users (
-        id, username, email, password, name, phone, role, status, is_temp_password, created_at
+        id, username, email, password, name, phone, role, provider, provider_id, status, is_temp_password, created_at
         )
         VALUES (
         #{id},
@@ -36,6 +38,8 @@
         #{name},
         #{phone, jdbcType=VARCHAR},
         #{role},
+        #{provider, jdbcType=VARCHAR},
+        #{providerId, jdbcType=VARCHAR},
         #{status},
         #{isTempPassword},
         SYSTIMESTAMP
@@ -74,6 +78,17 @@
             updated_at = SYSTIMESTAMP
         </set>
         WHERE id = #{id}
+    </update>
+
+    <!-- OAuth2 provider 정보 업데이트 -->
+    <update id="updateProviderInfo" parameterType="com.spacecore.domain.user.User">
+        UPDATE users
+        <set>
+            <if test="provider != null">provider = #{provider, jdbcType=VARCHAR},</if>
+            <if test="providerId != null">provider_id = #{providerId, jdbcType=VARCHAR},</if>
+            updated_at = SYSTIMESTAMP
+        </set>
+        WHERE email = #{email}
     </update>
 
     <!-- 사용자 삭제 -->
@@ -142,5 +157,4 @@
         FROM users
         WHERE role = 'ADMIN'
     </select>
-
 </mapper>

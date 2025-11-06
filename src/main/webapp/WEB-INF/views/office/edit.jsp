@@ -1,63 +1,239 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String context = request.getContextPath();
+%>
+<%@ include file="/WEB-INF/views/components/header.jsp" %>
+<link rel="stylesheet" href="<%=context%>/css/style.css">
 
 <style>
     body {
-        font-family: "Pretendard", sans-serif;
-        background-color: #fafafa;
-        margin: 50px;
+        background: var(--cream-base);
     }
-    h2 { color: #333; }
-    label {
+
+    .form-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 60px 20px;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .form-header h1 {
+        color: var(--choco);
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .form-header p {
+        color: var(--gray-600);
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .form-card {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .form-section {
+        margin-bottom: 32px;
+    }
+
+    .form-label {
         display: block;
-        margin-top: 10px;
-        font-weight: bold;
+        font-weight: 600;
+        color: var(--choco);
+        margin-bottom: 10px;
+        font-size: 16px;
     }
-    input {
-        width: 250px;
-        padding: 8px;
-        margin-top: 5px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+
+    .form-label .required {
+        color: #e74c3c;
+        margin-left: 4px;
     }
-    button {
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #7b6cf6;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
+
+    .form-input,
+    .form-select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--sirocco);
+        border-radius: var(--radius-md);
+        font-size: 16px;
+        background: var(--cream-base);
+        color: var(--text-primary);
+        transition: border-color 0.2s ease, background 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: var(--mocha);
+        background: var(--white);
+    }
+
+    .form-input[readonly] {
+        background-color: var(--gray-100);
+        color: var(--gray-600);
+        cursor: not-allowed;
+    }
+
+    .form-select {
         cursor: pointer;
-        font-weight: bold;
     }
-    button:hover {
-        background-color: #6957f2;
+
+    .form-message {
+        font-size: 13px;
+        margin-top: 8px;
+        min-height: 18px;
     }
-    a {
-        display: inline-block;
-        margin-top: 20px;
+
+    .form-message.error {
+        color: #e74c3c;
+    }
+
+    .form-message.success {
+        color: #27ae60;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .btn-submit {
+        flex: 1;
+        background: var(--mocha);
+        color: var(--white);
+        border: none;
+        border-radius: 9999px;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        background: var(--amber);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .btn-cancel {
+        padding: 16px 24px;
+        background: var(--gray-200);
+        color: var(--gray-700);
+        border: none;
+        border-radius: 9999px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
         text-decoration: none;
-        color: #7b6cf6;
+        transition: 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-cancel:hover {
+        background: var(--gray-300);
+    }
+
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 40px 16px;
+        }
+
+        .form-card {
+            padding: 30px 20px;
+        }
+
+        .form-header h1 {
+            font-size: 28px;
+        }
     }
 </style>
-<h2>지점 수정</h2>
 
+<main>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>
+                <i class="ph ph-pencil"></i>
+                지점 수정
+            </h1>
+            <p>지점 정보를 수정하세요</p>
+        </div>
 
-<form action="/offices/edit" method="post">
-    <input type="hidden" name="id" value="${office.id}"/>
-    <div>
-        지점명: <input type="text" name="name" value="${office.name}" required/>
-    </div>
-    <div>
-        주소: <input type="text" name="address" value="${office.address}"/>
-    </div>
-    <div>
-        상태:
-        <select name="status">
-            <option value="ACTIVE" ${room.status == 'ACTIVE' ? 'selected' : ''}>ACTIVE</option>
-            <option value="INACTIVE" ${room.status == 'INACTIVE' ? 'selected' : ''}>INACTIVE</option>
-        </select>
-    </div>
-    <button type="submit">수정</button>
-</form>
+        <div class="form-card">
+            <form action="<%=context%>/offices/edit" method="post">
+                <input type="hidden" name="id" value="${office.id}"/>
 
-<p><a href="/offices/detail/${office.id}">[상세보기]</a> | <a href="/offices/">[목록]</a></p>
+                <div class="form-section">
+                    <label for="name" class="form-label">
+                        지점명
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" id="name" name="name" class="form-input" value="${office.name}" required placeholder="지점명을 입력하세요">
+                    <p id="nameMessage" class="form-message"></p>
+                </div>
+
+                <div class="form-section">
+                    <label for="address" class="form-label">주소</label>
+                    <input type="text" id="address" name="address" class="form-input" value="${office.address}" placeholder="주소를 입력하세요">
+                    <p id="addressMessage" class="form-message"></p>
+                </div>
+
+                <div class="form-section">
+                    <label for="status" class="form-label">상태</label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="ACTIVE" ${office.status == 'ACTIVE' ? 'selected' : ''}>활성</option>
+                        <option value="INACTIVE" ${office.status == 'INACTIVE' ? 'selected' : ''}>비활성</option>
+                    </select>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn-submit">
+                        <i class="ph ph-floppy-disk"></i>
+                        저장하기
+                    </button>
+                    <a href="<%=context%>/offices/detail/${office.id}" class="btn-cancel">
+                        <i class="ph ph-x"></i>
+                        취소
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<%@ include file="/WEB-INF/views/components/footer.jsp" %>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.getElementById('name');
+        const nameMessage = document.getElementById('nameMessage');
+
+        nameInput.addEventListener('input', function() {
+            if (this.value.length < 1) {
+                nameMessage.textContent = '지점명을 입력해주세요.';
+                nameMessage.className = 'form-message error';
+            } else {
+                nameMessage.textContent = '';
+                nameMessage.className = 'form-message';
+            }
+        });
+    });
+</script>

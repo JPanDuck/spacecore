@@ -185,6 +185,7 @@
             <a href="${pageContext.request.contextPath}/reservations" class="nav-link">예약조회</a>
             ${notificationIconHtml}
             <a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>
+
             <a href="#" class="nav-link logout-link">로그아웃</a>
             <button id="menuToggle" class="icon-btn"><i class="ph ph-list"></i><span class="menu-text">MENU</span></button>
         `;
@@ -200,6 +201,8 @@
 
             menuExtra.innerHTML = notificationLinkHtml + '\n' +
                 '<a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>\n' +
+                '<a href="${pageContext.request.contextPath}/payments" class="nav-link">결제목록</a>\n' +
+                '<a href="${pageContext.request.contextPath}/favorites/list" class="nav-link">즐겨찾기</a>\n' +
                 '<a href="#" class="nav-link logout-link">로그아웃</a>';
             bindMenuEvents();
         }

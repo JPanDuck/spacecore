@@ -1,6 +1,8 @@
 package com.spacecore.controller.room;
 
 import com.spacecore.domain.room.Room;
+import com.spacecore.domain.room.RoomImage;
+import com.spacecore.mapper.room.RoomImageMapper;
 import com.spacecore.service.room.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.List;
 public class RoomRestController {
 
     private final RoomService roomService;
+    private final RoomImageMapper roomImageMapper;
 
     /// 룸 전체 조회
     @GetMapping
@@ -53,5 +56,12 @@ public class RoomRestController {
     public ResponseEntity<Room> deleteRoom(@PathVariable Long id){
         roomService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /// 룸 이미지 조회
+    @GetMapping("/{id}/images")
+    public ResponseEntity<List<RoomImage>> getRoomImages(@PathVariable Long id){
+        List<RoomImage> images = roomImageMapper.findImagesByRoomId(id);
+        return ResponseEntity.ok(images);
     }
 }

@@ -28,7 +28,11 @@ public class OfficeController {
     /// 지점 상세보기
     @GetMapping("/detail/{id}")
     public String officeDetail(@PathVariable Long id, Model model) {
-        model.addAttribute("office", officeService.get(id));
+        Office office = officeService.get(id);
+        if (office == null) {
+            return "redirect:/offices/?error=not_found";
+        }
+        model.addAttribute("office", office);
         // 해당 지점의 객실 목록 추가
         model.addAttribute("roomList", roomService.listByOffice(id));
         return "office/detail";
