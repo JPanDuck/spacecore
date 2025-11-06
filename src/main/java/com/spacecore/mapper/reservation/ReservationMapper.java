@@ -34,4 +34,7 @@ public interface ReservationMapper {
             @Param("startAt") LocalDateTime startAt,
             @Param("endAt") LocalDateTime endAt
     );
+
+    /// 사용자와 객실로 예약 조회 (리뷰 작성 권한 확인용)
+    List<Reservation> findByUserIdAndRoomId(@Param("userId") Long userId, @Param("roomId") Long roomId);
 }

@@ -452,6 +452,15 @@
         line-height: 1.6;
         margin-bottom: 8px;
     }
+    .review-card-image {
+        margin: 12px 0;
+    }
+    .review-card-image img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
     .review-card-footer {
         display: flex;
         justify-content: space-between;
@@ -1204,7 +1213,7 @@
         const roomIds = [];
         roomCards.forEach((card, index) => {
             const roomId = card.getAttribute('data-room-id');
-            console.log(`room-card[${index}] data-room-id:`, roomId);
+            console.log('room-card[' + index + '] data-room-id:', roomId);
             if (roomId) {
                 roomIds.push(roomId);
             }
@@ -1252,8 +1261,24 @@
                         // 각 리뷰에 roomId 추가 (roomId를 문자열에서 숫자로 변환)
                         const roomIdNum = parseInt(roomId);
                         reviews.forEach(review => {
-                            review.roomId = roomIdNum;
-                            allReviews.push(review);
+                            // review 객체가 유효한지 확인
+                            if (review && typeof review === 'object') {
+                                // roomId가 없으면 추가
+                                if (!review.roomId) {
+                                    review.roomId = roomIdNum;
+                                }
+                                // 새 객체로 복사하여 추가 (원본 변조 방지)
+                                allReviews.push({
+                                    id: review.id,
+                                    userId: review.userId,
+                                    roomId: review.roomId || roomIdNum,
+                                    rating: review.rating,
+                                    content: review.content,
+                                    userName: review.userName,
+                                    imgUrl: review.imgUrl,
+                                    createdAt: review.createdAt
+                                });
+                            }
                         });
                         
                         console.log('현재까지 수집된 리뷰 개수:', allReviews.length);
@@ -1280,9 +1305,14 @@
                     if (res.ok) {
                         const room = await res.json();
                         // roomId를 숫자로 변환하여 키로 사용 (일관성 유지)
-                        const roomIdNum = parseInt(roomId);
-                        roomMap.set(roomIdNum, room);
-                        console.log('룸 정보 로드 성공:', roomIdNum, room.name);
+                        const roomIdNum = parseInt(roomId, 10);
+                        if (!isNaN(roomIdNum)) {
+                            // 숫자 키로 저장
+                            roomMap.set(roomIdNum, room);
+                            // 문자열 키로도 저장 (혹시 모를 경우를 대비)
+                            roomMap.set(String(roomIdNum), room);
+                            console.log('룸 정보 로드 성공:', roomIdNum, room.name, 'room.id:', room.id);
+                        }
                     }
                 } catch (error) {
                     console.error('룸 정보 로드 실패:', roomId, error);
@@ -1315,13 +1345,43 @@
                 // 리뷰 렌더링
                 console.log('리뷰 렌더링 시작, allReviews.length:', allReviews.length);
                 
+                // 디버깅: roomMap 확인
+                console.log('=== roomMap 디버깅 ===');
+                console.log('roomMap 크기:', roomMap.size);
+                console.log('roomMap 키:', Array.from(roomMap.keys()));
+                console.log('roomMap 값:', Array.from(roomMap.values()).map(r => ({ id: r.id, name: r.name })));
+                console.log('====================');
+                
                 reviewsList.innerHTML = allReviews.slice(0, 20).map((review, index) => {
+                    // 디버깅: review 객체 확인 (템플릿 리터럴 대신 문자열 연결 사용 - JSP EL 충돌 방지)
+                    console.log('리뷰[' + index + '] 원본 객체:', review);
+                    const reviewRoomIdType = typeof review.roomId;
+                    console.log('리뷰[' + index + '] review.roomId:', review.roomId, 'type:', reviewRoomIdType);
+                    const reviewContentType = typeof review.content;
+                    console.log('리뷰[' + index + '] review.content:', review.content, 'type:', reviewContentType);
+                    const reviewUserNameType = typeof review.userName;
+                    console.log('리뷰[' + index + '] review.userName:', review.userName, 'type:', reviewUserNameType);
+                    
                     // roomId를 숫자로 변환하여 일관성 유지
-                    const roomIdNum = typeof review.roomId === 'string' ? parseInt(review.roomId) : review.roomId;
-                    const room = roomMap.get(roomIdNum);
+                    let roomIdNum = null;
+                    if (review.roomId !== null && review.roomId !== undefined) {
+                        roomIdNum = typeof review.roomId === 'string' ? parseInt(review.roomId, 10) : Number(review.roomId);
+                        if (isNaN(roomIdNum)) {
+                            roomIdNum = null;
+                        }
+                    }
+                    
+                    // roomMap에서 조회 (여러 타입으로 시도)
+                    let room = null;
+                    if (roomIdNum !== null) {
+                        room = roomMap.get(roomIdNum) || roomMap.get(String(roomIdNum)) || roomMap.get(Number(roomIdNum));
+                    }
+                    
                     const roomName = room ? room.name : '알 수 없음';
                     
-                    console.log(`리뷰[${index}] - roomId: ${roomIdNum}, roomName: ${roomName}`);
+                    // typeof를 변수로 저장 (JSP EL 표현식 충돌 방지)
+                    const roomIdNumType = typeof roomIdNum;
+                    console.log('리뷰[' + index + '] - roomIdNum: ' + roomIdNum + ' (type: ' + roomIdNumType + '), room:', room, 'roomName:', roomName);
                     
                     // content 처리: false, null, undefined, 빈 문자열, 'false' 문자열 모두 처리
                     let content = '내용이 없습니다.';
@@ -1344,21 +1404,45 @@
                     const rating = review.rating || 0;
                     const createdAt = review.createdAt || '';
                     
-                    console.log(`리뷰[${index}] - content: "${content}", userName: "${userName}", rating: ${rating}`);
+                    console.log('리뷰[' + index + '] - content: "' + content + '", userName: "' + userName + '", rating: ' + rating);
                     
-                    return `
-                        <div class="review-card">
-                            <div class="review-card-header">
-                                <span class="review-card-room">${roomName}</span>
-                                <span class="review-card-rating">⭐ ${rating}</span>
-                            </div>
-                            <div class="review-card-content">${content}</div>
-                            <div class="review-card-footer">
-                                <span>${userName}</span>
-                                <span>${createdAt}</span>
-                            </div>
-                        </div>
-                    `;
+                    // 이미지 처리 (여러 이미지 지원)
+                    let imgHtml = '';
+                    if (review.imgUrl && review.imgUrl.trim() !== '' && review.imgUrl !== 'false') {
+                        // 콤마로 구분된 이미지 경로들을 분리
+                        const imgPaths = review.imgUrl.split(',').map(function(path) {
+                            return path.trim();
+                        }).filter(function(path) {
+                            return path !== '' && path !== 'false';
+                        });
+                        
+                        if (imgPaths.length > 0) {
+                            imgHtml = '<div class="review-card-images" style="display:flex; flex-wrap:wrap; gap:8px; margin:12px 0;">';
+                            for (var i = 0; i < imgPaths.length; i++) {
+                                var imgPath = imgPaths[i];
+                                // 경로가 /로 시작하면 context 추가, 아니면 그대로 사용
+                                if (imgPath.startsWith('/')) {
+                                    imgPath = '<%=context%>' + imgPath;
+                                }
+                                imgHtml += '<img src="' + imgPath + '" alt="리뷰 이미지 ' + (i + 1) + '" style="max-width:150px; max-height:150px; border-radius:8px; object-fit:cover; cursor:pointer; border:1px solid var(--gray-300);" onerror="this.style.display=\'none\';" onclick="window.open(this.src, \'_blank\');">';
+                            }
+                            imgHtml += '</div>';
+                        }
+                    }
+                    
+                    // HTML 생성 (템플릿 리터럴 대신 문자열 연결 사용 - JSP EL 충돌 방지)
+                    return '<div class="review-card">' +
+                        '<div class="review-card-header">' +
+                        '<span class="review-card-room">' + roomName + '</span>' +
+                        '<span class="review-card-rating">⭐ ' + rating + '</span>' +
+                        '</div>' +
+                        '<div class="review-card-content">' + content + '</div>' +
+                        imgHtml +
+                        '<div class="review-card-footer">' +
+                        '<span>' + userName + '</span>' +
+                        '<span>' + createdAt + '</span>' +
+                        '</div>' +
+                        '</div>';
                 }).join('');
                 
                 console.log('리뷰 HTML 생성 완료, 길이:', reviewsList.innerHTML.length);

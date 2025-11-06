@@ -50,7 +50,6 @@
             <a href="${pageContext.request.contextPath}/about">회사 소개</a>
             <a href="${pageContext.request.contextPath}/notices">공지사항</a>
             <a href="${pageContext.request.contextPath}/offices">오피스</a>
-            <a href="${pageContext.request.contextPath}/reviews">커뮤니티</a>
             <a href="${pageContext.request.contextPath}/qna">Q&A</a>
             <a href="${pageContext.request.contextPath}/support">고객센터</a>
             <hr>

@@ -311,4 +311,10 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return events;
     }
+
+    /// 사용자와 객실로 예약 조회 (리뷰 작성 권한 확인용)
+    @Override
+    public List<Reservation> findByUserIdAndRoomId(Long userId, Long roomId) {
+        return reservationMapper.findByUserIdAndRoomId(userId, roomId);
+    }
 }

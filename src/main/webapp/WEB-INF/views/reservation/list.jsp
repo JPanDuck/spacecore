@@ -50,6 +50,12 @@
 <main class="reservation-list-container">
     <h2 style="margin-bottom: 30px;">예약 목록</h2>
     
+    <c:if test="${param.error != null}">
+        <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+            ${param.error}
+        </div>
+    </c:if>
+    
     <table class="reservation-table" id="reservationTable">
         <thead>
             <tr>
@@ -99,6 +105,9 @@
                     </td>
                     <td>
                         <a href="${pageContext.request.contextPath}/reservations/detail/${r.id}" class="btn btn-outline">상세</a>
+                        <c:if test="${r.status == 'CONFIRMED'}">
+                            <a href="${pageContext.request.contextPath}/reviews/create?roomId=${r.roomId}" class="btn btn-brown" style="margin-left: 8px;">리뷰 작성</a>
+                        </c:if>
                     </td>
                 </tr>
             </c:forEach>

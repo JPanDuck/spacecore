@@ -34,4 +34,7 @@ public interface ReservationService {
 
     /// 캘린더용 날짜 범위 조회
     List<Map<String, Object>> findCalendarAvailability(Long roomId, LocalDate startDate, LocalDate endDate);
+
+    /// 사용자와 객실로 예약 조회 (리뷰 작성 권한 확인용)
+    List<Reservation> findByUserIdAndRoomId(Long userId, Long roomId);
 }
