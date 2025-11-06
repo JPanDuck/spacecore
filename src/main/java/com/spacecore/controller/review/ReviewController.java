@@ -4,6 +4,7 @@ import com.spacecore.dto.common.PaginationDTO;
 import com.spacecore.dto.review.ReviewRequestDTO;
 import com.spacecore.dto.review.ReviewResponseDTO;
 import com.spacecore.service.review.ReviewService;
+import com.spacecore.service.reservation.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,36 +23,8 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final ReservationService reservationService;
 
-    // ============================================================
-    // ✅ 리뷰 목록 (누구나 접근 가능)
-    // ============================================================
-    @GetMapping
-    public String reviewListPage(@RequestParam(required = false) Long roomId,
-                                 @RequestParam(defaultValue = "1") int page,
-                                 @RequestParam(defaultValue = "5") int limit,
-                                 @RequestParam(required = false) String keyword,
-                                 @RequestParam(required = false) String userName,
-                                 @RequestParam(required = false) Integer rating,
-                                 Model model) {
-
-        // roomId가 null이면 모든 리뷰를 조회 (필터 제거)
-        // if (roomId == null) roomId = 1L; // 이 줄 제거
-
-        PaginationDTO<ReviewResponseDTO> result =
-                reviewService.getReviews(roomId, page, limit, keyword, userName, rating);
-
-        model.addAttribute("data", result.getData());
-        model.addAttribute("pageInfo", result.getPageInfo());
-        model.addAttribute("filterFields", List.of("keyword", "userName", "rating"));
-        model.addAttribute("roomId", roomId);
-
-        // 목록 페이지 이동 시 query 유지
-        String baseUrl = "/reviews" + (roomId != null ? "?roomId=" + roomId : "");
-        model.addAttribute("baseUrl", baseUrl);
-
-        return "review/review-list";
-    }
 
     // ============================================================
     // ✅ 리뷰 작성 폼 (USER만 접근 가능)
@@ -77,14 +50,14 @@ public class ReviewController {
             }
         }
         
-        // 관리자 체크
+            // 관리자 체크
         if ("ADMIN".equals(role)) {
-            // 관리자 → 리뷰 목록으로 리다이렉트 (메시지 포함, URL 인코딩)
+            // 관리자 → 홈으로 리다이렉트 (메시지 포함, URL 인코딩)
             try {
                 String message = URLEncoder.encode("리뷰 작성 권한이 없습니다", "UTF-8");
-                return "redirect:/reviews?roomId=" + roomId + "&message=" + message;
+                return "redirect:/?message=" + message;
             } catch (Exception e) {
-                return "redirect:/reviews?roomId=" + roomId + "&message=no_permission";
+                return "redirect:/?message=no_permission";
             }
         }
         
@@ -127,13 +100,12 @@ public class ReviewController {
         
         // 관리자 체크
         if ("ADMIN".equals(role)) {
-            // 관리자 → 리뷰 목록으로 리다이렉트 (메시지 포함, URL 인코딩)
-            Long redirectRoomId = dto.getRoomId() != null ? dto.getRoomId() : 1L;
+            // 관리자 → 홈으로 리다이렉트 (메시지 포함, URL 인코딩)
             try {
                 String message = URLEncoder.encode("리뷰 작성 권한이 없습니다", "UTF-8");
-                return "redirect:/reviews?roomId=" + redirectRoomId + "&message=" + message;
+                return "redirect:/?message=" + message;
             } catch (Exception e) {
-                return "redirect:/reviews?roomId=" + redirectRoomId + "&message=no_permission";
+                return "redirect:/?message=no_permission";
             }
         }
         
@@ -153,11 +125,25 @@ public class ReviewController {
             }
 
             // 세션에서 userId 가져오기
+            Long userId = null;
             if (user instanceof com.spacecore.domain.user.User) {
                 com.spacecore.domain.user.User userObj = (com.spacecore.domain.user.User) user;
-                dto.setUserId(userObj.getId());
+                userId = userObj.getId();
+                dto.setUserId(userId);
             } else {
                 throw new IllegalArgumentException("사용자 정보를 가져올 수 없습니다.");
+            }
+
+            // 예약 확인: 해당 사용자가 해당 객실을 예약했는지 확인 (CONFIRMED 상태만)
+            List<com.spacecore.domain.reservation.Reservation> reservations = 
+                reservationService.findByUserIdAndRoomId(userId, dto.getRoomId());
+            if (reservations == null || reservations.isEmpty()) {
+                try {
+                    String errorMsg = URLEncoder.encode("예약한 객실에만 리뷰를 작성할 수 있습니다.", "UTF-8");
+                    return "redirect:/reservations?error=" + errorMsg;
+                } catch (Exception e) {
+                    return "redirect:/reservations?error=reservation_required";
+                }
             }
 
             // 업로드 경로 생성
@@ -187,8 +173,8 @@ public class ReviewController {
             }
 
             reviewService.createReview(dto.getRoomId(), dto);
-            // 리다이렉트 시 페이지 번호를 포함하여 첫 페이지로 이동
-            return "redirect:/reviews?roomId=" + dto.getRoomId() + "&page=1";
+            // 리뷰 작성 후 예약 목록으로 리다이렉트
+            return "redirect:/reservations";
 
         } catch (Exception e) {
             e.printStackTrace();

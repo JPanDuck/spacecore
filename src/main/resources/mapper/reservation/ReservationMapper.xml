@@ -108,5 +108,16 @@
           AND end_at &gt; #{startAt}
     </select>
 
+    <!-- 사용자와 객실로 예약 조회 (리뷰 작성 권한 확인용) -->
+    <select id="findByUserIdAndRoomId" resultMap="ReservationMap">
+        SELECT id, user_id, room_id, start_at, end_at, unit, status,
+               amount, memo, created_at
+        FROM reservations
+        WHERE user_id = #{userId}
+          AND room_id = #{roomId}
+          AND status = 'CONFIRMED'
+        ORDER BY created_at DESC
+    </select>
+
 
 </mapper>
