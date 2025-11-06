@@ -49,6 +49,6 @@ public class AuthController {
     /** ✅ 비밀번호 재설정 페이지 */
     @GetMapping("/auth/reset-password")
     public String resetPasswordPage() {
-        return "auth/reset-password"; // 비밀번호 재설정 JSP
+        return "auth/user-reset-password"; // 비밀번호 재설정 JSP
     }
 }

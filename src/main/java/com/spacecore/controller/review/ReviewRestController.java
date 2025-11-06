@@ -71,37 +71,58 @@ public class ReviewRestController {
                                                           @RequestParam(required = false) String keyword,
                                                           @RequestParam(required = false) String userName,
                                                           @RequestParam(required = false) Integer rating) {
-        // 디버깅: 요청 파라미터 확인
-        System.out.println("=== ReviewRestController 요청 파라미터 ===");
-        System.out.println("roomId: " + roomId);
-        System.out.println("page: " + page);
-        System.out.println("limit: " + limit);
-        System.out.println("keyword: " + keyword);
-        System.out.println("userName: " + userName);
-        System.out.println("rating: " + rating);
-        System.out.println("==========================================");
-        
-        PaginationDTO<ReviewResponseDTO> result =
-                reviewService.getReviews(roomId, page, limit, keyword, userName, rating);
+        try {
+            // 디버깅: 요청 파라미터 확인
+            System.out.println("=== ReviewRestController 요청 파라미터 ===");
+            System.out.println("roomId: " + roomId);
+            System.out.println("page: " + page);
+            System.out.println("limit: " + limit);
+            System.out.println("keyword: " + keyword);
+            System.out.println("userName: " + userName);
+            System.out.println("rating: " + rating);
+            System.out.println("==========================================");
+            
+            PaginationDTO<ReviewResponseDTO> result =
+                    reviewService.getReviews(roomId, page, limit, keyword, userName, rating);
 
-        if (result == null) {
-            System.out.println("⚠️ result가 null입니다!");
+            if (result == null) {
+                System.out.println("⚠️ result가 null입니다!");
+                return ResponseEntity.ok(Map.of(
+                        "pageInfo", Collections.emptyMap(),
+                        "data", Collections.emptyList()
+                ));
+            }
+
+            // 디버깅: 응답 데이터 확인
+            System.out.println("=== ReviewRestController 응답 데이터 ===");
+            System.out.println("pageInfo: " + result.getPageInfo());
+            System.out.println("data 개수: " + (result.getData() != null ? result.getData().size() : 0));
+            
+            if (result.getData() != null && result.getData().size() > 0) {
+                System.out.println("=== 첫 번째 리뷰 응답 데이터 ===");
+                ReviewResponseDTO firstReview = result.getData().get(0);
+                System.out.println("id: " + firstReview.getId());
+                System.out.println("userName: [" + firstReview.getUserName() + "]");
+                System.out.println("content: [" + firstReview.getContent() + "]");
+                System.out.println("rating: " + firstReview.getRating());
+                System.out.println("roomId: " + firstReview.getRoomId());
+                System.out.println("================================");
+            }
+            
+            System.out.println("========================================");
+
             return ResponseEntity.ok(Map.of(
-                    "pageInfo", Collections.emptyMap(),
-                    "data", Collections.emptyList()
+                    "pageInfo", result.getPageInfo(),
+                    "data", result.getData() != null ? result.getData() : Collections.emptyList()
+            ));
+        } catch (Exception e) {
+            System.err.println("❌ 리뷰 조회 중 예외 발생:");
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of(
+                    "error", "리뷰 조회 중 오류가 발생했습니다.",
+                    "message", e.getMessage()
             ));
         }
-
-        // 디버깅: 응답 데이터 확인
-        System.out.println("=== ReviewRestController 응답 데이터 ===");
-        System.out.println("pageInfo: " + result.getPageInfo());
-        System.out.println("data 개수: " + (result.getData() != null ? result.getData().size() : 0));
-        System.out.println("========================================");
-
-        return ResponseEntity.ok(Map.of(
-                "pageInfo", result.getPageInfo(),
-                "data", result.getData() != null ? result.getData() : Collections.emptyList()
-        ));
     }
 
     /** 리뷰 요약 (전체) */

@@ -1,26 +1,30 @@
 package com.spacecore.controller.user;
 
+import com.spacecore.domain.auth.RefreshToken;
 import com.spacecore.domain.user.User;
 import com.spacecore.dto.user.PasswordChangeRequest;
+import com.spacecore.mapper.auth.RefreshTokenMapper;
 import com.spacecore.security.CustomUserDetails;
 import com.spacecore.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-/**
- * 🧩 사용자 관련 REST API 컨트롤러 (최신)
- * - JWT 인증 기반 사용자 API
- * - 내 정보 조회 / 수정 / 비밀번호 변경 / 탈퇴 / 이메일·전화번호 중복 검사
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -30,132 +34,180 @@ public class UserRestController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final OAuth2AuthorizedClientService authorizedClientService;
+    private final RefreshTokenMapper refreshTokenMapper;
 
-    // ✅ 현재 로그인한 사용자 정보 조회
+    /** ✅ 현재 로그인한 사용자 정보 조회 */
     @GetMapping("/me")
     public ResponseEntity<?> getMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
         if (userDetails == null || userDetails.getUser() == null) {
-            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+            return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
         }
         log.info("👤 사용자 정보 조회 요청: {}", userDetails.getUsername());
         return ResponseEntity.ok(userDetails.getUser());
     }
 
-    // ✅ 내 정보 수정
+    /** ✅ 내 정보 수정 */
     @PutMapping("/me")
-    public ResponseEntity<String> updateMyInfo(
+    public ResponseEntity<Map<String, String>> updateMyInfo(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody User updatedUser) {
 
         try {
-            if (userDetails == null || userDetails.getUser() == null) {
-                return ResponseEntity.status(401).body("인증 정보가 없습니다.");
-            }
+            if (userDetails == null || userDetails.getUser() == null)
+                return ResponseEntity.status(401).body(Map.of("message", "인증 정보가 없습니다."));
 
             Long userId = userDetails.getUser().getId();
             updatedUser.setId(userId);
 
-            // ✅ 전화번호 형식 검증
+            // 전화번호 유효성 검사
             if (updatedUser.getPhone() != null &&
                     !updatedUser.getPhone().matches("^010-\\d{4}-\\d{4}$")) {
-                return ResponseEntity.badRequest().body("전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)");
+                return ResponseEntity.badRequest().body(Map.of("message", "전화번호 형식이 올바르지 않습니다."));
             }
 
-            // ✅ 전화번호 중복 검증
+            // 중복 전화번호 검사
             if (updatedUser.getPhone() != null &&
                     userService.existsByPhone(updatedUser.getPhone()) &&
                     !updatedUser.getPhone().equals(userDetails.getUser().getPhone())) {
-                return ResponseEntity.badRequest().body("이미 등록된 전화번호입니다.");
+                return ResponseEntity.badRequest().body(Map.of("message", "이미 등록된 전화번호입니다."));
             }
 
-            // ✅ 이메일 중복 검증
+            // 중복 이메일 검사
             if (updatedUser.getEmail() != null &&
                     userService.existsByEmail(updatedUser.getEmail()) &&
                     !updatedUser.getEmail().equals(userDetails.getUser().getEmail())) {
-                return ResponseEntity.badRequest().body("이미 사용 중인 이메일입니다.");
+                return ResponseEntity.badRequest().body(Map.of("message", "이미 사용 중인 이메일입니다."));
             }
 
             userService.update(updatedUser);
             log.info("🔄 사용자 정보 수정 완료: {}", userId);
+            return ResponseEntity.ok(Map.of("message", "내 정보가 성공적으로 수정되었습니다."));
 
-            return ResponseEntity.ok("내 정보가 성공적으로 수정되었습니다.");
         } catch (Exception e) {
             log.error("❌ 사용자 정보 수정 실패: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("내 정보 수정 중 오류가 발생했습니다.");
+            return ResponseEntity.internalServerError().body(Map.of("message", "내 정보 수정 중 오류가 발생했습니다."));
         }
     }
 
-    // ✅ 전화번호 중복 확인 API (AJAX용)
-    @GetMapping("/check-phone")
-    public ResponseEntity<Boolean> checkPhoneDuplicate(@RequestParam String phone) {
-        boolean exists = userService.existsByPhone(phone);
-        log.debug("📞 전화번호 중복 검사: {} → {}", phone, exists);
-        return ResponseEntity.ok(exists);
-    }
-
-    // ✅ 이메일 중복 확인 API (AJAX용)
-    @GetMapping("/check-email")
-    public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam String email) {
-        boolean exists = userService.existsByEmail(email);
-        log.debug("📧 이메일 중복 검사: {} → {}", email, exists);
-        return ResponseEntity.ok(exists);
-    }
-
-    // ✅ 비밀번호 변경
-    @PutMapping("/change-password")
-    public ResponseEntity<?> changePassword(
+    /** ✅ 비밀번호 변경 (로그아웃 포함) */
+    @PutMapping(value = "/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> changePassword(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody PasswordChangeRequest request,
-            HttpServletResponse response) {
+            HttpServletResponse response,
+            HttpSession session) {
 
-        if (userDetails == null || userDetails.getUser() == null) {
+        if (userDetails == null || userDetails.getUser() == null)
             return ResponseEntity.status(401).body(Map.of("message", "인증 정보가 없습니다."));
-        }
 
         User user = userDetails.getUser();
 
+        // 🔒 기존 비밀번호 확인
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             return ResponseEntity.badRequest().body(Map.of("message", "현재 비밀번호가 일치하지 않습니다."));
         }
 
-        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
-            return ResponseEntity.badRequest().body(Map.of("message", "새 비밀번호는 기존 비밀번호와 달라야 합니다."));
-        }
-
+        // 🔒 새 비밀번호 유효성 검사
         if (request.getNewPassword().length() < 8) {
             return ResponseEntity.badRequest().body(Map.of("message", "새 비밀번호는 8자 이상이어야 합니다."));
         }
 
-        userService.changePassword(user.getId(), passwordEncoder.encode(request.getNewPassword()));
-        log.info("🔑 비밀번호 변경 완료: {}", user.getUsername());
-
-        invalidateJwtCookies(response);
-        return ResponseEntity.ok(Map.of("message", "비밀번호가 성공적으로 변경되었습니다. 다시 로그인해주세요."));
-    }
-
-    // ✅ 회원 탈퇴
-    @DeleteMapping("/me")
-    public ResponseEntity<String> deleteMyAccount(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            HttpServletResponse response) {
         try {
-            if (userDetails == null || userDetails.getUser() == null) {
-                return ResponseEntity.status(401).body("인증 정보가 없습니다.");
-            }
+            userService.changePassword(user.getId(), request.getNewPassword());
+            log.info("🔑 비밀번호 변경 완료: {}", user.getUsername());
 
-            Long userId = userDetails.getUser().getId();
-            userService.delete(userId);
+            // ✅ 세션 및 인증정보 완전 초기화
+            org.springframework.security.core.context.SecurityContextHolder.clearContext();
+            if (session != null) session.invalidate();
+
+            // ✅ JWT 쿠키 삭제
             invalidateJwtCookies(response);
 
-            log.info("👋 회원 탈퇴 완료: {}", userId);
-            return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+            return ResponseEntity.ok(Map.of("message", "비밀번호가 성공적으로 변경되었습니다. 다시 로그인해주세요."));
+        } catch (IllegalArgumentException e) {
+            log.warn("⚠️ 비밀번호 변경 실패 (동일 비밀번호): {}", e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         } catch (Exception e) {
-            log.error("❌ 회원 탈퇴 실패: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("회원 탈퇴 중 오류가 발생했습니다.");
+            log.error("❌ 비밀번호 변경 중 예외 발생", e);
+            return ResponseEntity.internalServerError().body(Map.of("message", "비밀번호 변경 중 오류가 발생했습니다."));
         }
     }
 
-    // ✅ JWT 쿠키 무효화
+    /** ✅ 회원 탈퇴 */
+    @DeleteMapping("/me")
+    public ResponseEntity<Map<String, String>> deleteMyAccount(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            Authentication authentication,
+            HttpServletResponse response,
+            HttpSession session) {
+
+        try {
+            if (userDetails == null || userDetails.getUser() == null)
+                return ResponseEntity.status(401).body(Map.of("message", "인증 정보가 없습니다."));
+
+            Long userId = userDetails.getUser().getId();
+
+            // Google RefreshToken 삭제
+            RefreshToken storedToken = refreshTokenMapper.findByUserId(userId);
+            if (storedToken != null) {
+                revokeGoogleToken(storedToken.getToken(), "RefreshToken");
+                refreshTokenMapper.deleteByUserId(userId);
+                log.info("🧹 Google RefreshToken 삭제 완료 (userId={})", userId);
+            }
+
+            // ✅ Java 11 호환: instanceof 후 캐스팅 분리
+            if (authentication instanceof OAuth2AuthenticationToken) {
+                OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
+                authorizedClientService.removeAuthorizedClient(
+                        oauth2Token.getAuthorizedClientRegistrationId(),
+                        oauth2Token.getName()
+                );
+            }
+
+            // 사용자 삭제
+            userService.delete(userId);
+
+            // ✅ 세션, 쿠키, 인증정보 초기화
+            org.springframework.security.core.context.SecurityContextHolder.clearContext();
+            if (session != null) session.invalidate();
+            invalidateJwtCookies(response);
+
+            log.info("👋 회원 탈퇴 및 Google 연결 해제 완료: userId={}", userId);
+            return ResponseEntity.ok(Map.of("message", "회원 탈퇴가 완료되었습니다."));
+
+        } catch (Exception e) {
+            log.error("❌ 회원 탈퇴 실패: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of("message", "회원 탈퇴 중 오류가 발생했습니다."));
+        }
+    }
+
+
+    /** ✅ Google OAuth 토큰 revoke */
+    private void revokeGoogleToken(String token, String type) {
+        try {
+            String revokeUrl = "https://oauth2.googleapis.com/revoke";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            String body = "token=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
+            HttpEntity<String> request = new HttpEntity<>(body, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response =
+                    restTemplate.exchange(revokeUrl, HttpMethod.POST, request, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                log.info("✅ Google OAuth {} revoke 성공", type);
+            } else {
+                log.warn("⚠️ Google OAuth {} revoke 실패 (응답 코드: {})", type, response.getStatusCode());
+            }
+        } catch (Exception e) {
+            log.warn("⚠️ Google OAuth {} revoke 중 예외 발생: {}", type, e.getMessage());
+        }
+    }
+
+    /** ✅ JWT 쿠키 무효화 */
     private void invalidateJwtCookies(HttpServletResponse response) {
         Cookie access = new Cookie("access_token", null);
         access.setPath("/");

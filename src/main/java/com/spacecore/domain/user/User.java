@@ -24,6 +24,8 @@ public class User {
     private String phone;           // 연락처
     private String role;            // ROLE_USER / ROLE_ADMIN
     private String status;          // ACTIVE / SUSPENDED
+    private String provider;        // 소셜 로그인 공급자 (google, naver 등)
+    private String providerId;      // 공급자 고유 ID 또는 이메일
     private String isTempPassword;  // Y/N
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

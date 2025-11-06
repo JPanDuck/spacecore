@@ -21,7 +21,7 @@
     .filter-section {
         margin-bottom: 30px;
         padding-bottom: 30px;
-        border-bottom: 1px solid var(--gray-200);
+        border-bottom: 1px solid var(--gray-100);
     }
     
     .search-filter-row {
@@ -333,9 +333,16 @@
             <!-- 결과 헤더 -->
             <div class="result-header">
                 <h2 class="section-title">검색 결과</h2>
-                <p class="result-summary">
-                    총 <span id="totalOffices">0</span>개 지점
-                </p>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <p class="result-summary">
+                        총 <span id="totalOffices">0</span>개 지점
+                    </p>
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <a href="<%=context%>/offices/add" class="btn-admin" style="padding: 10px 20px; background: var(--mocha); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="ph ph-plus"></i> 지점 추가
+                        </a>
+                    </sec:authorize>
+                </div>
             </div>
         </div>
 
@@ -410,7 +417,7 @@
 
         var state = {
             page: parseInt(qs.get("page") || 1),
-            limit: parseInt(qs.get("limit") || 9),
+            limit: parseInt(qs.get("limit") || 10),
             keyword: qs.get("keyword") || "",
             minPrice: qs.get("minPrice") || "",
             maxPrice: qs.get("maxPrice") || ""

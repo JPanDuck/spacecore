@@ -5,22 +5,41 @@
 
 <mapper namespace="com.spacecore.mapper.auth.RefreshTokenMapper">
 
-    <!-- Refresh Token 조회 -->
+    <!-- ✅ 토큰으로 조회 -->
     <select id="findByToken" parameterType="string" resultType="com.spacecore.domain.auth.RefreshToken">
         SELECT id, user_id, token, expiry_date
         FROM refresh_tokens
         WHERE token = #{token}
     </select>
 
-    <!-- Refresh Token 저장 -->
+    <!-- ✅ user_id로 조회 -->
+    <select id="findByUserId" parameterType="long" resultType="com.spacecore.domain.auth.RefreshToken">
+        SELECT id, user_id, token, expiry_date
+        FROM refresh_tokens
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- ✅ 기본 insert -->
     <insert id="insert" parameterType="com.spacecore.domain.auth.RefreshToken">
         INSERT INTO refresh_tokens (id, user_id, token, expiry_date)
         VALUES (seq_refresh_tokens.NEXTVAL, #{userId}, #{token}, #{expiryDate})
     </insert>
 
-    <!-- 사용자별 Refresh Token 삭제 -->
+    <!-- ✅ 삭제 -->
     <delete id="deleteByUserId" parameterType="long">
         DELETE FROM refresh_tokens WHERE user_id = #{userId}
     </delete>
+
+    <!-- ✅ upsert (MERGE) -->
+    <insert id="saveOrUpdate">
+        MERGE INTO refresh_tokens t
+            USING (SELECT #{userId} AS user_id FROM dual) s
+            ON (t.user_id = s.user_id)
+            WHEN MATCHED THEN
+                UPDATE SET t.token = #{token}, t.expiry_date = #{expiry}
+            WHEN NOT MATCHED THEN
+                INSERT (id, user_id, token, expiry_date)
+                    VALUES (seq_refresh_tokens.NEXTVAL, #{userId}, #{token}, #{expiry})
+    </insert>
 
 </mapper>

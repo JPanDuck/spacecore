@@ -45,9 +45,14 @@ img { display: block; max-width: 100%; height: auto; }
   /* 강조 & 텍스트 계열 */
   --choco: #5B3B31;              /* Chocolate Martini */
   --white: #FFFFFF;
-  --gray-100: #F3F3F2;
-  --gray-300: #E1DFDC;
-  --gray-600: #8C8278;
+    --gray-100: #F3F3F2;  /* 가장 밝음 */
+    --gray-200: #E9E7E5;  /* 밝은 회색 */
+    --gray-300: #E1DFDC;  /* 중간 밝기 */
+    --gray-400: #C9C4BE;  /* 중간 회색 */
+    --gray-500: #A89E94;  /* 살짝 톤다운 */
+    --gray-600: #8C8278;  /* 짙은 회색 */
+    --gray-700: #6E665E;  /* 어두운 그레이 */
+    --gray-800: #4F4842;  /* 가장 깊은 웜톤 그레이 */
   --text-primary: #2E2A27;
 
   /* 공통 요소 */

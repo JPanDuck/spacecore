@@ -15,6 +15,12 @@ import java.security.Key;
 import java.time.Duration;
 import java.util.*;
 
+/**
+ * ✅ JWT 토큰 유틸 (최신화)
+ * - AccessToken / RefreshToken 발급 및 검증
+ * - Expired 처리 명확화
+ * - Claims 기반 인증 객체 변환
+ */
 @Slf4j
 @Component
 public class JwtTokenProvider {
@@ -28,10 +34,11 @@ public class JwtTokenProvider {
     @Value("${app.jwt.refresh-token-validity-seconds}")
     private long refreshTokenValiditySeconds;
 
+    /** ✅ 서명키 반환 */
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         if (keyBytes.length < 32) {
-            throw new IllegalArgumentException("JWT secret key must be at least 256 bits");
+            throw new IllegalArgumentException("JWT secret key must be at least 256 bits (32 bytes)");
         }
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -67,28 +74,38 @@ public class JwtTokenProvider {
         claims.put("id", user.getId());
         claims.put("role", user.getRole());
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+
+        log.info("🔁 RefreshToken 생성: {} (유효기간: {}일)", user.getUsername(),
+                refreshTokenValiditySeconds / 86400);
+        return token;
     }
 
     /** ✅ Refresh Token → Access Token 재발급 */
     public String refreshAccessToken(String refreshToken) {
-        Claims claims = validateAndGetClaims(refreshToken);
+        try {
+            Claims claims = validateAndGetClaims(refreshToken);
 
-        User user = new User();
-        user.setUsername(claims.getSubject());
-        user.setRole((String) claims.get("role"));
-        user.setId(((Number) claims.get("id")).longValue());
+            User user = new User();
+            user.setUsername(claims.getSubject());
+            user.setRole((String) claims.get("role"));
+            user.setId(((Number) claims.get("id")).longValue());
 
-        return generateToken(user, Duration.ofHours(1));
+            return generateToken(user, Duration.ofSeconds(accessTokenValiditySeconds));
+
+        } catch (ExpiredJwtException e) {
+            log.warn("⚠️ 만료된 RefreshToken - 재발급 불가: {}", e.getMessage());
+            throw new JwtException("만료된 RefreshToken 입니다.");
+        }
     }
 
-    /** ✅ Claims 검증 + 반환 */
+    /** ✅ Claims 검증 + 반환 (만료 포함) */
     public Claims validateAndGetClaims(String token) {
         try {
             return Jwts.parserBuilder()
@@ -96,8 +113,11 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+        } catch (ExpiredJwtException e) {
+            log.warn("⚠️ 만료된 JWT 토큰 (sub={}): {}", e.getClaims().getSubject(), e.getMessage());
+            throw e;
         } catch (JwtException e) {
-            log.warn("JWT 검증 실패: {}", e.getMessage());
+            log.warn("❌ JWT 검증 실패: {}", e.getMessage());
             throw e;
         }
     }

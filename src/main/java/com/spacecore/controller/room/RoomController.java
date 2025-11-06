@@ -17,23 +17,7 @@ public class RoomController {
     private final RoomService roomService;
     private final OfficeService officeService;
 
-    /// 오피스에 해당하는 룸 전체 페이지
-    @GetMapping({"","/"})
-    public String roomList(@PathVariable("officeId") Long officeId, Model model) {
-        // 해당 오피스의 룸만 조회
-        model.addAttribute("roomList", roomService.listByOffice(officeId));
-        model.addAttribute("officeList", officeService.list());
-        model.addAttribute("selectedOfficeId", officeId);
-        return "room/list";
-    }
-
-    /// 상세 페이지
-    @GetMapping("/detail/{id}")
-    public String roomDetail(@PathVariable Long id, Model model) {
-        model.addAttribute("room", roomService.get(id));
-        model.addAttribute("officeList", officeService.list());
-        return "room/detail";
-    }
+    // 사용자용 room list/detail 페이지는 제거됨 - office detail의 모달로 대체
 
     /// 등록 폼
     @PreAuthorize("hasRole('ADMIN')")
@@ -50,7 +34,7 @@ public class RoomController {
     @PostMapping("/add")
     public String addRoom(@ModelAttribute Room room){
         roomService.create(room);
-        return "redirect:/offices/" + room.getOfficeId() + "/rooms";
+        return "redirect:/offices/detail/" + room.getOfficeId();
     }
 
     /// 수정 폼
@@ -67,7 +51,7 @@ public class RoomController {
     @PostMapping("/edit")
     public String editRoom(@ModelAttribute Room room){
         roomService.update(room);
-        return "redirect:/offices/" + room.getOfficeId() + "/rooms";
+        return "redirect:/offices/detail/" + room.getOfficeId();
     }
 
     /// 삭제
@@ -77,7 +61,7 @@ public class RoomController {
         Room room = roomService.get(id);  // 삭제 전에 officeId 가져오기
         Long officeId = room.getOfficeId();
         roomService.delete(id);
-        return "redirect:/offices/" + officeId + "/rooms";
+        return "redirect:/offices/detail/" + officeId;
     }
 }
 

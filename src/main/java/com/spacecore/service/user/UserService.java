@@ -26,7 +26,10 @@ public interface UserService {
 
     // 비밀번호 관련
     void changePassword(Long id, String newPassword);
-    void resetPassword(Long id);
+    // 비밀번호 찾기 후 직접 새 비밀번호 입력
+    void resetPasswordByUser(String username, String newPassword);
+    // 관리자 임시 비밀번호 초기화
+    String resetPasswordByAdmin(Long id);
 
     // 중복체크
     boolean existsByUsername(String username);
@@ -34,7 +37,8 @@ public interface UserService {
     boolean existsByPhone(String phone);
     /** ✅ 내 계정을 제외한 중복 전화번호 검사 */
     boolean existsByPhoneExcludingId(String phone, Long excludeId);
-
+    /** ✅ 아이디와 이메일이 일치하는지 확인 (비밀번호 찾기용) */
+    boolean checkUsernameAndEmail(String username, String email);
     //(알림 기능) 모든 관리자에게 알림 발송용
     List<Long> getAllAdminIds();
 }

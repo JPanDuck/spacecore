@@ -21,7 +21,7 @@ public interface UserMapper {
     void insert(User user);                                   // 회원가입
     void update(User user);                                   // 프로필 수정
     void delete(@Param("id") Long id);                        // 회원탈퇴 / 관리자삭제
-
+    void updateProviderInfo(User user);                       // 소셜계정
     // 비밀번호 관련
     void updatePassword(@Param("id") Long id, @Param("password") String password);
     void updateTempPassword(@Param("id") Long id,

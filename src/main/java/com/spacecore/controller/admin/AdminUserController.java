@@ -61,7 +61,7 @@ public class AdminUserController {
     @PostMapping("/{id}/reset-password")
     public String resetPassword(@PathVariable Long id,
                                 RedirectAttributes redirectAttributes) {
-        userService.resetPassword(id);
+        userService.resetPasswordByAdmin(id);
         redirectAttributes.addFlashAttribute("message", "비밀번호가 초기화되었습니다.");
         log.info("관리자 - 비밀번호 초기화: userId={}", id);
         return "redirect:/admin/" + id;
