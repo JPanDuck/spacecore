@@ -212,8 +212,6 @@ public class AuthRestController {
         }
     }
 
-
-
     /** ✅ 토큰 재발급 */
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@CookieValue(name = "refresh_token", required = false) String refreshToken) {

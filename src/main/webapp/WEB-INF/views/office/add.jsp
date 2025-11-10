@@ -189,6 +189,18 @@
                 </div>
 
                 <div class="form-section">
+                    <label for="latitude" class="form-label">위도</label>
+                    <input type="number" id="latitude" name="latitude" class="form-input" step="any" placeholder="위도를 입력하세요 (예: 37.5665)">
+                    <p id="latitudeMessage" class="form-message"></p>
+                </div>
+
+                <div class="form-section">
+                    <label for="longitude" class="form-label">경도</label>
+                    <input type="number" id="longitude" name="longitude" class="form-input" step="any" placeholder="경도를 입력하세요 (예: 126.9780)">
+                    <p id="longitudeMessage" class="form-message"></p>
+                </div>
+
+                <div class="form-section">
                     <label for="status" class="form-label">상태</label>
                     <select id="status" name="status" class="form-select">
                         <option value="ACTIVE" selected>활성</option>

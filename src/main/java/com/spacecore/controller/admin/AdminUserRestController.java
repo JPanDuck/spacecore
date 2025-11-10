@@ -41,24 +41,29 @@ public class AdminUserRestController {
 
     /** 사용자 수정 */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User formUser) {
+    public ResponseEntity<?> updateUserStatus(@PathVariable Long id, @RequestBody User formUser) {
         try {
             User existingUser = userService.findById(id);
             if (existingUser == null) {
-                return ResponseEntity.status(404).body(Map.of("message", "해당 사용자를 찾을 수 없습니다."));
+                return ResponseEntity.status(404)
+                        .body(Map.of("message", "해당 사용자를 찾을 수 없습니다."));
             }
 
-            if (formUser.getName() != null) existingUser.setName(formUser.getName());
-            if (formUser.getEmail() != null) existingUser.setEmail(formUser.getEmail());
-            if (formUser.getPhone() != null) existingUser.setPhone(formUser.getPhone());
-            if (formUser.getStatus() != null) existingUser.setStatus(formUser.getStatus());
+            if (formUser.getStatus() == null) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("message", "상태 값이 누락되었습니다."));
+            }
 
+            existingUser.setStatus(formUser.getStatus());
             userService.update(existingUser);
-            log.info("관리자 - 사용자 수정 완료: {}", existingUser.getUsername());
-            return ResponseEntity.ok(Map.of("message", "사용자 정보가 수정되었습니다."));
+
+            log.info("관리자 - 사용자 상태 변경 완료: id={}, newStatus={}", id, formUser.getStatus());
+            return ResponseEntity.ok(Map.of("message", "✅ 사용자 상태가 변경되었습니다."));
+
         } catch (Exception e) {
-            log.error("사용자 수정 실패: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("message", "사용자 수정 중 오류 발생"));
+            log.error("사용자 상태 변경 중 오류: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("message", "사용자 상태 변경 중 오류 발생"));
         }
     }
 

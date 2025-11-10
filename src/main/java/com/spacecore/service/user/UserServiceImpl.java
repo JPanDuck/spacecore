@@ -1,7 +1,12 @@
 package com.spacecore.service.user;
 
 import com.spacecore.domain.user.User;
+import com.spacecore.dto.common.PageInfoDTO;
+import com.spacecore.dto.common.PaginationDTO;
 import com.spacecore.mapper.user.UserMapper;
+import com.spacecore.mapper.auth.RefreshTokenMapper;
+import com.spacecore.service.oauth2.OAuth2AccountService;
+import com.spacecore.util.common.PaginationHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +25,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final OAuth2AccountService oAuth2AccountService; // ✅ 추가
+    private final RefreshTokenMapper refreshTokenMapper;     // ✅ 추가
 
+    /**
+     * ✅ 회원 등록
+     */
     @Override
     public void register(User user) {
         // username 자동 생성 (OAuth2 가입 시)
@@ -44,6 +54,9 @@ public class UserServiceImpl implements UserService {
         log.info("✅ 사용자 등록 완료: {}", user.getUsername());
     }
 
+    /**
+     * ✅ 사용자 조회
+     */
     @Override
     public Optional<User> findByUsername(String username) {
         return Optional.ofNullable(userMapper.findByUsername(username));
@@ -68,20 +81,80 @@ public class UserServiceImpl implements UserService {
         return userMapper.findAll();
     }
 
+    /**
+     * ✅ 검색 및 페이징 조회
+     */
+    @Override
+    public PaginationDTO<User> findAllWithSearch(String keyword, int page, int limit) {
+        // 키워드가 null이면 빈 문자열로 처리
+        if (keyword == null) {
+            keyword = "";
+        }
+        
+        // 페이지가 1보다 작으면 1로 설정
+        if (page < 1) {
+            page = 1;
+        }
+        
+        // limit이 1보다 작으면 10으로 설정
+        if (limit < 1) {
+            limit = 10;
+        }
+        
+        // offset 계산
+        int offset = (page - 1) * limit;
+        
+        // 전체 개수 조회
+        int totalCount = userMapper.countAllWithSearch(keyword);
+        
+        // 페이징 정보 생성
+        PageInfoDTO pageInfo = PaginationHelper.createPageInfo(totalCount, page, limit);
+        
+        // 데이터 조회
+        List<User> users = userMapper.findAllWithSearch(keyword, offset, limit);
+        
+        return new PaginationDTO<>(users, pageInfo);
+    }
+
+    /**
+     * ✅ 사용자 정보 수정
+     */
     @Override
     public void update(User user) {
         userMapper.update(user);
         log.info("🔄 사용자 정보 수정 완료: {}", user.getId());
     }
 
+    /**
+     * ✅ 회원 탈퇴 (모든 관련 데이터 포함 삭제)
+     * - oauth2_account
+     * - refresh_tokens
+     * - users
+     */
     @Override
     public void delete(Long id) {
+        try {
+            // 1️⃣ 소셜 로그인 정보 제거 + revoke 처리
+            oAuth2AccountService.deleteAndRevoke(id);
+        } catch (Exception e) {
+            log.warn("⚠️ OAuth2Account 삭제 중 예외 발생 (userId={}): {}", id, e.getMessage());
+        }
+
+        try {
+            // 2️⃣ 내부 JWT RefreshToken 삭제
+            refreshTokenMapper.deleteByUserId(id);
+            log.info("🧹 refresh_token 삭제 완료 (userId={})", id);
+        } catch (Exception e) {
+            log.warn("⚠️ RefreshToken 삭제 중 예외 발생 (userId={}): {}", id, e.getMessage());
+        }
+
+        // 3️⃣ 실제 사용자 삭제
         userMapper.delete(id);
-        log.info("🗑️ 사용자 삭제 완료: {}", id);
+        log.info("🗑️ 사용자 및 관련 계정 정보 삭제 완료: {}", id);
     }
 
     /**
-     * ✅ 비밀번호 변경 (Controller에서 이미 인코딩된 상태로 전달됨)
+     * ✅ 비밀번호 변경
      */
     @Override
     public void changePassword(Long id, String rawNewPassword) {
@@ -90,18 +163,18 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("해당 사용자를 찾을 수 없습니다. (id=" + id + ")");
         }
 
-        // ✅ 새 비밀번호가 기존 비밀번호와 같은지 검사
         if (passwordEncoder.matches(rawNewPassword, user.getPassword())) {
             throw new IllegalArgumentException("기존 비밀번호와 동일한 비밀번호로 변경할 수 없습니다.");
         }
 
-        // ✅ 비밀번호 인코딩 후 저장
         String encodedPassword = passwordEncoder.encode(rawNewPassword);
         userMapper.updatePassword(id, encodedPassword);
         log.info("🔑 비밀번호 변경 완료 (userId={}): 기존과 다른 비밀번호로 변경됨", id);
     }
 
-    // 사용자 비밀번호 재설정
+    /**
+     * ✅ 사용자 비밀번호 재설정 (본인 요청)
+     */
     @Override
     public void resetPasswordByUser(String username, String newPassword) {
         User user = userMapper.findByUsername(username);
@@ -113,25 +186,22 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 임시 비밀번호 발급 (관리자용)
+     * ✅ 임시 비밀번호 발급 (관리자용)
      */
     @Override
     public String resetPasswordByAdmin(Long id) {
         User user = userMapper.findById(id);
         if (user == null) throw new RuntimeException("사용자를 찾을 수 없습니다. id=" + id);
 
-        // UUID에서 하이픈을 제거하고 앞 8자리만 사용하여 임시 비밀번호 생성
-        String tempPassword = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        String tempPassword = UUID.randomUUID().toString().substring(0, 8);
         String encoded = passwordEncoder.encode(tempPassword);
-        // 임시 비밀번호 설정 및 is_temp_password 플래그를 "Y"로 설정
         userMapper.updateTempPassword(id, encoded, "Y");
 
         log.info("🧩 관리자 비밀번호 초기화 완료: userId={} → 임시비밀번호={}", id, tempPassword);
         return tempPassword;
     }
 
-
-    // 중복체크
+    // ✅ 중복체크
     @Override
     public boolean existsByUsername(String username) {
         return userMapper.existsByUsername(username);
@@ -147,19 +217,24 @@ public class UserServiceImpl implements UserService {
         return userMapper.existsByPhone(phone);
     }
 
-    /** ✅ 내 계정을 제외한 중복 전화번호 검사 */
+    /**
+     * ✅ 내 계정을 제외한 중복 전화번호 검사
+     */
     @Override
     public boolean existsByPhoneExcludingId(String phone, Long excludeId) {
         return userMapper.existsByPhoneExcludingId(phone, excludeId);
     }
 
-    /** ✅ 아이디와 이메일이 일치하는지 확인 (비밀번호 찾기용) */
+    /**
+     * ✅ 아이디와 이메일 일치 여부 검사 (비밀번호 찾기용)
+     */
     @Override
     public boolean checkUsernameAndEmail(String username, String email) {
         return findByUsername(username)
                 .filter(user -> user.getEmail() != null && user.getEmail().equalsIgnoreCase(email))
                 .isPresent();
     }
+
 
     //(알림 기능) 모든 관리자에게 알림 발송용
     @Override

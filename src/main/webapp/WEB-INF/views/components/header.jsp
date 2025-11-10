@@ -1,7 +1,106 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<!-- ✅ 아이콘 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/dist/phosphor.css">
+<!-- ✅ 아이콘 - SVG 폴백 직접 사용 (CDN 시도 없음) -->
+<script>
+    // CDN 시도 없이 바로 SVG 폴백 활성화
+    (function() {
+        document.documentElement.classList.add('phosphor-failed');
+    })();
+</script>
+<style>
+    /* Phosphor 아이콘 폰트가 로드되지 않을 경우를 대비한 폴백 */
+    .ph {
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        line-height: 1;
+        font-family: 'Phosphor', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    /* 아이콘이 보이지 않을 경우를 대비한 기본 스타일 */
+    i.ph {
+        font-size: inherit;
+        width: 1em;
+        height: 1em;
+        display: inline-block;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    /* 하트 아이콘 SVG 폴백 (CDN 실패 시 사용) */
+    .phosphor-failed .ph-heart,
+    .phosphor-failed .ph-heart-fill {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .phosphor-failed .ph-heart {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='%238C8278' d='M128,216a7.8,7.8,0,0,1-3.6-.9C76.5,186.7,24,146,24,104a56,56,0,0,1,104-24,56,56,0,0,1,104,24c0,42-52.5,82.7-100.4,111.1A7.8,7.8,0,0,1,128,216Z'/%3E%3C/svg%3E");
+    }
+    .phosphor-failed .ph-heart-fill {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='%23e74c3c' d='M128,216a7.8,7.8,0,0,1-3.6-.9C76.5,186.7,24,146,24,104a56,56,0,0,1,104-24,56,56,0,0,1,104,24c0,42-52.5,82.7-100.4,111.1A7.8,7.8,0,0,1,128,216Z'/%3E%3C/svg%3E");
+    }
+    /* 벨(종) 아이콘 SVG 폴백 (CDN 실패 시 사용) - 색칠된 종 모양 */
+    .phosphor-failed .ph-bell,
+    .phosphor-failed i.ph-bell {
+        display: inline-block !important;
+        width: 1em !important;
+        height: 1em !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='%238C8278' d='M168,224a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,224Zm53.85-32A15.8,15.8,0,0,1,208,200H48a15.8,15.8,0,0,1-13.85-8,15.7,15.7,0,0,1-1.71-12.12l19.84-66.12a4,4,0,0,0,.06-1.64C44.15,87.47,40,75.23,40,64a88,88,0,0,1,176,0c0,11.23-4.15,23.47-6.34,28.12a4,4,0,0,0,.06,1.64l19.84,66.12A15.7,15.7,0,0,1,221.85,192ZM128,24a40,40,0,0,0-40,40,8,8,0,0,1-16,0,56,56,0,0,1,112,0,8,8,0,0,1-16,0A40,40,0,0,0,128,24Z'/%3E%3C/svg%3E") !important;
+        font-size: 13px !important;
+        line-height: 1 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    /* 벨 아이콘 스타일 강화 (항상 적용) */
+    .notification-icon i.ph-bell {
+        display: inline-block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        font-size: 13px !important;
+        line-height: 1 !important;
+        min-width: 15px;
+        min-height: 15px;
+    }
+    /* CDN 실패 시 벨 아이콘 보이도록 추가 보장 */
+    .phosphor-failed .notification-icon i.ph-bell::before {
+        display: none !important;
+    }
+    /* 프로필(사용자) 아이콘 SVG 폴백 (CDN 실패 시 사용) - 원형 배경 스타일 */
+    .phosphor-failed .ph-user-circle,
+    .phosphor-failed i.ph-user-circle {
+        display: inline-block !important;
+        width: 1em !important;
+        height: 1em !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Ccircle fill='none' stroke='%238C8278' stroke-width='16' cx='128' cy='128' r='96'/%3E%3Ccircle fill='%238C8278' cx='128' cy='96' r='32'/%3E%3Cpath fill='%238C8278' d='M64,192a64,64,0,0,1,128,0'/%3E%3C/svg%3E") !important;
+        font-size: 20px !important;
+        line-height: 1 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    /* 프로필 아이콘 스타일 강화 */
+    .mypage-icon i.ph-user-circle {
+        display: inline-block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        font-size: 20px !important;
+        line-height: 1 !important;
+        min-width: 20px;
+        min-height: 20px;
+    }
+    /* CDN 실패 시 프로필 아이콘 보이도록 추가 보장 */
+    .phosphor-failed .mypage-icon i.ph-user-circle::before {
+        display: none !important;
+    }
+</style>
 
 <header class="app-header">
     <div class="container-1980 header-top">
@@ -38,7 +137,7 @@
         <div class="support-content">
             <h3>문의하기</h3>
             <p>전화번호 : <strong>02-1234-5678</strong></p>
-            <p>주소 : 서울특별시 강남구 테헤란로 123, 스페이스코어 빌딩</p>
+            <p>주소 : 서울특별시 구로구 시흥대로163길 33 <br> <b>주호타워 3층</b></p>
         </div>
     </div>
     <div class="menu-overlay" id="supportOverlay"></div>
@@ -51,6 +150,7 @@
             <a href="${pageContext.request.contextPath}/notices">공지사항</a>
             <a href="${pageContext.request.contextPath}/offices">오피스</a>
             <a href="${pageContext.request.contextPath}/qna">Q&A</a>
+            <a href="${pageContext.request.contextPath}/chatbot/faq">자주묻는 질문</a>
             <a href="${pageContext.request.contextPath}/support">고객센터</a>
             <hr>
             <div class="menu-extra" id="menuExtra"></div>
@@ -120,75 +220,193 @@
             }
         };
 
+        // ✅ 쿠키에서 토큰 읽기
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
         // ✅ 로그인 상태 확인 (토큰 검증 필수)
         async function checkLoginStatus() {
-            const token = localStorage.getItem("accessToken");
+            console.log("[Token Debug] ========== 토큰 검증 시작 ==========");
+            
+            // localStorage와 쿠키 모두 확인
+            const localStorageToken = localStorage.getItem("accessToken");
+            const cookieToken = getCookie("access_token");
+            const allCookies = document.cookie;
+            
+            console.log("[Token Debug] localStorage에서 accessToken 확인:", localStorageToken ? "존재함 (길이: " + localStorageToken.length + ")" : "없음");
+            console.log("[Token Debug] 쿠키에서 access_token 확인:", cookieToken ? "존재함 (길이: " + cookieToken.length + ")" : "없음");
+            console.log("[Token Debug] 모든 쿠키:", allCookies || "없음");
 
-            // 토큰이 없으면 무조건 비로그인 상태
-            if (!token) {
-                // localStorage 정리
-                localStorage.removeItem("username");
-                localStorage.removeItem("accessToken");
-                localStorage.removeItem("refreshToken");
-                localStorage.removeItem("role");
-                showLoggedOutUI();
-                return;
-            }
+            // localStorage나 쿠키에 토큰이 없어도 세션 기반 인증을 확인하기 위해 서버 검증 시도
+            // (서버는 쿠키의 토큰이나 세션을 모두 확인할 수 있음)
+            console.log("[Token Debug] 토큰이 없어도 세션 기반 인증 확인을 위해 서버 검증 시도");
 
-            // 토큰이 있으면 서버에서 검증
+            // 서버에서 검증 (세션 기반 인증도 확인)
             try {
-                const res = await fetch("${pageContext.request.contextPath}/api/auth/validate", {
+                const validateUrl = "${pageContext.request.contextPath}/api/auth/validate";
+                console.log("[Token Debug] 토큰 검증 API 호출:", validateUrl);
+                
+                const res = await fetch(validateUrl, {
                     method: "GET",
                     credentials: "include"
                 });
 
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.valid === true) {
-                        // 유효한 토큰이면 로그인 상태 표시
-                        // data.name을 우선 사용, 없거나 빈 문자열이면 username 사용
-                        let displayName = data.name;
-                        if (!displayName || displayName.trim() === "") {
-                            displayName = data.username || "사용자";
+                console.log("[Token Debug] 검증 API 응답 상태:", res.status, res.statusText);
+                console.log("[Token Debug] 응답 헤더:", {
+                    contentType: res.headers.get("content-type"),
+                    cookies: document.cookie
+                });
+
+                // 응답 본문 읽기 (성공/실패 모두)
+                let responseText = '';
+                let data = null;
+                
+                try {
+                    responseText = await res.text();
+                    console.log("[Token Debug] 검증 API 응답 본문 (raw):", responseText);
+                    
+                    if (responseText) {
+                        try {
+                            data = JSON.parse(responseText);
+                            console.log("[Token Debug] 검증 API 응답 데이터 (parsed):", data);
+                        } catch (parseErr) {
+                            console.warn("[Token Debug] JSON 파싱 실패, 텍스트로 처리:", parseErr);
+                            data = { valid: false, message: responseText };
                         }
-                        console.log("로그인 사용자 정보:", { name: data.name, username: data.username, displayName: displayName });
+                    }
+                } catch (readErr) {
+                    console.error("[Token Debug] 응답 읽기 실패:", readErr);
+                }
 
-                        // 🚨 (추가) 알림 개수 비동기 조회 및 전달
-                        const unreadCount = await getUnreadNotificationCount();
+                if (res.ok && data && data.valid === true) {
+                    console.log("[Token Debug] ✅ 세션 기반 인증 성공 (토큰 없이도 인증됨)");
+                    // 유효한 세션이면 사용자 정보 가져오기
+                    let displayName = data.username || "사용자";
+                    
+                    // /api/auth/me 엔드포인트에서 name과 role 정보 가져오기
+                    let userRole = data.role || 'USER';
+                    console.log("[Token Debug] 초기 사용자 정보:", { displayName, userRole });
+                    
+                    try {
+                        const meUrl = "${pageContext.request.contextPath}/api/auth/me";
+                        console.log("[Token Debug] 사용자 정보 API 호출:", meUrl);
+                        
+                        const meRes = await fetch(meUrl, {
+                            method: "GET",
+                            credentials: "include"
+                        });
+                        
+                        console.log("[Token Debug] 사용자 정보 API 응답 상태:", meRes.status);
+                        
+                        if (meRes.ok) {
+                            const meData = await meRes.json();
+                            console.log("[Token Debug] 사용자 정보 API 응답 데이터:", meData);
+                            
+                            // name이 있으면 name 사용, 없으면 username 사용
+                            displayName = (meData.name && meData.name.trim() !== "") ? meData.name : (meData.username || displayName);
+                            // role 정보 업데이트
+                            if (meData.role) {
+                                userRole = meData.role;
+                            }
+                            console.log("[Token Debug] 최종 사용자 정보:", { displayName, userRole });
+                        } else {
+                            console.warn("[Token Debug] ⚠️ 사용자 정보 API 실패:", meRes.status);
+                            const errorText = await meRes.text();
+                            console.warn("[Token Debug] 에러 내용:", errorText);
+                        }
+                    } catch (meErr) {
+                        console.error("[Token Debug] ❌ 사용자 정보 조회 실패:", meErr);
+                        console.error("[Token Debug] 에러 상세:", {
+                            message: meErr.message,
+                            stack: meErr.stack
+                        });
+                    }
+                    
+                    console.log("[Token Debug] 최종 로그인 사용자 정보:", { displayName: displayName, role: userRole });
 
-                        showLoggedInUI(displayName, unreadCount);
-                        return;
+                    // 🚨 (추가) 알림 개수 비동기 조회 및 전달
+                    const unreadCount = await getUnreadNotificationCount();
+                    console.log("[Token Debug] 알림 개수:", unreadCount);
+
+                    console.log("[Token Debug] showLoggedInUI 호출 전:", { displayName, unreadCount, userRole });
+                    try {
+                        showLoggedInUI(displayName, unreadCount, userRole);
+                        console.log("[Token Debug] ✅ showLoggedInUI 호출 성공");
+                    } catch (uiErr) {
+                        console.error("[Token Debug] ❌ showLoggedInUI 호출 실패:", uiErr);
+                        console.error("[Token Debug] 에러 상세:", {
+                            name: uiErr.name,
+                            message: uiErr.message,
+                            stack: uiErr.stack
+                        });
+                    }
+                    console.log("[Token Debug] ========== 세션 기반 인증 성공 ==========");
+                    return;
+                } else {
+                    if (res.status === 401) {
+                        console.warn("[Token Debug] ⚠️ 인증 실패 (401) - 세션도 없음");
+                    } else {
+                        console.warn("[Token Debug] ⚠️ 응답이 유효하지 않음:", { status: res.status, data: data });
                     }
                 }
+                
                 // 토큰이 유효하지 않으면 정리
+                console.log("[Token Debug] ❌ 토큰 무효 - localStorage 정리 및 비로그인 상태로 전환");
                 localStorage.clear();
                 showLoggedOutUI();
             } catch (err) {
-                console.error("토큰 검증 실패:", err);
+                console.error("[Token Debug] ❌ 토큰 검증 중 예외 발생:", err);
+                console.error("[Token Debug] 에러 상세:", {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack
+                });
                 localStorage.clear();
                 showLoggedOutUI();
             }
+            console.log("[Token Debug] ========== 토큰 검증 종료 ==========");
         }
 
-        function showLoggedInUI(userName, unreadCount) {
+        function showLoggedInUI(userName, unreadCount, userRole) {
+            console.log("[Header] showLoggedInUI 호출됨:", { userName, unreadCount, userRole });
+            
+            // userName이 비어있거나 undefined인 경우 기본값 설정
+            if (!userName || userName.trim() === "") {
+                userName = "사용자";
+            }
+            
+            // role이 없으면 기본값 'USER' 설정
+            userRole = userRole || 'USER';
+            
+            console.log("[Header] 최종 파라미터:", { userName, unreadCount, userRole });
+            
             // 알림 아이콘 HTML 생성
             const notificationCountHtml = (unreadCount > 0) 
                 ? '<span class="notification-badge">' + unreadCount + '</span>' 
                 : '';
             const notificationIconHtml = 
-                '<a href="${pageContext.request.contextPath}/notifications" class="nav-link notification-icon" style="position: relative; display: inline-flex; align-items: center;">' +
-                '<i class="ph ph-bell"></i>' + notificationCountHtml + '</a>';
+                '<a href="${pageContext.request.contextPath}/notifications" class="nav-link notification-icon" style="position: relative; display: inline-flex; align-items: center; justify-content: center;">' +
+                '<i class="ph ph-bell" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 13px !important; line-height: 1 !important;"></i>' + notificationCountHtml + '</a>';
+            
+            console.log("[Header] 벨 아이콘 HTML:", notificationIconHtml);
 
-            headerIcons.innerHTML = `
-            <span class="welcome-text">환영합니다, <strong>${userName}</strong>님</span>
-            <a href="${pageContext.request.contextPath}/reservations" class="nav-link">예약조회</a>
-            ${notificationIconHtml}
-            <a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>
+            // 마이페이지 아이콘 HTML 생성 (원형 배경 스타일)
+            const mypageIconHtml = 
+                '<a href="${pageContext.request.contextPath}/user/mypage" class="nav-link mypage-icon" style="position: relative; display: inline-flex; align-items: center; justify-content: center;">' +
+                '<i class="ph ph-user-circle" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 20px !important; line-height: 1 !important;"></i></a>';
 
-            <a href="#" class="nav-link logout-link">로그아웃</a>
-            <button id="menuToggle" class="icon-btn"><i class="ph ph-list"></i><span class="menu-text">MENU</span></button>
-        `;
-
+            // JSP EL과 충돌 방지를 위해 문자열 연결 방식 사용
+            headerIcons.innerHTML = 
+                '<span class="welcome-text">환영합니다, <strong>' + userName + '</strong>님</span>' +
+                notificationIconHtml +''+
+                mypageIconHtml +
+                '<a href="#" class="nav-link logout-link">로그아웃</a>' +
+                '<button id="menuToggle" class="icon-btn"><i class="ph ph-list"></i><span class="menu-text">MENU</span></button>';
+            // ========================== 메뉴 하단
             //🚨 (추가)
             var countHtml = (unreadCount > 0)
                 ? ' <span class="notification-count">' + unreadCount + '</span>'
@@ -198,10 +416,24 @@
                 '알림' + countHtml +
                 '</a>';
 
+            // FAQ 관리 링크는 ADMIN만 표시
+            var faqAdminLink = '';
+            var userAdminLink = '';
+            if (userRole === 'ADMIN') {
+                faqAdminLink = '<a href="${pageContext.request.contextPath}/chatbot/admin/list" class="nav-link">FAQ 관리</a>\n';
+                userAdminLink = '<a href="${pageContext.request.contextPath}/admin/list" class="nav-link">사용자 관리</a>\n';
+            }
+
+            // 마이페이지 링크 HTML 생성
+            const mypageLinkHtml = '<a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>\n';
+
             menuExtra.innerHTML = notificationLinkHtml + '\n' +
-                '<a href="${pageContext.request.contextPath}/user/mypage" class="nav-link">마이페이지</a>\n' +
+                mypageLinkHtml +
+                '<a href="${pageContext.request.contextPath}/reservations" class="nav-link">예약조회</a>' +
                 '<a href="${pageContext.request.contextPath}/payments" class="nav-link">결제목록</a>\n' +
                 '<a href="${pageContext.request.contextPath}/favorites/list" class="nav-link">즐겨찾기</a>\n' +
+                faqAdminLink +
+                userAdminLink +
                 '<a href="#" class="nav-link logout-link">로그아웃</a>';
             bindMenuEvents();
         }
@@ -405,7 +637,7 @@
     }
 
     .notification-icon i {
-        font-size: 20px;
+        font-size: 15px;
     }
 
     .notification-badge {

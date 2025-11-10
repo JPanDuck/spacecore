@@ -110,7 +110,9 @@
         .divider::before { left: 0; }
         .divider::after { right: 0; }
 
-        .google-btn {
+        .google-btn,
+        .kakao-btn,
+        .naver-btn {
             width: 100%;
             border: 1px solid var(--gray-300);
             background: #fff;
@@ -124,13 +126,38 @@
             transition: 0.3s ease;
             font-weight: 600;
             color: var(--text-primary);
+            margin-bottom: 12px;
         }
 
         .google-btn:hover {
             background: var(--cream-tan);
         }
 
-        .google-btn img {
+        .kakao-btn {
+            background: #FEE500;
+            border-color: #FEE500;
+            color: #000;
+        }
+
+        .kakao-btn:hover {
+            background: #FDD835;
+            border-color: #FDD835;
+        }
+
+        .naver-btn {
+            background: #03C75A;
+            border-color: #03C75A;
+            color: #fff;
+        }
+
+        .naver-btn:hover {
+            background: #02B350;
+            border-color: #02B350;
+        }
+
+        .google-btn img,
+        .kakao-btn img,
+        .naver-btn img {
             width: 40px;
             height: 40px;
         }
@@ -202,6 +229,23 @@
         Google 계정으로 로그인
     </button>
 
+    <!-- ✅ 카카오 로그인 -->
+    <button type="button" class="kakao-btn"
+            onclick="location.href='${pageContext.request.contextPath}/oauth2/authorization/kakao'">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="20" fill="#FEE500"/>
+            <path d="M20 12C14.4772 12 10 15.5817 10 20C10 22.9091 11.6364 25.4545 14 27.0909L13 30L16.5 28.5C17.5909 28.8182 18.7727 29 20 29C25.5228 29 30 25.4183 30 20C30 14.5817 25.5228 12 20 12Z" fill="#000"/>
+        </svg>
+        카카오 계정으로 로그인
+    </button>
+
+    <!-- ✅ 네이버 로그인 -->
+    <button type="button" class="naver-btn"
+            onclick="location.href='${pageContext.request.contextPath}/oauth2/authorization/naver'">
+        <img src="${pageContext.request.contextPath}/img/Naver.svg" alt="Naver Logo">
+        네이버 계정으로 로그인
+    </button>
+
     <div class="footer-link">
         계정이 없으신가요? <a href="${pageContext.request.contextPath}/auth/register">회원가입</a>
     </div>
@@ -251,8 +295,9 @@
             localStorage.setItem("username", data.username);
             localStorage.setItem("role", data.role);
 
-            const userName = data.name || data.username || "사용자";
-            alert(`${userName}님, 환영합니다!`);
+            // name이 있으면 name 사용, 없으면 username 사용, 둘 다 없으면 "사용자"
+            const userName = (data.name && data.name.trim() !== "") ? data.name : (data.username || "사용자");
+            alert(userName + '님, 환영합니다!');
             location.href = "${pageContext.request.contextPath}/";
         } catch (err) {
             console.error("로그인 오류:", err);

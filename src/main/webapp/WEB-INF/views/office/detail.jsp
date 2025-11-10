@@ -122,7 +122,10 @@
         transform: scale(1.1);
     }
     .office-favorite-btn.active {
-        color: #e74c3c;
+        color: #e74c3c !important;
+    }
+    .office-favorite-btn.active i {
+        color: #e74c3c !important;
     }
 
     /* 객실 선택 섹션 */
@@ -197,10 +200,15 @@
         z-index: 10;
         color: var(--gray-600);
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 0;
     }
     .room-card-favorite i {
-        display: block;
-        font-size: 20px;
+        display: block !important;
+        font-size: 20px !important;
+        color: inherit;
+        line-height: 1;
+        width: 20px;
+        height: 20px;
     }
     .room-card-favorite:hover {
         background: white;
@@ -209,10 +217,28 @@
         color: var(--mocha);
     }
     .room-card-favorite.active {
-        color: #c33;
+        color: #e74c3c !important;
+        background: rgba(231, 76, 60, 0.1) !important;
     }
     .room-card-favorite.active:hover {
-        color: #a00;
+        color: #c0392b !important;
+        background: rgba(231, 76, 60, 0.15) !important;
+        transform: scale(1.15);
+    }
+    .room-card-favorite.active i {
+        color: #e74c3c !important;
+        display: block !important;
+    }
+    .room-card-favorite:not(.active) i {
+        color: var(--gray-600) !important;
+    }
+    .room-card-favorite i.ph-heart,
+    .room-card-favorite i.ph-heart-fill {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        font-size: 20px !important;
+        line-height: 1 !important;
     }
     .room-card-content {
         flex: 1;
@@ -616,8 +642,12 @@
     }
 </style>
 
-<!-- Google Maps API는 나중에 추가 예정 -->
-<!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script> -->
+<!-- 네이버 지도 API 로드 (지오코딩 포함) -->
+<script type="text/javascript"
+        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}"
+        onload="console.log('네이버 지도 API 로드 완료');"
+        onerror="console.error('네이버 지도 API 로드 실패');">
+</script>
 
 <main class="office-detail">
     <!-- 메인 이미지 갤러리 -->
@@ -869,6 +899,8 @@
 <script>
     const officeId = ${office != null ? office.id : 0};
     const officeAddress = "${office != null ? office.address : ''}";
+    const officeLatitude = ${office != null && office.latitude != null ? office.latitude : 'null'};
+    const officeLongitude = ${office != null && office.longitude != null ? office.longitude : 'null'};
     let officeMap = null;
     let officeMarker = null;
 
@@ -877,12 +909,11 @@
         document.getElementById('mainImage').src = src;
     }
 
-    // 지도 초기화 (나중에 Google Maps API 추가 시 사용)
+    // 네이버 지도 초기화
     function initMap() {
         try {
-            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
-                console.warn('Google Maps API가 로드되지 않았습니다. 나중에 추가 예정입니다.');
-                // 지도 컨테이너에 주소 표시
+            if (typeof naver === 'undefined' || typeof naver.maps === 'undefined') {
+                console.warn('네이버 지도 API가 로드되지 않았습니다.');
                 const mapContainer = document.getElementById('officeMap');
                 if (mapContainer) {
                     mapContainer.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--gray-600); font-size: 16px;">' + officeAddress + '</div>';
@@ -890,44 +921,96 @@
                 return;
             }
             
-            const geocoder = new google.maps.Geocoder();
-            const mapOptions = {
-                zoom: 15,
-                center: { lat: 37.5665, lng: 126.9780 }
-            };
-            officeMap = new google.maps.Map(document.getElementById('officeMap'), mapOptions);
-
-            geocoder.geocode({ address: officeAddress }, function(results, status) {
-                if (status === 'OK' && results[0]) {
-                    const location = results[0].geometry.location;
-                    officeMap.setCenter(location);
-                    officeMarker = new google.maps.Marker({
-                        map: officeMap,
-                        position: location,
-                        title: "${office.name}"
-                    });
-
-                    const infoWindow = new google.maps.InfoWindow({
-                        content: `<div style="padding: 10px;">
-                            <strong>${office.name}</strong><br>
-                            ${officeAddress}
-                        </div>`
-                    });
-                    officeMarker.addListener('click', function() {
-                        infoWindow.open(officeMap, officeMarker);
-                    });
-                } else {
-                    console.error('Geocoding failed:', status);
-                    // 지도 컨테이너에 주소 표시
-                    const mapContainer = document.getElementById('officeMap');
-                    if (mapContainer) {
-                        mapContainer.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--gray-600); font-size: 16px;">' + officeAddress + '</div>';
-                    }
-                }
+            // 지도 객체 생성 (기본 위치: 서울시청)
+            officeMap = new naver.maps.Map('officeMap', {
+                center: new naver.maps.LatLng(37.5665, 126.9780),
+                zoom: 15
             });
+
+            // 위도/경도가 있으면 직접 사용, 없으면 지오코딩
+            if (officeLatitude != null && officeLongitude != null && 
+                !isNaN(parseFloat(officeLatitude)) && !isNaN(parseFloat(officeLongitude))) {
+                var location = new naver.maps.LatLng(parseFloat(officeLatitude), parseFloat(officeLongitude));
+                setMapLocation(location);
+            } else {
+                // 주소를 좌표로 변환 (지오코딩) - OpenStreetMap Nominatim 사용
+                geocodeAddress(officeAddress);
+            }
+            
+            function geocodeAddress(address) {
+                // OpenStreetMap Nominatim을 사용하여 지오코딩 (무료, API 키 불필요)
+                var geocoderUrl = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address) + '&limit=1&countrycodes=kr';
+                
+                fetch(geocoderUrl, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'SpaceCore/1.0' // Nominatim은 User-Agent 필수
+                    }
+                })
+                .then(function(res) {
+                    if (!res.ok) {
+                        throw new Error('HTTP ' + res.status);
+                    }
+                    return res.json();
+                })
+                .then(function(data) {
+                    if (data && data.length > 0) {
+                        var result = data[0];
+                        var lat = parseFloat(result.lat);
+                        var lng = parseFloat(result.lon);
+                        
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            var location = new naver.maps.LatLng(lat, lng);
+                            setMapLocation(location);
+                        } else {
+                            console.warn('좌표 파싱 실패:', address);
+                        }
+                    } else {
+                        console.warn('지오코딩 결과 없음:', address);
+                    }
+                })
+                .catch(function(err) {
+                    console.warn('OpenStreetMap 지오코딩 실패:', err);
+                });
+            }
+            
+            // 네이버 지도 API 지오코딩 시도 (fallback) - 제거됨 (OpenStreetMap Nominatim만 사용)
+            function tryNaverGeocode(address) {
+                // 네이버 지도 API 지오코더는 사용하지 않음 (OpenStreetMap Nominatim만 사용)
+                console.warn('지오코딩 실패:', address, '(OpenStreetMap Nominatim 실패)');
+            }
+            
+            // 지도 위치 설정 및 마커 생성
+            function setMapLocation(location) {
+                // 지도 중심 이동
+                officeMap.setCenter(location);
+                
+                // 마커 생성
+                officeMarker = new naver.maps.Marker({
+                    position: location,
+                    map: officeMap,
+                    title: "${office.name}"
+                });
+
+                // 정보창 생성
+                const infoWindow = new naver.maps.InfoWindow({
+                    content: '<div style="padding: 10px; min-width: 150px;">' +
+                        '<strong style="font-size: 14px; color: var(--choco);">${office.name}</strong><br>' +
+                        '<span style="font-size: 12px; color: var(--gray-600);">' + officeAddress + '</span>' +
+                        '</div>'
+                });
+
+                // 마커 클릭 시 정보창 표시
+                naver.maps.Event.addListener(officeMarker, 'click', function() {
+                    if (infoWindow.getMap()) {
+                        infoWindow.close();
+                    } else {
+                        infoWindow.open(officeMap, officeMarker);
+                    }
+                });
+            }
         } catch (error) {
             console.error('지도 초기화 실패:', error);
-            // 지도 컨테이너에 주소 표시
             const mapContainer = document.getElementById('officeMap');
             if (mapContainer) {
                 mapContainer.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--gray-600); font-size: 16px;">' + officeAddress + '</div>';
@@ -935,16 +1018,40 @@
         }
     }
 
-    // 페이지 로드 시 지도 초기화 시도 (Google Maps API가 로드된 경우에만)
-    if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
-        window.initMap = initMap;
-    } else {
-        // Google Maps API가 없으면 직접 호출 (지도 컨테이너에 주소만 표시)
+            // 네이버 지도 API 로드 완료 대기 함수
+            function waitForNaverMaps(callback, maxAttempts) {
+                maxAttempts = maxAttempts || 50; // 최대 5초 대기
+                var attempts = 0;
+                
+                var checkInterval = setInterval(function() {
+                    attempts++;
+                    
+                    // naver.maps.Map만 확인 (지오코더 서브모듈 제거)
+                    if (typeof naver !== 'undefined' && 
+                        typeof naver.maps !== 'undefined' && 
+                        typeof naver.maps.Map !== 'undefined') {
+                        clearInterval(checkInterval);
+                        console.log('네이버 지도 API 로드 확인 완료');
+                        callback();
+                    } else if (attempts >= maxAttempts) {
+                        clearInterval(checkInterval);
+                        console.warn('네이버 지도 API 로드 타임아웃');
+                        const mapContainer = document.getElementById('officeMap');
+                        if (mapContainer) {
+                            mapContainer.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--gray-600); font-size: 16px;">지도를 불러올 수 없습니다.<br>' + officeAddress + '</div>';
+                        }
+                    }
+                }, 100);
+            }
+    
+    // 페이지 로드 시 지도 초기화
+    if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                initMap();
-            }, 100);
+            waitForNaverMaps(initMap);
         });
+    } else {
+        // DOM이 이미 로드된 경우
+        waitForNaverMaps(initMap);
     }
 
     // 예상 가격 계산
@@ -1025,10 +1132,14 @@
             if (data.success) {
                 if (data.isFavorite) {
                     btn.classList.add('active');
-                    if (icon) icon.className = 'ph ph-heart-fill';
+                    if (icon) {
+                        icon.className = 'ph ph-heart-fill';
+                    }
                 } else {
                     btn.classList.remove('active');
-                    if (icon) icon.className = 'ph ph-heart';
+                    if (icon) {
+                        icon.className = 'ph ph-heart';
+                    }
                 }
             }
         })
@@ -1039,27 +1150,106 @@
     }
 
     // 지점 즐겨찾기 토글
-    function toggleOfficeFavorite(event) {
+    async function toggleOfficeFavorite(event) {
         event.stopPropagation();
         const btn = event.currentTarget;
         const icon = btn.querySelector('i');
-        const isActive = btn.classList.contains('active');
+        const officeId = ${office != null ? office.id : 0};
 
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('로그인이 필요합니다');
-            window.location.href = '<%=context%>/auth/login?error=' + encodeURIComponent('로그인이 필요합니다');
+        if (!officeId) {
+            alert('지점 정보를 찾을 수 없습니다.');
             return;
         }
 
-        if (isActive) {
-            btn.classList.remove('active');
-            icon.className = 'ph ph-heart';
-        } else {
-            btn.classList.add('active');
-            icon.className = 'ph ph-heart-fill';
+        try {
+            console.log('오피스 즐겨찾기 토글 시작 - officeId:', officeId);
+            const res = await fetch('<%=context%>/api/favorites/offices/' + officeId, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('API 응답 상태:', res.status, res.statusText);
+
+            if (res.status === 401) {
+                alert('로그인이 필요합니다');
+                window.location.href = '<%=context%>/auth/login?error=' + encodeURIComponent('로그인이 필요합니다');
+                return;
+            }
+
+            let data;
+            try {
+                const responseText = await res.text();
+                console.log('API 응답 본문:', responseText);
+                data = JSON.parse(responseText);
+            } catch (parseErr) {
+                console.error('응답 파싱 실패:', parseErr);
+                alert('서버 응답을 처리할 수 없습니다.');
+                return;
+            }
+
+            if (!res.ok) {
+                const errorMsg = data.message || '즐겨찾기 처리 중 오류가 발생했습니다.';
+                console.error('API 오류:', errorMsg);
+                alert(errorMsg);
+                return;
+            }
+            
+            console.log('즐겨찾기 상태:', data.isFavorite);
+            if (data.isFavorite) {
+                btn.classList.add('active');
+                icon.className = 'ph ph-heart-fill';
+                icon.style.color = '#e74c3c';
+            } else {
+                btn.classList.remove('active');
+                icon.className = 'ph ph-heart';
+                icon.style.color = '';
+            }
+        } catch (err) {
+            console.error('즐겨찾기 토글 실패:', err);
+            alert('즐겨찾기 처리 중 오류가 발생했습니다: ' + err.message);
         }
     }
+    
+    // 지점 즐겨찾기 상태 확인
+    async function checkOfficeFavoriteStatus() {
+        const officeId = ${office != null ? office.id : 0};
+        if (!officeId) return;
+
+        try {
+            const res = await fetch('<%=context%>/api/favorites/offices/' + officeId, {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                const btn = document.getElementById('officeFavoriteBtn');
+                const icon = btn ? btn.querySelector('i') : null;
+                
+                if (btn && icon) {
+                    if (data.isFavorite) {
+                        btn.classList.add('active');
+                        icon.className = 'ph ph-heart-fill';
+                        icon.style.color = '#e74c3c';
+                    } else {
+                        btn.classList.remove('active');
+                        icon.className = 'ph ph-heart';
+                        icon.style.color = '';
+                    }
+                }
+            }
+        } catch (err) {
+            console.error('즐겨찾기 상태 확인 실패:', err);
+        }
+    }
+    
+    // 페이지 로드 시 즐겨찾기 상태 확인
+    document.addEventListener('DOMContentLoaded', function() {
+        checkOfficeFavoriteStatus();
+    });
 
     // 룸 모달 표시
     async function showRoomModal(roomId) {
@@ -1492,7 +1682,7 @@
                     const favoriteButtons = document.querySelectorAll('.room-card-favorite');
                     console.log('즐겨찾기 버튼 개수:', favoriteButtons.length);
                     favoriteButtons.forEach(btn => {
-                        const roomId = btn.getAttribute('data-room-id');
+                        const roomId = btn.getAttribute('data-room-id') || btn.closest('.room-card')?.getAttribute('data-room-id');
                         if (roomId) {
                             fetch('<%=context%>/api/favorites/rooms/' + roomId, {
                                 method: 'GET',
@@ -1506,11 +1696,15 @@
                                 if (favData.isFavorite) {
                                     btn.classList.add('active');
                                     const icon = btn.querySelector('i');
-                                    if (icon) icon.className = 'ph ph-heart-fill';
+                                    if (icon) {
+                                        icon.className = 'ph ph-heart-fill';
+                                    }
                                 } else {
                                     btn.classList.remove('active');
                                     const icon = btn.querySelector('i');
-                                    if (icon) icon.className = 'ph ph-heart';
+                                    if (icon) {
+                                        icon.className = 'ph ph-heart';
+                                    }
                                 }
                             })
                             .catch((err) => {
