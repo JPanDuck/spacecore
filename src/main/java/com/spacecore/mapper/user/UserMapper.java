@@ -13,8 +13,14 @@ public interface UserMapper {
     User findByEmail(@Param("email") String email);           // OAuth2 로그인용
     User findById(@Param("id") Long id);                      // 마이페이지 / 관리자 상세조회
     List<User> findAll();                                     // 관리자 전체 조회
+    
+    // 검색 및 페이징
+    List<User> findAllWithSearch(@Param("keyword") String keyword, 
+                                  @Param("offset") int offset, 
+                                  @Param("limit") int limit); // 관리자 검색 및 페이징 조회
+    int countAllWithSearch(@Param("keyword") String keyword); // 검색 조건에 맞는 전체 개수
 
-    // ✅ 추가 — OAuth2AuthorizedClientService에서 사용 (이메일 → userId 변환)
+    // OAuth2AuthorizedClientService에서 사용 (이메일 → userId 변환)
     Long findIdByEmail(@Param("email") String email);
 
     // 등록 / 수정 / 삭제
@@ -22,6 +28,7 @@ public interface UserMapper {
     void update(User user);                                   // 프로필 수정
     void delete(@Param("id") Long id);                        // 회원탈퇴 / 관리자삭제
     void updateProviderInfo(User user);                       // 소셜계정
+
     // 비밀번호 관련
     void updatePassword(@Param("id") Long id, @Param("password") String password);
     void updateTempPassword(@Param("id") Long id,
@@ -31,10 +38,11 @@ public interface UserMapper {
     // 기타
     boolean existsByUsername(@Param("username") String username); // 아이디 중복체크
     boolean existsByEmail(@Param("email") String email);          // 이메일 중복체크
-    boolean existsByPhone(@Param("phone") String phone);
+    boolean existsByPhone(@Param("phone") String phone);          // 휴대폰 번호 중복 체크
 
     //내 계정을 제외한 중복 전화번호 검사
     boolean existsByPhoneExcludingId(@Param("phone") String phone, @Param("excludeId") Long excludeId);
+
 
     //(알림 기능) 모든 관리자에게 알림 발송용
     List<Long> selectAllAdminIds();

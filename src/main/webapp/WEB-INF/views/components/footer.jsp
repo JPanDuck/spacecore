@@ -32,15 +32,21 @@
                     <img src="${pageContext.request.contextPath}/img/bot.png" alt="봇">
                 </div>
                 <div class="message-content">
-                    <p>안녕하세요! Space Core 챗봇입니다. 무엇을 도와드릴까요?</p>
+                    <p>안녕하세요! Space Core 챗봇입니다. 무엇을 도와드릴까요? 😊</p>
                 </div>
+            </div>
+            <div class="chatbot-quick-questions" id="quickQuestions">
+                <!-- 빠른 질문 버튼들이 여기에 동적으로 추가됩니다 -->
             </div>
         </div>
         <div class="chatbot-input-area">
-            <input type="text" id="chatbotInput" class="chatbot-input" placeholder="메시지를 입력하세요..." maxlength="500">
+            <input type="text" id="chatbotInput" class="chatbot-input" placeholder="질문을 입력하세요..." maxlength="500">
             <button id="chatbotSend" class="chatbot-send-btn">
                 <i class="ph ph-paper-plane-tilt"></i>
             </button>
+        </div>
+        <div class="chatbot-footer-link">
+            <a href="${pageContext.request.contextPath}/chatbot/faq" target="_blank">전체 FAQ 보기</a>
         </div>
     </div>
 </div>
@@ -282,6 +288,43 @@
         word-wrap: break-word;
     }
 
+    /* 빠른 질문 버튼 영역 */
+    .chatbot-quick-questions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px 20px;
+        margin-top: 8px;
+    }
+
+    /* 답변 아래에 표시되는 인라인 FAQ 목록 */
+    .chatbot-quick-questions-inline {
+        margin-top: 12px;
+        margin-bottom: 8px;
+        padding: 12px 0;
+        border-top: 1px solid var(--gray-200);
+    }
+
+    .quick-question-btn {
+        padding: 8px 16px;
+        background: var(--white);
+        border: 1px solid var(--gray-300);
+        border-radius: 20px;
+        font-size: 13px;
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .quick-question-btn:hover {
+        background: var(--choco);
+        color: var(--white);
+        border-color: var(--choco);
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(91, 59, 49, 0.2);
+    }
+
     /* 챗봇 입력 영역 */
     .chatbot-input-area {
         display: flex;
@@ -289,6 +332,25 @@
         padding: 16px;
         background: var(--white);
         border-top: 1px solid var(--gray-200);
+    }
+
+    /* 챗봇 푸터 링크 */
+    .chatbot-footer-link {
+        padding: 12px 16px;
+        text-align: center;
+        background: var(--gray-50);
+        border-top: 1px solid var(--gray-200);
+    }
+
+    .chatbot-footer-link a {
+        font-size: 13px;
+        color: var(--choco);
+        text-decoration: underline;
+        transition: color 0.3s ease;
+    }
+
+    .chatbot-footer-link a:hover {
+        color: var(--amber);
     }
 
     .chatbot-input {
@@ -377,13 +439,294 @@
         const chatbotInput = document.getElementById('chatbotInput');
         const chatbotSend = document.getElementById('chatbotSend');
         const chatbotMessages = document.getElementById('chatbotMessages');
+        const quickQuestions = document.getElementById('quickQuestions');
+
+        let faqData = []; // FAQ 데이터 캐시
+        let categories = []; // 카테고리 목록
+
+        // FAQ 데이터 로드 (개선된 버전)
+        async function loadFAQData() {
+            try {
+                // 먼저 전역 변수에서 FAQ 데이터 확인 (FAQ 페이지에서 제공)
+                if (window.faqDataForChatbot && window.faqDataForChatbot.length > 0) {
+                    faqData = window.faqDataForChatbot.map(item => ({
+                        id: item.id,
+                        category: item.category,
+                        question: item.question,
+                        answer: item.answer,
+                        priority: item.priority
+                    }));
+                    
+                    // 카테고리 목록 추출
+                    categories = [...new Set(faqData.map(faq => faq.category).filter(cat => cat))];
+                    console.log('전역 변수에서 FAQ 데이터 로드:', faqData.length);
+                    return;
+                }
+
+                // 전역 변수가 없으면 FAQ 페이지에서 카테고리 목록을 가져오기
+                const response = await fetch('${pageContext.request.contextPath}/chatbot/faq');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // JSON 데이터가 페이지에 포함되어 있는지 확인
+                const faqJsonElement = doc.getElementById('faqJsonData');
+                if (faqJsonElement) {
+                    try {
+                        const jsonData = JSON.parse(faqJsonElement.textContent);
+                        faqData = jsonData.map(item => ({
+                            id: item.id,
+                            category: item.category,
+                            question: item.question,
+                            answer: item.answer,
+                            priority: item.priority
+                        }));
+                        categories = [...new Set(faqData.map(faq => faq.category).filter(cat => cat))];
+                        console.log('JSON에서 FAQ 데이터 로드:', faqData.length);
+                        return;
+                    } catch (e) {
+                        console.error('JSON 파싱 오류:', e);
+                    }
+                }
+                
+                // JSON이 없으면 HTML 파싱 방식 사용
+                const categoryLinks = doc.querySelectorAll('.category-tab');
+                const categoryUrls = Array.from(categoryLinks).map(link => {
+                    const href = link.getAttribute('href');
+                    const categoryName = link.textContent.trim().replace(/[📁\s]/g, '').trim();
+                    return { name: categoryName, url: href };
+                });
+
+                categories = categoryUrls.map(cat => cat.name).filter(name => name);
+
+                // 각 카테고리별로 FAQ 데이터 가져오기
+                for (const catInfo of categoryUrls) {
+                    if (!catInfo.name) continue;
+                    
+                    try {
+                        const catResponse = await fetch('${pageContext.request.contextPath}/chatbot/faq?category=' + encodeURIComponent(catInfo.name));
+                        const catHtml = await catResponse.text();
+                        const catDoc = parser.parseFromString(catHtml, 'text/html');
+                        
+                        // JSON 데이터 확인
+                        const catJsonElement = catDoc.getElementById('faqJsonData');
+                        if (catJsonElement) {
+                            try {
+                                const jsonData = JSON.parse(catJsonElement.textContent);
+                                jsonData.forEach(item => {
+                                    faqData.push({
+                                        id: item.id,
+                                        category: item.category,
+                                        question: item.question,
+                                        answer: item.answer,
+                                        priority: item.priority
+                                    });
+                                });
+                                continue;
+                            } catch (e) {
+                                console.error('카테고리 JSON 파싱 오류:', e);
+                            }
+                        }
+                        
+                        // HTML 파싱 방식
+                        const faqItems = catDoc.querySelectorAll('.faq-item');
+                        faqItems.forEach((item) => {
+                            const question = item.getAttribute('data-question') || 
+                                           item.querySelector('.faq-question span')?.textContent.trim() || '';
+                            const answer = item.getAttribute('data-answer') || 
+                                         item.querySelector('.faq-answer-content')?.textContent.trim() || '';
+                            
+                            if (question && answer) {
+                                faqData.push({
+                                    category: catInfo.name,
+                                    question: question,
+                                    answer: answer
+                                });
+                            }
+                        });
+                    } catch (err) {
+                        console.error('카테고리 데이터 로드 실패:', catInfo.name, err);
+                    }
+                }
+
+                console.log('로드된 FAQ 데이터 개수:', faqData.length);
+            } catch (err) {
+                console.error('FAQ 데이터 로드 실패:', err);
+            }
+        }
+
+        // 빠른 질문 버튼 생성 (컨테이너 지정 가능)
+        function createQuickQuestions(container) {
+            const targetContainer = container || quickQuestions;
+            targetContainer.innerHTML = '';
+            
+            // FAQ 데이터에서 실제 질문들을 추출하여 빠른 질문 버튼으로 사용
+            let quickQList = [];
+            
+            if (faqData.length > 0) {
+                // FAQ 데이터에서 우선순위가 높은 질문들 추출 (최대 5개)
+                const sortedFaqs = [...faqData].slice(0, 5);
+                quickQList = sortedFaqs.map(faq => faq.question);
+            } else {
+                // FAQ 데이터가 없으면 기본 질문들 사용
+                quickQList = [
+                    '예약 방법이 궁금해요',
+                    '결제는 어떻게 하나요?',
+                    '환불 정책은?',
+                    '오피스 위치는 어디인가요?',
+                    '이용 시간은 어떻게 되나요?'
+                ];
+            }
+
+            quickQList.forEach(question => {
+                if (!question) return;
+                
+                const btn = document.createElement('button');
+                btn.className = 'quick-question-btn';
+                btn.textContent = question.length > 20 ? question.substring(0, 20) + '...' : question;
+                btn.title = question; // 전체 텍스트를 툴팁으로
+                btn.addEventListener('click', () => {
+                    chatbotInput.value = question;
+                    sendMessage();
+                });
+                targetContainer.appendChild(btn);
+            });
+        }
+        
+        // 답변 메시지 아래에 FAQ 목록 추가
+        function addQuickQuestionsAfterMessage(messageElement) {
+            if (!messageElement || !messageElement.parentNode) return;
+            
+            // 이미 FAQ 목록이 있는지 확인
+            let quickQContainer = messageElement.nextElementSibling;
+            if (quickQContainer && quickQContainer.classList.contains('chatbot-quick-questions-inline')) {
+                // 이미 있으면 업데이트만
+                createQuickQuestions(quickQContainer);
+                quickQContainer.style.display = 'flex';
+                // 스크롤 업데이트
+                setTimeout(() => {
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                }, 100);
+                return;
+            }
+            
+            // 새로운 FAQ 목록 컨테이너 생성
+            quickQContainer = document.createElement('div');
+            quickQContainer.className = 'chatbot-quick-questions chatbot-quick-questions-inline';
+            quickQContainer.style.display = 'flex';
+            
+            // 메시지 다음에 삽입
+            messageElement.parentNode.insertBefore(quickQContainer, messageElement.nextSibling);
+            
+            // FAQ 목록 생성
+            createQuickQuestions(quickQContainer);
+            
+            // 스크롤을 맨 아래로 이동
+            setTimeout(() => {
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }, 100);
+        }
+
+        // FAQ 검색 함수 (개선된 버전)
+        function searchFAQ(query) {
+            if (!query || faqData.length === 0) {
+                return null;
+            }
+
+            const lowerQuery = query.toLowerCase().trim();
+            const keywords = lowerQuery.split(/\s+/).filter(k => k.length > 0);
+
+            // 점수 기반 매칭
+            let bestMatch = null;
+            let bestScore = 0;
+            const matches = [];
+
+            faqData.forEach(faq => {
+                const questionLower = faq.question.toLowerCase();
+                const answerLower = faq.answer.toLowerCase();
+                let score = 0;
+
+                // 완전 일치 (가장 높은 점수)
+                if (questionLower === lowerQuery) {
+                    score += 100;
+                } else if (answerLower.includes(lowerQuery)) {
+                    score += 50;
+                }
+
+                // 질문 시작 부분 일치
+                if (questionLower.startsWith(lowerQuery)) {
+                    score += 30;
+                }
+
+                // 정확한 일치
+                if (questionLower.includes(lowerQuery)) {
+                    score += 20;
+                }
+                
+                if (answerLower.includes(lowerQuery)) {
+                    score += 10;
+                }
+
+                // 키워드 매칭
+                keywords.forEach(keyword => {
+                    if (keyword.length < 2) return;
+                    
+                    if (questionLower.includes(keyword)) {
+                        score += 5;
+                    }
+                    if (answerLower.includes(keyword)) {
+                        score += 2;
+                    }
+                });
+
+                // 질문과 답변 모두에서 키워드 발견
+                const matchedKeywords = keywords.filter(k => 
+                    questionLower.includes(k) || answerLower.includes(k)
+                ).length;
+                if (matchedKeywords === keywords.length && keywords.length > 0) {
+                    score += 10;
+                }
+
+                if (score > 0) {
+                    matches.push({ faq, score });
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMatch = faq;
+                    }
+                }
+            });
+
+            // 최소 점수 이상인 경우만 반환
+            return bestScore >= 5 ? bestMatch : null;
+        }
 
         // 팝업 열기
-        function openChatbot() {
+        async function openChatbot() {
             chatbotPopup.classList.add('active');
             chatbotOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
             chatbotInput.focus();
+
+            // FAQ 데이터가 없으면 로드
+            if (faqData.length === 0) {
+                const loadingMsg = addMessage('FAQ 데이터를 불러오는 중입니다...', false);
+                try {
+                    await loadFAQData();
+                    // 로딩 메시지 제거 (정상적으로 로드되었을 때는 조용히 제거)
+                    if (loadingMsg && loadingMsg.parentNode) {
+                        loadingMsg.remove();
+                    }
+                } catch (err) {
+                    // 오류 발생 시에만 오류 메시지 표시
+                    if (loadingMsg && loadingMsg.parentNode) {
+                        loadingMsg.remove();
+                    }
+                    addMessage('FAQ 데이터를 불러오는 중 오류가 발생했습니다.', false);
+                    console.error('FAQ 로드 오류:', err);
+                }
+            }
+            
+            createQuickQuestions();
         }
 
         // 팝업 닫기
@@ -394,9 +737,12 @@
         }
 
         // 메시지 추가 함수
-        function addMessage(text, isUser) {
+        function addMessage(text, isUser, isTyping = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'chatbot-message ' + (isUser ? 'chatbot-message-user' : 'chatbot-message-bot');
+            if (isTyping) {
+                messageDiv.classList.add('typing-indicator');
+            }
             
             const avatarDiv = document.createElement('div');
             avatarDiv.className = 'message-avatar';
@@ -418,21 +764,73 @@
             
             // 스크롤을 맨 아래로
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            return messageDiv;
+        }
+
+        // 타이핑 애니메이션
+        function showTypingIndicator() {
+            const typingDiv = addMessage('입력 중...', false, true);
+            return typingDiv;
         }
 
         // 메시지 전송
-        function sendMessage() {
+        async function sendMessage() {
             const text = chatbotInput.value.trim();
             if (!text) return;
 
             // 사용자 메시지 추가
             addMessage(text, true);
             chatbotInput.value = '';
+            chatbotSend.disabled = true;
 
-            // 봇 응답 (예시)
-            setTimeout(function() {
-                addMessage('죄송합니다. 챗봇 기능은 현재 개발 중입니다. 곧 만나뵐게요! 😊', false);
-            }, 500);
+            // 빠른 질문 버튼 숨기기
+            quickQuestions.style.display = 'none';
+
+            // 타이핑 인디케이터
+            const typingDiv = showTypingIndicator();
+
+            // 약간의 딜레이 (자연스러운 대화 느낌)
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // 타이핑 인디케이터 제거
+            typingDiv.remove();
+
+            // FAQ 데이터가 없으면 먼저 로드 시도
+            if (faqData.length === 0) {
+                await loadFAQData();
+            }
+
+            // FAQ 검색
+            const matchedFAQ = searchFAQ(text);
+
+            if (matchedFAQ) {
+                // 매칭된 FAQ 답변 표시
+                const answerMessage = addMessage(matchedFAQ.answer, false);
+                
+                // 답변 메시지 바로 아래에 FAQ 목록 추가
+                if (faqData.length > 0) {
+                    addQuickQuestionsAfterMessage(answerMessage);
+                }
+                
+                // 추가 도움이 필요하면 안내
+                setTimeout(() => {
+                    addMessage('더 궁금한 점이 있으시면 위의 질문 버튼을 클릭하거나 질문해 주세요. 전체 FAQ 페이지에서도 더 많은 정보를 확인하실 수 있습니다.', false);
+                }, 500);
+            } else {
+                // 매칭되는 FAQ가 없을 때
+                addMessage('죄송합니다. 관련된 답변을 찾지 못했습니다. 😔', false);
+                setTimeout(() => {
+                    addMessage('다른 방식으로 질문해 주시거나, 전체 FAQ 페이지를 확인해 보시기 바랍니다.', false);
+                    setTimeout(() => {
+                        if (faqData.length > 0) {
+                            createQuickQuestions();
+                            quickQuestions.style.display = 'flex';
+                        }
+                    }, 300);
+                }, 500);
+            }
+
+            chatbotSend.disabled = false;
         }
 
         // 이벤트 리스너
@@ -443,7 +841,8 @@
         
         // Enter 키로 메시지 전송
         chatbotInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
                 sendMessage();
             }
         });

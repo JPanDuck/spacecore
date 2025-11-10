@@ -50,11 +50,30 @@ public class AdminUserController {
     public String updateUser(@PathVariable Long id,
                              @ModelAttribute User formUser,
                              RedirectAttributes redirectAttributes) {
-        formUser.setId(id);
-        userService.update(formUser);
-        redirectAttributes.addFlashAttribute("message", "사용자 정보가 수정되었습니다.");
-        log.info("관리자 - 사용자 정보 수정 완료: {}", formUser.getUsername());
-        return "redirect:/admin/" + id;
+        try {
+            User existingUser = userService.findById(id);
+            if (existingUser == null) {
+                redirectAttributes.addFlashAttribute("message", "해당 사용자를 찾을 수 없습니다.");
+                return "redirect:/admin/list";
+            }
+
+            // ✅ 상태(status)만 변경
+            if (formUser.getStatus() != null) {
+                existingUser.setStatus(formUser.getStatus());
+                userService.update(existingUser);
+                log.info("관리자 - 사용자 상태 변경 완료: id={}, newStatus={}", id, formUser.getStatus());
+                redirectAttributes.addFlashAttribute("message", "✅ 사용자 상태가 변경되었습니다.");
+            } else {
+                redirectAttributes.addFlashAttribute("message", "⚠️ 상태 값이 비어 있습니다.");
+            }
+
+            return "redirect:/admin/" + id;
+
+        } catch (Exception e) {
+            log.error("❌ 사용자 상태 변경 중 오류: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("message", "상태 변경 중 오류가 발생했습니다.");
+            return "redirect:/admin/list";
+        }
     }
 
     /** ✅ 비밀번호 초기화 (관리자 전용) */

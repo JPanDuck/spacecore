@@ -1,9 +1,11 @@
 package com.spacecore.controller.notice;
 
 import com.spacecore.domain.notice.Notice;
+import com.spacecore.security.CustomUserDetails;
 import com.spacecore.service.notice.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +41,11 @@ public class NoticeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
-    public String addNotice(@ModelAttribute Notice notice) {
+    public String addNotice(@ModelAttribute Notice notice, @AuthenticationPrincipal CustomUserDetails user) {
+        // 현재 로그인한 사용자의 ID 설정
+        if (user != null) {
+            notice.setUserId(user.getId());
+        }
         noticeService.create(notice);
         return "redirect:/notices";
     }

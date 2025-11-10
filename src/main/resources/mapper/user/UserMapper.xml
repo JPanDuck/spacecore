@@ -66,6 +66,40 @@
         SELECT * FROM users ORDER BY id DESC
     </select>
 
+    <!-- 검색 및 페이징 조회 -->
+    <select id="findAllWithSearch" resultMap="UserResultMap">
+        SELECT *
+        FROM users
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (
+                    username LIKE '%' || #{keyword} || '%'
+                    OR name LIKE '%' || #{keyword} || '%'
+                    OR email LIKE '%' || #{keyword} || '%'
+                    OR phone LIKE '%' || #{keyword} || '%'
+                )
+            </if>
+        </where>
+        ORDER BY id DESC
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <!-- 검색 조건에 맞는 전체 개수 -->
+    <select id="countAllWithSearch" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (
+                    username LIKE '%' || #{keyword} || '%'
+                    OR name LIKE '%' || #{keyword} || '%'
+                    OR email LIKE '%' || #{keyword} || '%'
+                    OR phone LIKE '%' || #{keyword} || '%'
+                )
+            </if>
+        </where>
+    </select>
+
     <!-- 사용자 정보 수정 -->
     <update id="update" parameterType="com.spacecore.domain.user.User">
         UPDATE users
@@ -150,6 +184,8 @@
         WHERE phone = #{phone}
           AND id != #{excludeId}
     </select>
+
+
 
     <!-- (알림 기능) 모든 관리자에게 알림 발송용 -->
     <select id="selectAllAdminIds" resultType="Long">

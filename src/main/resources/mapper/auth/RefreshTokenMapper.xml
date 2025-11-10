@@ -14,7 +14,7 @@
 
     <!-- ✅ user_id로 조회 -->
     <select id="findByUserId" parameterType="long" resultType="com.spacecore.domain.auth.RefreshToken">
-        SELECT id, user_id, token, expiry_date
+        SELECT id, user_id, TRIM(token) AS token, expiry_date
         FROM refresh_tokens
         WHERE user_id = #{userId}
     </select>

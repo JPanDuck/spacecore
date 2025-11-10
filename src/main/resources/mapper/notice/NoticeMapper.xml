@@ -29,7 +29,7 @@
             SELECT seq_notices.NEXTVAL FROM dual
         </selectKey>
         INSERT INTO notices (id, user_id, title, content, pinned, created_at)
-        VALUES (#{id}, #{userId}, #{title}, #{content}, COALESCE(#{pinned}, 'N'), SYSTIMESTAMP)
+        VALUES (#{id}, #{userId, jdbcType=NUMERIC}, #{title}, #{content}, COALESCE(#{pinned}, 'N'), SYSTIMESTAMP)
     </insert>
 
     <update id="update" parameterType="com.spacecore.domain.notice.Notice">

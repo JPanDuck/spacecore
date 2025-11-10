@@ -1,6 +1,7 @@
 package com.spacecore.service.user;
 
 import com.spacecore.domain.user.User;
+import com.spacecore.dto.common.PaginationDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,9 @@ public interface UserService {
     // 마이페이지, 관리자 조회
     User findById(Long id);
     List<User> findAll();
+    
+    // 검색 및 페이징
+    PaginationDTO<User> findAllWithSearch(String keyword, int page, int limit);
 
     // 프로필 수정
     void update(User user);
@@ -39,6 +43,7 @@ public interface UserService {
     boolean existsByPhoneExcludingId(String phone, Long excludeId);
     /** ✅ 아이디와 이메일이 일치하는지 확인 (비밀번호 찾기용) */
     boolean checkUsernameAndEmail(String username, String email);
+
     //(알림 기능) 모든 관리자에게 알림 발송용
     List<Long> getAllAdminIds();
 }

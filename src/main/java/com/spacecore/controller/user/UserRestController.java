@@ -1,9 +1,7 @@
 package com.spacecore.controller.user;
 
-import com.spacecore.domain.auth.RefreshToken;
 import com.spacecore.domain.user.User;
 import com.spacecore.dto.user.PasswordChangeRequest;
-import com.spacecore.mapper.auth.RefreshTokenMapper;
 import com.spacecore.security.CustomUserDetails;
 import com.spacecore.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Slf4j
@@ -35,7 +30,6 @@ public class UserRestController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final OAuth2AuthorizedClientService authorizedClientService;
-    private final RefreshTokenMapper refreshTokenMapper;
 
     /** ✅ 현재 로그인한 사용자 정보 조회 */
     @GetMapping("/me")
@@ -148,24 +142,17 @@ public class UserRestController {
 
             Long userId = userDetails.getUser().getId();
 
-            // Google RefreshToken 삭제
-            RefreshToken storedToken = refreshTokenMapper.findByUserId(userId);
-            if (storedToken != null) {
-                revokeGoogleToken(storedToken.getToken(), "RefreshToken");
-                refreshTokenMapper.deleteByUserId(userId);
-                log.info("🧹 Google RefreshToken 삭제 완료 (userId={})", userId);
-            }
-
-            // ✅ Java 11 호환: instanceof 후 캐스팅 분리
+            // ✅ OAuth2AuthorizedClientService에서 연결된 AuthorizedClient 제거 (Java 11 방식)
             if (authentication instanceof OAuth2AuthenticationToken) {
                 OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
                 authorizedClientService.removeAuthorizedClient(
                         oauth2Token.getAuthorizedClientRegistrationId(),
                         oauth2Token.getName()
                 );
+                log.info("🔗 OAuth2AuthorizedClient 제거 완료");
             }
 
-            // 사용자 삭제
+            // ✅ UserService에서 모든 연관 데이터(OAuth2Account + RefreshToken + User) 정리
             userService.delete(userId);
 
             // ✅ 세션, 쿠키, 인증정보 초기화
@@ -173,37 +160,12 @@ public class UserRestController {
             if (session != null) session.invalidate();
             invalidateJwtCookies(response);
 
-            log.info("👋 회원 탈퇴 및 Google 연결 해제 완료: userId={}", userId);
+            log.info("👋 회원 탈퇴 완료: userId={}", userId);
             return ResponseEntity.ok(Map.of("message", "회원 탈퇴가 완료되었습니다."));
 
         } catch (Exception e) {
             log.error("❌ 회원 탈퇴 실패: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().body(Map.of("message", "회원 탈퇴 중 오류가 발생했습니다."));
-        }
-    }
-
-
-    /** ✅ Google OAuth 토큰 revoke */
-    private void revokeGoogleToken(String token, String type) {
-        try {
-            String revokeUrl = "https://oauth2.googleapis.com/revoke";
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-            String body = "token=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
-            HttpEntity<String> request = new HttpEntity<>(body, headers);
-
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response =
-                    restTemplate.exchange(revokeUrl, HttpMethod.POST, request, String.class);
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-                log.info("✅ Google OAuth {} revoke 성공", type);
-            } else {
-                log.warn("⚠️ Google OAuth {} revoke 실패 (응답 코드: {})", type, response.getStatusCode());
-            }
-        } catch (Exception e) {
-            log.warn("⚠️ Google OAuth {} revoke 중 예외 발생: {}", type, e.getMessage());
         }
     }
 

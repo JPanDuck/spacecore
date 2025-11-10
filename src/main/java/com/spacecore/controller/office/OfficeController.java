@@ -5,6 +5,7 @@ import com.spacecore.domain.office.Office;
 import com.spacecore.service.office.OfficeService;
 import com.spacecore.service.room.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,11 +18,15 @@ public class OfficeController {
 
     private final OfficeService officeService;
     private final RoomService roomService;
+    
+    @Value("${naver.map.client.id}")
+    private String naverMapClientId;
 
     /// 목록 페이지
     @GetMapping({"","/"})
     public String officeList(Model model) {
         model.addAttribute("officeList", officeService.list());
+        model.addAttribute("clientId", naverMapClientId);
         return "office/list";
     }
 
@@ -35,6 +40,7 @@ public class OfficeController {
         model.addAttribute("office", office);
         // 해당 지점의 객실 목록 추가
         model.addAttribute("roomList", roomService.listByOffice(id));
+        model.addAttribute("clientId", naverMapClientId);
         return "office/detail";
     }
 

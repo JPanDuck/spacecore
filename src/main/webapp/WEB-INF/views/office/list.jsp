@@ -263,7 +263,14 @@
         transform: scale(1.1);
     }
     .room-card-favorite.active {
-        color: #e74c3c;
+        color: #e74c3c !important;
+    }
+    .room-card-favorite.active:hover {
+        color: #c0392b !important;
+        transform: scale(1.15);
+    }
+    .room-card-favorite.active i {
+        color: #e74c3c !important;
     }
     
     /* 그리드 레이아웃 */
@@ -403,8 +410,12 @@
 
 <%@ include file="/WEB-INF/views/components/footer.jsp" %>
 
-<!-- 구글맵 API 키를 설정하세요 -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY" async defer></script>
+<!-- 네이버 지도 API 로드 (지오코딩 포함) -->
+<script type="text/javascript"
+        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}"
+        onload="console.log('네이버 지도 API 로드 완료');"
+        onerror="console.error('네이버 지도 API 로드 실패');">
+</script>
 <script>
     (function() {
         var ctx = "<%=context%>";
@@ -450,8 +461,11 @@
             });
         }
         
-        // 지도 팝업 내 검색창 동기화
-        $("#mapKeyword").value = state.keyword;
+        // 지도 팝업 내 검색창 동기화 (요소가 존재하는 경우에만)
+        var mapKeywordEl = document.getElementById("mapKeyword");
+        if (mapKeywordEl) {
+            mapKeywordEl.value = state.keyword || "";
+        }
 
         function pushUrl() {
             var params = new URLSearchParams({
@@ -672,22 +686,96 @@
         }
 
         var map = null;
-        function initMap() {
-            // 구글맵 초기화는 콜백으로 처리
-        }
+        var markers = [];
+        var labels = [];
+        var mapBounds = null;
+        var mapResizeTimer = null;
+        var mapEventListenersAttached = false;
+        var boundsAdjustTimer = null;
         
         function ensureMap() {
             var container = document.getElementById('mapContainer');
-            if (!map && container) {
-                map = new google.maps.Map(container, {
-                    center: { lat: 37.5665, lng: 126.9780 },
-                    zoom: 5
-                });
+            if (!container) return null;
+            
+            // 모달이 열려있는지 확인
+            var mapPopup = document.getElementById('mapPopup');
+            var isModalOpen = mapPopup && mapPopup.classList.contains('active');
+            
+            // 지도가 이미 초기화되어 있으면 리사이즈만 트리거
+            if (map && typeof naver !== 'undefined' && typeof naver.maps !== 'undefined') {
+                if (isModalOpen) {
+                    // 모달이 열려있으면 리사이즈 트리거
+                    if (mapResizeTimer) clearTimeout(mapResizeTimer);
+                    mapResizeTimer = setTimeout(function() {
+                        if (map) {
+                            try {
+                                naver.maps.Event.trigger(map, 'resize');
+                            } catch (e) {
+                                console.warn('지도 리사이즈 트리거 실패:', e);
+                            }
+                        }
+                    }, 300);
+                }
+                return map;
+            }
+            
+            // 모달이 열려있지 않으면 지도 초기화하지 않음
+            if (!isModalOpen) {
+                return null;
+            }
+            
+            // 지도 초기화
+            if (typeof naver !== 'undefined' && typeof naver.maps !== 'undefined') {
+                try {
+                    map = new naver.maps.Map(container, {
+                        center: new naver.maps.LatLng(37.5665, 126.9780),
+                        zoom: 12
+                    });
+                    
+                    // 지도 이벤트 리스너는 한 번만 등록
+                    if (!mapEventListenersAttached) {
+                        attachMapEventListeners();
+                        mapEventListenersAttached = true;
+                    }
+                    
+                    // 지도가 완전히 로드된 후 리사이즈 트리거
+                    naver.maps.Event.addListenerOnce(map, 'init', function() {
+                        setTimeout(function() {
+                            if (map) {
+                                try {
+                                    naver.maps.Event.trigger(map, 'resize');
+                                } catch (e) {
+                                    console.warn('지도 리사이즈 트리거 실패:', e);
+                                }
+                            }
+                        }, 200);
+                    });
+                    
+                    // init 이벤트가 발생하지 않을 경우를 대비한 fallback
+                    setTimeout(function() {
+                        if (map && isModalOpen) {
+                            try {
+                                naver.maps.Event.trigger(map, 'resize');
+                            } catch (e) {
+                                console.warn('지도 리사이즈 트리거 실패:', e);
+                            }
+                        }
+                    }, 500);
+                } catch (e) {
+                    console.error('지도 초기화 실패:', e);
+                    return null;
+                }
             }
             return map;
         }
 
         async function drawMarkers() {
+            // 네이버 지도 API가 로드되지 않았으면 대기
+            if (typeof naver === 'undefined' || typeof naver.maps === 'undefined') {
+                console.warn('네이버 지도 API가 로드되지 않았습니다.');
+                return;
+            }
+            
             // 전체 지점 데이터가 없으면 가져오기
             if (allOffices.length === 0) {
                 var res = await fetch(ctx + "/api/offices", { credentials: "same-origin" });
@@ -709,52 +797,263 @@
             
             // 필터링 적용
             var offices = filterOffices(allOffices);
-            var map = ensureMap();
             
             // 지도 팝업 내 총 개수 업데이트
-            $("#mapTotalOffices").innerText = offices.length;
+            var mapTotalEl = document.getElementById("mapTotalOffices");
+            if (mapTotalEl) {
+                mapTotalEl.innerText = offices.length;
+            }
             
-            if (!map) return;
+            // 지도 초기화
+            var currentMap = ensureMap();
+            if (!currentMap) {
+                console.warn('지도 초기화 실패');
+                return;
+            }
 
-            // 기존 마커 제거
-            if (window.markers) {
-                window.markers.forEach(function(marker) {
-                    marker.setMap(null);
+            // 기존 마커 및 라벨 제거
+            if (markers.length > 0) {
+                markers.forEach(function(item) {
+                    if (item.marker) {
+                        item.marker.setMap(null);
+                    }
                 });
             }
-            window.markers = [];
+            if (labels.length > 0) {
+                labels.forEach(function(item) {
+                    if (item.el && item.el.parentNode) {
+                        item.el.parentNode.removeChild(item.el);
+                    }
+                });
+            }
+            markers = [];
+            labels = [];
+            mapBounds = new naver.maps.LatLngBounds();
 
-            var bounds = new google.maps.LatLngBounds();
-
+            // 각 지점에 대해 마커 생성
+            var geocodeCount = 0;
+            var completedCount = 0;
+            
             for (var i=0; i<offices.length; i++) {
                 var o = offices[i];
-                // 위도/경도가 있다면 마커 추가 (현재 Office 엔티티에 위도/경도가 없으므로 기본 위치 사용)
-                // TODO: Office 엔티티에 latitude, longitude 필드 추가 필요
-                // 임시로 기본 위치 사용
-                var pos = { lat: 37.5665 + (i * 0.01), lng: 126.9780 + (i * 0.01) }; // 임시 위치
-                var marker = new google.maps.Marker({
-                    position: pos,
-                    map: map,
-                    title: o.name
-                });
+                var address = o.address || '';
                 
-                var infoWindow = new google.maps.InfoWindow({
-                    content: '<div style="padding:8px 12px;font-size:14px;">' +
-                        escapeHtml(o.name) + '<br>' +
-                        escapeHtml(o.address || '') + '<br>' +
-                        '<a href="' + ctx + '/offices/detail/' + o.id + '" style="color:#5B3B31;font-weight:700;">상세보기</a></div>'
-                });
+                if (!address) continue;
                 
-                marker.addListener('click', function() {
-                    infoWindow.open(map, marker);
-                });
+                geocodeCount++;
                 
-                window.markers.push(marker);
-                bounds.extend(pos);
+                (function(office, addr) {
+                    // 위도/경도가 있으면 직접 사용
+                    if (office.latitude != null && office.longitude != null && 
+                        !isNaN(parseFloat(office.latitude)) && !isNaN(parseFloat(office.longitude))) {
+                        completedCount++;
+                        var lat = parseFloat(office.latitude);
+                        var lng = parseFloat(office.longitude);
+                        var position = new naver.maps.LatLng(lat, lng);
+                        createMarker(office, addr, position);
+                        checkAllGeocodeComplete();
+                        return;
+                    }
+                    
+                    // 위도/경도가 없으면 지오코딩 수행
+                    // OpenStreetMap Nominatim을 사용하여 지오코딩 (무료, API 키 불필요)
+                    var geocoderUrl = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(addr) + '&limit=1&countrycodes=kr';
+                    
+                    fetch(geocoderUrl, {
+                        method: 'GET',
+                        headers: {
+                            'User-Agent': 'SpaceCore/1.0' // Nominatim은 User-Agent 필수
+                        }
+                    })
+                    .then(function(res) {
+                        if (!res.ok) {
+                            throw new Error('HTTP ' + res.status);
+                        }
+                        return res.json();
+                    })
+                    .then(function(data) {
+                        completedCount++;
+                        
+                        if (data && data.length > 0) {
+                            var result = data[0];
+                            var lat = parseFloat(result.lat);
+                            var lng = parseFloat(result.lon);
+                            
+                            if (!isNaN(lat) && !isNaN(lng)) {
+                                var position = new naver.maps.LatLng(lat, lng);
+                                createMarker(office, addr, position);
+                            } else {
+                                // 좌표 파싱 실패
+                                console.warn('좌표 파싱 실패:', office.name, addr);
+                            }
+                        } else {
+                            // 결과 없음
+                            console.warn('지오코딩 결과 없음:', office.name, addr);
+                        }
+                        
+                        checkAllGeocodeComplete();
+                    })
+                    .catch(function(err) {
+                        completedCount++;
+                        console.warn('OpenStreetMap 지오코딩 실패:', office.name, addr, err);
+                        checkAllGeocodeComplete();
+                    });
+                })(o, address);
             }
             
-            if (window.markers.length > 0) {
-                map.fitBounds(bounds);
+            // 네이버 지도 API 지오코딩 시도 (fallback) - 제거됨 (OpenStreetMap Nominatim만 사용)
+            function tryNaverGeocode(office, addr) {
+                // 네이버 지도 API 지오코더는 사용하지 않음 (OpenStreetMap Nominatim만 사용)
+                completedCount++;
+                checkAllGeocodeComplete();
+                console.warn('지오코딩 실패:', office.name, addr, '(OpenStreetMap Nominatim 실패)');
+                return Promise.reject('지오코딩 실패');
+            }
+            
+            // 마커 생성 함수
+            function createMarker(office, addr, position) {
+                if (!currentMap || !position) return;
+                
+                // 마커 생성
+                var marker = new naver.maps.Marker({
+                    position: position,
+                    map: currentMap,
+                    title: office.name
+                });
+                
+                // 이름 라벨
+                var labelEl = document.createElement('div');
+                labelEl.className = 'map-label';
+                labelEl.textContent = office.name;
+                labelEl.style.cssText = 'background: white; border: 1px solid #ccc; border-radius: 4px; padding: 2px 6px; font-size: 12px; font-weight: bold; white-space: nowrap; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); position: absolute; cursor: pointer; transform: translate(-50%, -54px);';
+                labelEl.onclick = function() {
+                    window.location.href = ctx + '/offices/detail/' + office.id;
+                };
+                currentMap.getPanes().floatPane.appendChild(labelEl);
+                
+                // 정보창 생성
+                var infoWindow = new naver.maps.InfoWindow({
+                    content: '<div style="padding:8px 12px;font-size:14px;min-width:150px;">' +
+                        '<strong style="color:#5B3B31;font-size:14px;">' + escapeHtml(office.name) + '</strong><br>' +
+                        '<span style="color:#666;font-size:12px;">' + escapeHtml(addr) + '</span><br>' +
+                        '<a href="' + ctx + '/offices/detail/' + office.id + '" style="color:#5B3B31;font-weight:700;text-decoration:none;">상세보기</a></div>'
+                });
+                
+                // 마커 클릭 시 상세 페이지 이동
+                naver.maps.Event.addListener(marker, 'click', function() {
+                    if (infoWindow.getMap()) {
+                        infoWindow.close();
+                    } else {
+                        infoWindow.open(currentMap, marker);
+                    }
+                });
+                
+                markers.push({ marker: marker, position: position });
+                labels.push({ el: labelEl, position: position });
+                
+                // bounds 확장
+                if (mapBounds) {
+                    mapBounds.extend(position);
+                }
+            }
+            
+            // 모든 지오코딩 완료 확인
+            function checkAllGeocodeComplete() {
+                if (completedCount === geocodeCount && geocodeCount > 0) {
+                    // 중복 호출 방지를 위해 타이머 정리
+                    if (boundsAdjustTimer) clearTimeout(boundsAdjustTimer);
+                    
+                    // 약간의 지연을 두어 모든 마커가 생성된 후 지도 조정
+                    boundsAdjustTimer = setTimeout(function() {
+                        if (!currentMap || markers.length === 0 || !mapBounds) return;
+                        
+                        try {
+                            // bounds가 유효한지 확인
+                            var sw = mapBounds.getSW();
+                            var ne = mapBounds.getNE();
+                            
+                            if (!sw || !ne) return;
+                            
+                            // 지도 리사이즈 트리거 (컨테이너 크기 재확인)
+                            try {
+                                naver.maps.Event.trigger(currentMap, 'resize');
+                            } catch (e) {
+                                console.warn('지도 리사이즈 트리거 실패:', e);
+                            }
+                            
+                            // 지도 조정 (간단하게)
+                            setTimeout(function() {
+                                if (!currentMap || markers.length === 0) return;
+                                
+                                try {
+                                    if (markers.length > 1) {
+                                        // 여러 마커가 있으면 모든 마커가 보이도록 조정
+                                        currentMap.fitBounds(mapBounds);
+                                        // fitBounds 후 약간의 여백 추가
+                                        setTimeout(function() {
+                                            if (currentMap) {
+                                                var currentZoom = currentMap.getZoom();
+                                                if (currentZoom > 0) {
+                                                    currentMap.setZoom(currentZoom - 1);
+                                                }
+                                                updateLabelPositions();
+                                            }
+                                        }, 300);
+                                    } else if (markers.length === 1) {
+                                        // 마커가 하나면 해당 위치로 이동
+                                        var center = mapBounds.getCenter();
+                                        if (center && currentMap) {
+                                            currentMap.setCenter(center);
+                                            currentMap.setZoom(15);
+                                            updateLabelPositions();
+                                        }
+                                    }
+                                } catch (err) {
+                                    console.error('지도 조정 실패:', err);
+                                }
+                            }, 400);
+                        } catch (err) {
+                            console.error('지도 조정 실패:', err);
+                        }
+                    }, 600);
+                }
+            }
+            
+            // 지오코딩할 주소가 없으면 즉시 완료 처리
+            if (geocodeCount === 0) {
+                console.warn('지오코딩할 주소가 없습니다.');
+            }
+        }
+        
+        // 라벨 위치 업데이트 함수
+        function updateLabelPositions() {
+            if (!map) return;
+            labels.forEach(function(item) {
+                try {
+                    var projection = map.getProjection();
+                    if (!projection || !item.position) return;
+                    var pixel = projection.fromCoordToOffset(item.position);
+                    if (item.el && pixel) {
+                        item.el.style.left = pixel.x + 'px';
+                        item.el.style.top = pixel.y + 'px';
+                    }
+                } catch (e) {
+                    console.warn('라벨 위치 업데이트 실패:', e);
+                }
+            });
+        }
+        
+        // 지도 이벤트마다 라벨 위치 갱신 (지도가 생성된 후에만, 한 번만 등록)
+        function attachMapEventListeners() {
+            if (!map || mapEventListenersAttached) return;
+            if (typeof naver === 'undefined' || typeof naver.maps === 'undefined') return;
+            
+            try {
+                naver.maps.Event.addListener(map, 'idle', updateLabelPositions);
+                naver.maps.Event.addListener(map, 'zoom_changed', updateLabelPositions);
+                naver.maps.Event.addListener(map, 'dragend', updateLabelPositions);
+            } catch (e) {
+                console.error('지도 이벤트 리스너 등록 실패:', e);
             }
         }
 
@@ -769,12 +1068,69 @@
             document.getElementById("mapPopup").classList.add("active");
             document.getElementById("mapOverlay").classList.add("active");
             document.body.style.overflow = "hidden";
-            // 지도 팝업 내 검색창 동기화
-            $("#mapKeyword").value = state.keyword;
-            setTimeout(function(){ 
-                ensureMap(); 
-                drawMarkers(); 
-            }, 100);
+            
+            // 지도 팝업 내 검색창 동기화 (요소가 존재하는지 확인)
+            var mapKeywordEl = document.getElementById("mapKeyword");
+            if (mapKeywordEl) {
+                mapKeywordEl.value = state.keyword || "";
+            }
+            
+            // 가격대 필터 동기화
+            if (state.minPrice || state.maxPrice) {
+                var priceRange = state.minPrice + "~" + state.maxPrice;
+                var priceBtn = document.querySelector('[data-price="' + priceRange + '"]');
+                if (priceBtn) {
+                    document.querySelectorAll('.price-filter-btn').forEach(function(btn) {
+                        btn.classList.remove('active');
+                    });
+                    priceBtn.classList.add('active');
+                }
+            } else {
+                var allBtn = document.querySelector('[data-price="전체"]');
+                if (allBtn) {
+                    document.querySelectorAll('.price-filter-btn').forEach(function(btn) {
+                        btn.classList.remove('active');
+                    });
+                    allBtn.classList.add('active');
+                }
+            }
+            
+            // 모달이 열린 후 지도 초기화 및 마커 그리기
+            // 모달 애니메이션 완료를 위해 약간의 지연
+            setTimeout(function() {
+                var currentMap = ensureMap();
+                if (currentMap) {
+                    // 지도 리사이즈를 먼저 트리거하여 컨테이너 크기 인식
+                    setTimeout(function() {
+                        if (currentMap) {
+                            try {
+                                naver.maps.Event.trigger(currentMap, 'resize');
+                            } catch (e) {
+                                console.warn('지도 리사이즈 트리거 실패:', e);
+                            }
+                        }
+                        // 지도가 준비된 후 마커 그리기
+                        drawMarkers();
+                    }, 400);
+                } else {
+                    // 지도 초기화 실패 시 재시도
+                    setTimeout(function() {
+                        var retryMap = ensureMap();
+                        if (retryMap) {
+                            setTimeout(function() {
+                                if (retryMap) {
+                                    try {
+                                        naver.maps.Event.trigger(retryMap, 'resize');
+                                    } catch (e) {
+                                        console.warn('지도 리사이즈 트리거 실패:', e);
+                                    }
+                                }
+                                drawMarkers();
+                            }, 300);
+                        }
+                    }, 200);
+                }
+            }, 200);
         });
         
         $("#mapCloseBtn").addEventListener("click", function(){
@@ -829,56 +1185,98 @@
             });
         });
         
-        // 지도 팝업 내 검색/초기화 이벤트
-        $("#mapKeyword").addEventListener("keydown", function(e){
-            if (e.key == "Enter") $("#mapSearchBtn").click();
-        });
+        // 지도 팝업 내 검색/초기화 이벤트 (요소가 존재하는 경우에만)
+        var mapKeywordEl = document.getElementById("mapKeyword");
+        var mapSearchBtn = document.getElementById("mapSearchBtn");
+        var mapResetBtn = document.getElementById("mapResetBtn");
         
-        $("#mapSearchBtn").addEventListener("click", function(){
-            state.keyword = $("#mapKeyword").value.trim();
-            state.page = 1;
-            $("#keyword").value = state.keyword; // 메인 검색창도 동기화
-            setPricePreview();
-            fetchOffices(1);
-            setTimeout(function(){ drawMarkers(); }, 100);
-        });
+        if (mapKeywordEl) {
+            mapKeywordEl.addEventListener("keydown", function(e){
+                if (e.key == "Enter" && mapSearchBtn) {
+                    mapSearchBtn.click();
+                }
+            });
+        }
         
-        $("#mapResetBtn").addEventListener("click", function(){
-            state.keyword = "";
-            state.minPrice = "";
-            state.maxPrice = "";
-            state.page = 1;
-            $("#keyword").value = "";
-            $("#mapKeyword").value = "";
-            $all(".price-filter-btn").forEach(function(b){ b.classList.remove("active"); });
-            setPricePreview();
-            fetchOffices(1);
-            setTimeout(function(){ drawMarkers(); }, 100);
-        });
+        if (mapSearchBtn) {
+            mapSearchBtn.addEventListener("click", function(){
+                var keywordValue = mapKeywordEl ? mapKeywordEl.value.trim() : "";
+                state.keyword = keywordValue;
+                state.page = 1;
+                var keywordEl = document.getElementById("keyword");
+                if (keywordEl) {
+                    keywordEl.value = state.keyword; // 메인 검색창도 동기화
+                }
+                setPricePreview();
+                fetchOffices(1);
+                setTimeout(function(){ drawMarkers(); }, 100);
+            });
+        }
+        
+        if (mapResetBtn) {
+            mapResetBtn.addEventListener("click", function(){
+                state.keyword = "";
+                state.minPrice = "";
+                state.maxPrice = "";
+                state.page = 1;
+                var keywordEl = document.getElementById("keyword");
+                if (keywordEl) {
+                    keywordEl.value = "";
+                }
+                if (mapKeywordEl) {
+                    mapKeywordEl.value = "";
+                }
+                $all(".price-filter-btn").forEach(function(b){ b.classList.remove("active"); });
+                setPricePreview();
+                fetchOffices(1);
+                setTimeout(function(){ drawMarkers(); }, 100);
+            });
+        }
 
-        $("#searchBtn").addEventListener("click", function(){
-            state.keyword = $("#keyword").value.trim();
-            state.page = 1;
-            $("#mapKeyword").value = state.keyword; // 지도 팝업 검색창도 동기화
-            setPricePreview();
-            fetchOffices(1);
-            setTimeout(function(){ drawMarkers(); }, 100);
-        });
-        $("#keyword").addEventListener("keydown", function(e){
-            if (e.key == "Enter") $("#searchBtn").click();
-        });
-        $("#resetBtn").addEventListener("click", function(){
-            state.keyword = "";
-            state.minPrice = "";
-            state.maxPrice = "";
-            state.page = 1;
-            $("#keyword").value = "";
-            $("#mapKeyword").value = ""; // 지도 팝업 검색창도 초기화
-            $all(".price-filter-btn").forEach(function(b){ b.classList.remove("active"); });
-            setPricePreview();
-            fetchOffices(1);
-            setTimeout(function(){ drawMarkers(); }, 100);
-        });
+        var searchBtn = document.getElementById("searchBtn");
+        if (searchBtn) {
+            searchBtn.addEventListener("click", function(){
+                var keywordEl = document.getElementById("keyword");
+                var keywordValue = keywordEl ? keywordEl.value.trim() : "";
+                state.keyword = keywordValue;
+                state.page = 1;
+                if (mapKeywordEl) {
+                    mapKeywordEl.value = state.keyword; // 지도 팝업 검색창도 동기화
+                }
+                setPricePreview();
+                fetchOffices(1);
+                setTimeout(function(){ drawMarkers(); }, 100);
+            });
+        }
+        
+        var keywordEl = document.getElementById("keyword");
+        if (keywordEl) {
+            keywordEl.addEventListener("keydown", function(e){
+                if (e.key == "Enter" && searchBtn) {
+                    searchBtn.click();
+                }
+            });
+        }
+        
+        var resetBtn = document.getElementById("resetBtn");
+        if (resetBtn) {
+            resetBtn.addEventListener("click", function(){
+                state.keyword = "";
+                state.minPrice = "";
+                state.maxPrice = "";
+                state.page = 1;
+                if (keywordEl) {
+                    keywordEl.value = "";
+                }
+                if (mapKeywordEl) {
+                    mapKeywordEl.value = ""; // 지도 팝업 검색창도 초기화
+                }
+                $all(".price-filter-btn").forEach(function(b){ b.classList.remove("active"); });
+                setPricePreview();
+                fetchOffices(1);
+                setTimeout(function(){ drawMarkers(); }, 100);
+            });
+        }
 
         window.SC = {
             fetch: function(p){ fetchOffices(p); },
@@ -887,10 +1285,31 @@
             }
         };
 
-        // 구글맵 API가 로드되면 초기화
-        if (typeof google !== 'undefined' && google.maps) {
+            // 네이버 지도 API 로드 완료 대기 함수
+            function waitForNaverMaps(callback, maxAttempts) {
+                maxAttempts = maxAttempts || 50; // 최대 5초 대기
+                var attempts = 0;
+                
+                var checkInterval = setInterval(function() {
+                    attempts++;
+                    
+                    if (typeof naver !== 'undefined' && 
+                        typeof naver.maps !== 'undefined' && 
+                        typeof naver.maps.Map !== 'undefined') {
+                        clearInterval(checkInterval);
+                        console.log('네이버 지도 API 로드 확인 완료');
+                        if (callback) callback();
+                    } else if (attempts >= maxAttempts) {
+                        clearInterval(checkInterval);
+                        console.warn('네이버 지도 API 로드 타임아웃');
+                    }
+                }, 100);
+            }
+        
+        // 네이버 지도 API가 로드되면 초기화
+        waitForNaverMaps(function() {
             ensureMap();
-        }
+        });
 
         fetchOffices(state.page);
     })();

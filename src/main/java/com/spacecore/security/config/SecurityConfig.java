@@ -18,10 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * ✅ SpaceCore Security Configuration
- * JWT + OAuth2 + Stateless 통합 보안 설정
- */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -32,19 +28,25 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    /** ✅ 비밀번호 암호화 */
+    /**
+     * 비밀번호 암호화
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /** ✅ AuthenticationManager 등록 */
+    /**
+     * AuthenticationManager 등록
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-    /** ✅ 정적 리소스 보안 제외 */
+    /**
+     *  정적 리소스 보안 필터 제외
+     */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers(
@@ -58,29 +60,32 @@ public class SecurityConfig {
         );
     }
 
-    /** ✅ 보안 필터 체인 (JWT + OAuth2 + Stateless + SessionLogin 지원) */
+    /**
+     * 필터 체인 구성 (JWT + OAuth2 + Stateless)
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
-                // 기본 보안 비활성화
+                // 기본 보안 기능 비활성화
                 .csrf().disable()
                 .httpBasic().disable()
                 .formLogin().disable()
 
-                // ✅ 세션 정책 (OAuth2Login 위해 IF_REQUIRED)
-                // ✅ JWT 요청은 Stateless 하게 처리 (JwtAuthenticationFilter 내부 제어)
+                // ✅ 세션 관리 - OAuth2Login 위해 IF_REQUIRED
+                // ✅ JWT 요청은 Stateless 하게 필터에서 처리 (JwtAuthenticationFilter 내부 제어)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
 
-                // ✅ 인가 규칙 설정
+                // 인가 규칙 설정
                 .authorizeRequests()
-
-                // 비회원 접근 가능 영역
+                // ✅ 공개 경로 (비회원 접근 가능)
                 .antMatchers(
                         "/", "/index",
-                        "/auth/**",
+                        "/auth/login",
+                        "/auth/register",
+                        "/auth/find-password",
+                        "/auth/reset-password",
                         "/oauth2/**",
                         "/error",
                         "/api/auth/login",
@@ -90,61 +95,56 @@ public class SecurityConfig {
                         "/api/auth/find-password",
                         "/api/auth/reset-password",
                         "/reviews/**",
-                        "/api/reviews/**",
                         "/chatbot/**",
                         "/map/**",
-                        "/rooms/**",
-                        "/offices/**",
-                        "/api/offices", "/api/offices/**",
-                        "/api/rooms", "/api/rooms/**",
-                        "/reservations/", "/reservations/detail/**",
-                        "/notices/**",
-                        "/virtual-accounts/detail/**"
+                        "/offices/**", "/api/offices/**",
+                        "/offices/*/rooms/**",
+                        "/rooms/detail/**",
+                        "/reservations/**",
+                        "/reservations/add/**",
+                        "/reservations/detail/**",
+                        "/notices/**", "/api/notices/**",
+                        "/payments/detail/**",
+                        "/api/rooms/**",
+                        "/api/reservations/calendar/**"
+
                 ).permitAll()
 
-                // 회원 전용 영역
+                // ✅ 관리자 전용 경로
+                .antMatchers(
+                        "/admin/**",          // 관리자 대시보드, 관리 기능 등
+                        "/api/admin/**"       // 관리자용 API
+                ).hasRole("ADMIN")
+
+                // ✅ 일반 사용자 전용 경로
                 .antMatchers(
                         "/user/**",
                         "/api/user/**",
                         "/favorites/**",
-                        "/notifications/**",
-                        "/api/notifications/**",
-                        "/reservations/add/**",
-                        "/reservations/edit/**",
-                        "/api/reservations",
-                        "/api/reservations/**/cancel",
-                        "/payments/**",
-                        "/api/payments/**"
+                        "/api/notifications/**"
                 ).hasAnyRole("USER", "ADMIN")
 
-                // 관리자 전용 영역
-                .antMatchers(
-                        "/admin/**",
-                        "/api/admin/**"
-                ).hasRole("ADMIN")
-
-                // 그 외 요청은 인증 필요
                 .anyRequest().authenticated()
                 .and()
 
-                // ✅ OAuth2 로그인 설정
+                // OAuth2 로그인
                 .oauth2Login()
                 .loginPage("/auth/login")
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
-                .and()
 
-                // ✅ 로그아웃 처리 (JWT 쿠키 삭제 + 세션 무효화)
+                // 로그아웃 (JWT 기반 - 쿠키 제거만)
+                .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/auth/login")
-                .deleteCookies("access_token", "refresh_token", "JSESSIONID")
+                .deleteCookies("access_token", "refresh_token")
                 .clearAuthentication(true)
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true);;
 
-        // ✅ JWT 인증 필터 등록 (UsernamePasswordAuthenticationFilter 앞에)
+        // JWT 필터 등록 (UsernamePasswordAuthenticationFilter보다 앞에)
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
