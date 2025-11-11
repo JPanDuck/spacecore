@@ -1,192 +1,266 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<% String context = request.getContextPath(); %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 목록 | Space Core</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <style>
+        .reservation-list-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--cream-tan);
+        }
+
+        .list-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--choco);
+        }
+
+        .reservation-table {
+            width: 100%;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .reservation-table thead {
+            background: var(--cream-tan);
+        }
+
+        .reservation-table th {
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--choco);
+            font-size: 15px;
+            border-bottom: 2px solid var(--mocha);
+        }
+
+        .reservation-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .reservation-table tbody tr:hover {
+            background: var(--gray-100);
+            transition: var(--transition);
+        }
+
+        .reservation-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-badge.awaiting {
+            background: var(--safari);
+            color: var(--choco);
+        }
+
+        .status-badge.confirmed {
+            background: var(--amber);
+            color: var(--white);
+        }
+
+        .status-badge.cancelled {
+            background: var(--gray-400);
+            color: var(--white);
+        }
+
+        .status-badge.expired {
+            background: var(--gray-500);
+            color: var(--white);
+        }
+
+        .detail-link {
+            color: var(--amber);
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .detail-link:hover {
+            color: var(--mocha);
+            text-decoration: underline;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--gray-600);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+        }
+
+        .room-name {
+            font-weight: 500;
+            color: var(--choco);
+        }
+
+        .reservant-name {
+            color: var(--text-primary);
+        }
+
+        .datetime {
+            color: var(--gray-700);
+            font-size: 13px;
+        }
+
+        .amount {
+            font-weight: 600;
+            color: var(--amber);
+        }
+    </style>
+</head>
+<body>
 <%@ include file="/WEB-INF/views/components/header.jsp" %>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<div class="reservation-list-container">
+    <div class="list-header">
+        <h1 class="list-title">예약 목록</h1>
+    </div>
 
-<style>
-    .reservation-list-container {
-        max-width: 1200px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
-    .reservation-table {
-        width: 100%;
-        border-collapse: collapse;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .reservation-table th {
-        background: var(--choco);
-        color: white;
-        padding: 12px;
-        text-align: left;
-        font-weight: 600;
-    }
-    .reservation-table td {
-        padding: 12px;
-        border-bottom: 1px solid var(--gray-200);
-    }
-    .reservation-table tr:hover {
-        background: var(--gray-100);
-    }
-    .status-badge {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-    .status-AWAITING_PAYMENT { background: #fff3cd; color: #856404; }
-    .status-CONFIRMED { background: #d4edda; color: #155724; }
-    .status-CANCELLED { background: #f8d7da; color: #721c24; }
-    .status-EXPIRED { background: #e2e3e5; color: #383d41; }
-</style>
-
-<main class="reservation-list-container">
-    <h2 style="margin-bottom: 30px;">예약 목록</h2>
-    
-    <c:if test="${param.error != null}">
-        <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
-            ${param.error}
-        </div>
-    </c:if>
-    
-    <table class="reservation-table" id="reservationTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>사용자</th>
-                <th>룸</th>
-                <th>시작시간</th>
-                <th>종료시간</th>
-                <th>상태</th>
-                <th>액션</th>
-            </tr>
-        </thead>
-        <tbody id="reservationTableBody">
-            <c:forEach var="r" items="${reservationList}">
-                <tr data-reservation-id="${r.id}">
-                    <td>${r.id}</td>
-                    <td><c:out value="${r.userName != null ? r.userName : '없음'}"/></td>
-                    <td><c:out value="${r.roomName != null ? r.roomName : '없음'}"/></td>
-                    <td>
-                        <c:if test="${r.startAt != null}">
-                            ${r.startAt.year}년 ${r.startAt.monthValue}월 ${r.startAt.dayOfMonth}일 ${r.startAt.hour}시
-                        </c:if>
-                    </td>
-                    <td>
-                        <c:if test="${r.endAt != null}">
-                            ${r.endAt.year}년 ${r.endAt.monthValue}월 ${r.endAt.dayOfMonth}일 ${r.endAt.hour}시
-                        </c:if>
-                    </td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${r.status == 'AWAITING_PAYMENT'}">
-                                <span class="status-badge status-AWAITING_PAYMENT">결제 대기</span>
-                            </c:when>
-                            <c:when test="${r.status == 'CONFIRMED'}">
-                                <span class="status-badge status-CONFIRMED">확정</span>
-                            </c:when>
-                            <c:when test="${r.status == 'CANCELLED'}">
-                                <span class="status-badge status-CANCELLED">취소</span>
-                            </c:when>
-                            <c:when test="${r.status == 'EXPIRED'}">
-                                <span class="status-badge status-EXPIRED">만료</span>
-                            </c:when>
-                            <c:otherwise>
-                                <span class="status-badge">${r.status}</span>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-                    <td>
-                        <a href="${pageContext.request.contextPath}/reservations/detail/${r.id}" class="btn btn-outline">상세</a>
-                        <c:if test="${r.status == 'CONFIRMED'}">
-                            <a href="${pageContext.request.contextPath}/reviews/create?roomId=${r.roomId}" class="btn btn-brown" style="margin-left: 8px;">리뷰 작성</a>
-                        </c:if>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-
-    <!-- 페이지네이션 -->
-    <div class="pagination mt-40" id="paginationArea"></div>
-
-</main>
-
-<script>
-(function() {
-    const itemsPerPage = 10;
-    let currentPage = 1;
-    const allRows = Array.from(document.querySelectorAll('#reservationTableBody tr'));
-    const totalItems = allRows.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-    function renderPage(page) {
-        currentPage = page;
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        
-        allRows.forEach((row, index) => {
-            if (index >= start && index < end) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        renderPagination();
-    }
-
-    function renderPagination() {
-        const paginationArea = document.getElementById('paginationArea');
-        if (!paginationArea) return;
-
-        if (totalPages <= 1) {
-            paginationArea.innerHTML = '';
-            return;
-        }
-
-        let html = '<ul class="pagination-list">';
-        
-        // 이전 버튼
-        if (currentPage > 1) {
-            html += '<li><a href="#" data-page="' + (currentPage - 1) + '">이전</a></li>';
-        }
-
-        // 페이지 번호
-        for (let i = 1; i <= totalPages; i++) {
-            const activeClass = (i === currentPage) ? 'active' : '';
-            html += '<li class="' + activeClass + '">' +
-                    '<a href="#" data-page="' + i + '">' + i + '</a></li>';
-        }
-
-        // 다음 버튼
-        if (currentPage < totalPages) {
-            html += '<li><a href="#" data-page="' + (currentPage + 1) + '">다음</a></li>';
-        }
-
-        html += '</ul>';
-        paginationArea.innerHTML = html;
-
-        // 이벤트 리스너
-        paginationArea.querySelectorAll('a[data-page]').forEach(a => {
-            a.addEventListener('click', e => {
-                e.preventDefault();
-                const page = parseInt(a.dataset.page);
-                renderPage(page);
-            });
-        });
-    }
-
-    // 초기 렌더링
-    renderPage(1);
-})();
-</script>
+    <c:choose>
+        <c:when test="${not empty reservationList && reservationList.size() > 0}">
+            <table class="reservation-table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">예약번호</th>
+                        <th style="width: 120px;">예약자</th>
+                        <th>객실</th>
+                        <th style="width: 180px;">시작 시간</th>
+                        <th style="width: 180px;">종료 시간</th>
+                        <th style="width: 120px;">금액</th>
+                        <th style="width: 100px;">상태</th>
+                        <th style="width: 150px;">작업</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="reservation" items="${reservationList}">
+                        <tr>
+                            <td>${reservation.id}</td>
+                            <td class="reservant-name">
+                                <c:choose>
+                                    <c:when test="${not empty reservation.reservantName}">
+                                        ${reservation.reservantName}
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${reservation.userName != null ? reservation.userName : '-'}
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <span class="room-name">
+                                    <c:choose>
+                                        <c:when test="${not empty reservation.roomName}">
+                                            ${reservation.roomName}
+                                        </c:when>
+                                        <c:otherwise>
+                                            -
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                            </td>
+                            <td class="datetime">
+                                <c:if test="${not empty reservation.startAt}">
+                                    ${reservation.startAt.year}.${reservation.startAt.monthValue}.${reservation.startAt.dayOfMonth} 
+                                    ${reservation.startAt.hour}시
+                                    <c:if test="${reservation.startAt.minute > 0}">${reservation.startAt.minute}분</c:if>
+                                </c:if>
+                                <c:if test="${empty reservation.startAt}">-</c:if>
+                            </td>
+                            <td class="datetime">
+                                <c:if test="${not empty reservation.endAt}">
+                                    ${reservation.endAt.year}.${reservation.endAt.monthValue}.${reservation.endAt.dayOfMonth} 
+                                    ${reservation.endAt.hour}시
+                                    <c:if test="${reservation.endAt.minute > 0}">${reservation.endAt.minute}분</c:if>
+                                </c:if>
+                                <c:if test="${empty reservation.endAt}">-</c:if>
+                            </td>
+                            <td class="amount">
+                                <fmt:formatNumber value="${reservation.amount}" type="number"/>원
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${reservation.status == 'AWAITING_PAYMENT'}">
+                                        <span class="status-badge awaiting">결제 대기</span>
+                                    </c:when>
+                                    <c:when test="${reservation.status == 'CONFIRMED'}">
+                                        <span class="status-badge confirmed">확정</span>
+                                    </c:when>
+                                    <c:when test="${reservation.status == 'CANCELLED'}">
+                                        <span class="status-badge cancelled">취소</span>
+                                    </c:when>
+                                    <c:when test="${reservation.status == 'EXPIRED'}">
+                                        <span class="status-badge expired">만료</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="status-badge">${reservation.status}</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <a href="/reservations/detail/${reservation.id}" class="detail-link">상세</a>
+                                    <sec:authorize access="hasRole('USER') and !hasRole('ADMIN')">
+                                        <c:if test="${reservation.status == 'CONFIRMED' && reservation.roomId != null}">
+                                            <a href="/reviews/create?roomId=${reservation.roomId}" 
+                                               style="color: var(--amber); font-weight: 500; text-decoration: none; font-size: 13px; padding: 4px 8px; border: 1px solid var(--amber); border-radius: var(--radius-md); transition: var(--transition);"
+                                               onmouseover="this.style.background='var(--amber)'; this.style.color='var(--white)';"
+                                               onmouseout="this.style.background='transparent'; this.style.color='var(--amber)';">리뷰 작성</a>
+                                        </c:if>
+                                    </sec:authorize>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:when>
+        <c:otherwise>
+            <div class="empty-state">
+                <div class="empty-state-icon">📅</div>
+                <div class="empty-state-text">등록된 예약이 없습니다.</div>
+            </div>
+        </c:otherwise>
+    </c:choose>
+</div>
 
 <%@ include file="/WEB-INF/views/components/footer.jsp" %>
+</body>
+</html>

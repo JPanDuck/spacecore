@@ -375,7 +375,7 @@
                     <select id="status" name="status" class="form-select" required>
                         <option value="ACTIVE" ${user.status == 'ACTIVE' ? 'selected' : ''}>활성 (ACTIVE)</option>
                         <option value="SUSPENDED" ${user.status == 'SUSPENDED' ? 'selected' : ''}>정지 (SUSPENDED)</option>
-                    </select>
+                </select>
                     <div class="form-help">활성: 정상 사용 가능, 정지: 계정 사용 불가</div>
                 </div>
             </div>
@@ -395,7 +395,7 @@
                     목록으로
                 </a>
             </div>
-        </form>
+</form>
 
         <!-- 일반 계정만 비밀번호 초기화 -->
         <c:if test="${empty user.provider}">

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>예약 수정</title>
@@ -39,6 +39,9 @@
             margin-top: 20px;
             text-decoration: none;
             color: #7b6cf6;
+        }
+        p {
+            margin: 15px 0;
         }
     </style>
 </head>

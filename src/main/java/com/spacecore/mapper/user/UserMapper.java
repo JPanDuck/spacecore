@@ -13,7 +13,7 @@ public interface UserMapper {
     User findByEmail(@Param("email") String email);           // OAuth2 로그인용
     User findById(@Param("id") Long id);                      // 마이페이지 / 관리자 상세조회
     List<User> findAll();                                     // 관리자 전체 조회
-    
+
     // 검색 및 페이징
     List<User> findAllWithSearch(@Param("keyword") String keyword, 
                                   @Param("offset") int offset, 

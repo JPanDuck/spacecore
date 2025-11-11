@@ -10,22 +10,22 @@
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="address" property="address"/>
-        <result column="latitude" property="latitude"/>
-        <result column="longitude" property="longitude"/>
         <result column="status" property="status"/>
         <result column="created_at" property="createdAt"/>
+        <result column="latitude" property="latitude"/>
+        <result column="longitude" property="longitude"/>
     </resultMap>
 
     <!-- 전체 조회 -->
     <select id="findAll" resultMap="OfficeMap">
-        SELECT id, name, address, latitude, longitude, status, created_at
+        SELECT id, name, address, status, created_at, latitude, longitude
         FROM offices
         ORDER BY id DESC
     </select>
 
     <!-- 지점 단건 조회 -->
     <select id="findById" parameterType="long" resultMap="OfficeMap">
-        SELECT id, name, address, latitude, longitude, status, created_at
+        SELECT id, name, address, status, created_at, latitude, longitude
         FROM offices
         WHERE id = #{id}
     </select>
@@ -35,18 +35,18 @@
         <selectKey keyProperty="id" resultType="long" order="BEFORE">
             SELECT seq_offices.NEXTVAL FROM dual
         </selectKey>
-        INSERT INTO offices (id, name, address, latitude, longitude, status, created_at)
-        VALUES (#{id}, #{name}, #{address}, #{latitude, jdbcType=NUMERIC}, #{longitude, jdbcType=NUMERIC}, NVL(#{status}, 'ACTIVE'), SYSDATE)
+        INSERT INTO offices (id, name, address, status, created_at, latitude, longitude)
+        VALUES (#{id}, #{name}, #{address}, NVL(#{status}, 'ACTIVE'), SYSDATE, #{latitude, jdbcType=NUMERIC}, #{longitude, jdbcType=NUMERIC})
     </insert>
 
     <!-- 지점 수정 -->
     <update id="update" parameterType="com.spacecore.domain.office.Office">
         UPDATE offices
-        SET name    = #{name},
-            address = #{address},
-            latitude = #{latitude, jdbcType=NUMERIC},
-            longitude = #{longitude, jdbcType=NUMERIC},
-            status  = #{status}
+        SET name      = #{name},
+            address   = #{address},
+            status    = #{status},
+            latitude  = #{latitude},
+            longitude = #{longitude}
         WHERE id = #{id}
     </update>
 

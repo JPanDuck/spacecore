@@ -36,6 +36,55 @@
             gap: 12px;
         }
 
+        .search-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--amber);
+        }
+
+        .btn-search {
+            padding: 12px 24px;
+            background: var(--choco);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-search:hover {
+            background: var(--amber);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
         .user-table-container {
             background: var(--white);
             border-radius: 12px;
@@ -154,7 +203,34 @@
         .user-provider {
             width: 100px;
             font-size: 12px;
-            color: var(--gray-600);
+        }
+
+        .provider-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .provider-badge.google {
+            background: #4285F4;
+            color: var(--white);
+        }
+
+        .provider-badge.kakao {
+            background: #FEE500;
+            color: #000;
+        }
+
+        .provider-badge.naver {
+            background: #03C75A;
+            color: var(--white);
+        }
+
+        .provider-badge.general {
+            background: var(--gray-200);
+            color: var(--text-primary);
         }
 
         .user-date {
@@ -248,6 +324,49 @@
             font-weight: 600;
         }
 
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .pagination .btn {
+            padding: 10px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            background: var(--white);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pagination .btn:hover {
+            border-color: var(--amber);
+            color: var(--amber);
+        }
+
+        .pagination .btn.btn-brown {
+            background: var(--choco);
+            color: var(--white);
+            border-color: var(--choco);
+        }
+
+        .pagination .btn.btn-brown:hover {
+            background: var(--amber);
+            border-color: var(--amber);
+        }
+
+        .pagination .btn.btn-outline {
+            background: var(--white);
+            border-color: var(--gray-300);
+        }
+
         @media (max-width: 1200px) {
             .user-email, .user-phone {
                 max-width: 150px;
@@ -267,6 +386,14 @@
 
             .admin-header h1 {
                 font-size: 24px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
             }
 
             .user-table {
@@ -302,12 +429,32 @@
         </h1>
     </div>
 
-    <c:if test="${not empty message}">
+<c:if test="${not empty message}">
         <div class="info-message">
             ${message}
         </div>
-    </c:if>
+</c:if>
 
+    <!-- 검색 영역 -->
+    <div class="search-container">
+        <form class="search-form" method="get" action="${pageContext.request.contextPath}/admin/list">
+            <input type="text" 
+                   name="keyword" 
+                   class="search-input" 
+                   placeholder="아이디, 이름, 이메일, 전화번호로 검색..." 
+                   value="${keyword}">
+            <button type="submit" class="btn-search">
+                <i class="ph ph-magnifying-glass"></i>
+                검색
+            </button>
+            <c:if test="${not empty keyword}">
+                <a href="${pageContext.request.contextPath}/admin/list" class="btn-search" style="background: var(--gray-400);">
+                    <i class="ph ph-x"></i>
+                    초기화
+                </a>
+            </c:if>
+        </form>
+    </div>
 
     <!-- 사용자 목록 테이블 -->
     <div class="user-table-container">
@@ -318,13 +465,22 @@
                         <i class="ph ph-users"></i>
                     </div>
                     <h3>등록된 사용자가 없습니다</h3>
-                    <p>아직 등록된 사용자가 없습니다.</p>
+                    <p>
+                        <c:choose>
+                            <c:when test="${not empty keyword}">
+                                검색 조건에 맞는 사용자를 찾을 수 없습니다.
+                            </c:when>
+                            <c:otherwise>
+                                아직 등록된 사용자가 없습니다.
+                            </c:otherwise>
+                        </c:choose>
+                    </p>
                 </div>
             </c:when>
             <c:otherwise>
                 <table class="user-table">
-                    <thead>
-                    <tr>
+    <thead>
+    <tr>
                         <th class="user-id">ID</th>
                         <th class="user-username">아이디</th>
                         <th class="user-name">이름</th>
@@ -335,10 +491,10 @@
                         <th class="user-provider">로그인 방식</th>
                         <th class="user-date">가입일</th>
                         <th class="user-actions">관리</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="user" items="${users}">
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach var="user" items="${users}">
                         <tr id="user-row-${user.id}">
                             <td class="user-id">${user.id}</td>
                             <td class="user-username">${user.username}</td>
@@ -351,7 +507,29 @@
                             <td class="user-status">
                                 <span class="status-badge ${user.status}">${user.status == 'ACTIVE' ? '활성' : '정지'}</span>
                             </td>
-                            <td class="user-provider">${user.provider != null ? user.provider : '일반'}</td>
+                            <td class="user-provider">
+                                <c:choose>
+                                    <c:when test="${not empty user.provider}">
+                                        <c:choose>
+                                            <c:when test="${user.provider eq 'google'}">
+                                                <span class="provider-badge google">Google</span>
+                                            </c:when>
+                                            <c:when test="${user.provider eq 'kakao'}">
+                                                <span class="provider-badge kakao">Kakao</span>
+                                            </c:when>
+                                            <c:when test="${user.provider eq 'naver'}">
+                                                <span class="provider-badge naver">Naver</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="provider-badge general">${user.provider}</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="provider-badge general">일반</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
                             <td class="user-date">${user.createdAtStr}</td>
                             <td class="user-actions">
                                 <a href="${pageContext.request.contextPath}/admin/${user.id}" class="action-btn btn-detail">
@@ -366,15 +544,19 @@
                                     <i class="ph ph-trash"></i>
                                     삭제
                                 </button>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+            </td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
             </c:otherwise>
         </c:choose>
     </div>
 
+    <!-- 페이징 -->
+    <c:if test="${not empty pageInfo && pageInfo.totalPages > 0}">
+        <%@ include file="../components/pagination.jsp" %>
+    </c:if>
 </div>
 
 <!-- ✅ 푸터 include -->

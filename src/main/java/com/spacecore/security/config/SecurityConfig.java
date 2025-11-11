@@ -94,7 +94,7 @@ public class SecurityConfig {
                         "/api/auth/refresh",
                         "/api/auth/find-password",
                         "/api/auth/reset-password",
-                        "/reviews/**",
+                        "/reviews/**", "/api/reviews/**",
                         "/chatbot/**",
                         "/map/**",
                         "/offices/**", "/api/offices/**",

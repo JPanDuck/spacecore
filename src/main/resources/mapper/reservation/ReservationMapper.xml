@@ -9,6 +9,7 @@
         <id     property="id"       column="id"/>
         <result property="userId"   column="user_id"/>
         <result property="roomId"   column="room_id"/>
+        <result property="reservantName" column="reservant_name"/>
         <result property="startAt"  column="start_at"/>
         <result property="endAt"    column="end_at"/>
         <result property="unit"     column="unit"/>
@@ -33,9 +34,10 @@
                r.amount,
                r.memo,
                r.created_at,
+               r.reservant_name AS reservant_name,
                u.name AS user_name,
                rm.name AS room_name
-        FROM reservations r
+               FROM reservations r
                  LEFT JOIN users u ON r.user_id = u.id
                  LEFT JOIN rooms rm ON r.room_id = rm.id
         ORDER BY r.created_at DESC
@@ -43,27 +45,45 @@
 
     <!-- 내 예약 목록 -->
     <select id="findByUserId" parameterType="long" resultMap="ReservationMap">
-        SELECT id, user_id, room_id, start_at, end_at, unit, status,
-                              amount, memo, created_at
-        FROM reservations
-        WHERE user_id = #{userId}
-        ORDER BY created_at DESC
+        SELECT r.id,
+               r.user_id,
+               r.room_id,
+               r.start_at,
+               r.end_at,
+               r.unit,
+               r.status,
+               r.amount,
+               r.memo,
+               r.created_at,
+               r.reservant_name AS reservant_name,
+               u.name AS user_name,
+               rm.name AS room_name
+        FROM reservations r
+                 LEFT JOIN users u ON r.user_id = u.id
+                 LEFT JOIN rooms rm ON r.room_id = rm.id
+        WHERE r.user_id = #{userId}
+        ORDER BY r.created_at DESC
     </select>
 
     <!-- 단건 조회 (PK) -->
     <select id="findById" parameterType="long" resultMap="ReservationMap">
-        SELECT id,
-               user_id,
-               room_id,
-               start_at,
-               end_at,
-               unit,
-               status,
-               amount,
-               memo,
-               created_at
-        FROM reservations
-        WHERE id = #{id}
+        SELECT r.id,
+               r.user_id,
+               r.room_id,
+               r.reservant_name,
+               r.start_at,
+               r.end_at,
+               r.unit,
+               r.status,
+               r.amount,
+               r.memo,
+               r.created_at,
+               u.name AS user_name,
+               rm.name AS room_name
+        FROM reservations r
+                 LEFT JOIN users u ON r.user_id = u.id
+                 LEFT JOIN rooms rm ON r.room_id = rm.id
+        WHERE r.id = #{id}
     </select>
 
     <!-- 예약 생성 -->
@@ -72,23 +92,23 @@
             SELECT seq_reservations.NEXTVAL FROM dual
         </selectKey>
         INSERT INTO reservations (id, user_id, room_id, start_at,
-        end_at, unit,amount, status, memo, created_at)
-        VALUES (#{id}, #{userId}, #{roomId}, #{startAt}, #{endAt}, #{unit},#{amount},
-        #{status}, #{memo}, SYSTIMESTAMP)
+        end_at, unit, amount, status, memo, reservant_name, created_at)
+        VALUES (#{id}, #{userId}, #{roomId}, #{startAt}, #{endAt}, #{unit}, #{amount},
+        #{status}, #{memo}, #{reservantName}, SYSTIMESTAMP)
     </insert>
 
     <!-- 예약 수정 -->
-    <update id="update" parameterType="com.spacecore.domain.reservation.Reservation">
-        UPDATE reservations
-        SET user_id  = #{userId},
-            room_id  = #{roomId},
-            start_at = #{startAt},
-            end_at   = #{endAt},
-            unit     = #{unit},
-            amount   = #{amount},
-            memo     = #{memo}
-        WHERE id = #{id}
-    </update>
+<!--    <update id="update" parameterType="com.spacecore.domain.reservation.Reservation">-->
+<!--        UPDATE reservations-->
+<!--        SET user_id  = #{userId},-->
+<!--            room_id  = #{roomId},-->
+<!--            start_at = #{startAt},-->
+<!--            end_at   = #{endAt},-->
+<!--            unit     = #{unit},-->
+<!--            amount   = #{amount},-->
+<!--            memo     = #{memo}-->
+<!--        WHERE id = #{id}-->
+<!--    </update>-->
 
     <!-- 예약 취소 -->
     <!-- 예약 상태 변경 (확정/취소/만료 등)-->
@@ -106,17 +126,6 @@
           AND status = 'AWAITING_PAYMENT'
           AND start_at &lt; #{endAt}
           AND end_at &gt; #{startAt}
-    </select>
-
-    <!-- 사용자와 객실로 예약 조회 (리뷰 작성 권한 확인용) -->
-    <select id="findByUserIdAndRoomId" resultMap="ReservationMap">
-        SELECT id, user_id, room_id, start_at, end_at, unit, status,
-               amount, memo, created_at
-        FROM reservations
-        WHERE user_id = #{userId}
-          AND room_id = #{roomId}
-          AND status = 'CONFIRMED'
-        ORDER BY created_at DESC
     </select>
 
 

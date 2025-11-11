@@ -2,43 +2,60 @@
 <html>
 <head>
     <title>가상계좌 정보</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
         body {
-            font-family: "Pretendard", sans-serif;
-            background-color: #fafafa;
+            font-family: "Noto Sans KR", "Montserrat", sans-serif;
+            background: var(--cream-base);
+            color: var(--text-primary);
             margin: 50px;
         }
-        h2 { color: #333; }
+        h2 { 
+            color: var(--choco);
+            margin-bottom: 20px;
+        }
         label {
             display: block;
             margin-top: 10px;
-            font-weight: bold;
+            font-weight: 600;
+            color: var(--text-primary);
         }
         input {
             width: 250px;
-            padding: 8px;
+            padding: 10px;
             margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            background: var(--white);
+            color: var(--text-primary);
         }
         button {
             margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #7b6cf6;
-            color: #fff;
+            padding: 12px 24px;
+            background: var(--amber);
+            color: var(--white);
             border: none;
-            border-radius: 6px;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            transition: var(--transition);
         }
         button:hover {
-            background-color: #6957f2;
+            background: var(--mocha);
         }
         a {
             display: inline-block;
             margin-top: 20px;
             text-decoration: none;
-            color: #7b6cf6;
+            color: var(--amber);
+            font-weight: 500;
+        }
+        a:hover {
+            color: var(--mocha);
+        }
+        p {
+            margin: 12px 0;
+            color: var(--text-primary);
         }
     </style>
 </head>

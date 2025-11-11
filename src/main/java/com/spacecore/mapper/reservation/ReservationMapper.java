@@ -22,7 +22,7 @@ public interface ReservationMapper {
     int insert(Reservation reservation);
 
     /// 예약 수정
-    int update(Reservation reservation);
+//    int update(Reservation reservation);
 
     /// 예약 취소
     /// 예약 상태만 변경 (확정/취소/만료 등)
@@ -34,7 +34,4 @@ public interface ReservationMapper {
             @Param("startAt") LocalDateTime startAt,
             @Param("endAt") LocalDateTime endAt
     );
-
-    /// 사용자와 객실로 예약 조회 (리뷰 작성 권한 확인용)
-    List<Reservation> findByUserIdAndRoomId(@Param("userId") Long userId, @Param("roomId") Long roomId);
 }

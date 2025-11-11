@@ -11,6 +11,7 @@ public class Reservation {
     private Long id;
     private Long userId;
     private Long roomId;
+    private String reservantName;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startAt;
 
@@ -26,4 +27,3 @@ public class Reservation {
     private String userName;
     private String roomName;
 }
-

@@ -6,7 +6,6 @@ import com.spacecore.service.office.OfficeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class OfficeRestController {
     public ResponseEntity<Office> getOffice(@PathVariable Long id) {
         Office office = officeService.get(id);
         return office != null ? ResponseEntity.ok(office)
-                              : ResponseEntity.notFound().build();
+                : ResponseEntity.notFound().build();
     }
 
     ///  생성
@@ -51,7 +50,7 @@ public class OfficeRestController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Office> editOffice(@PathVariable Long id,
-                                       @RequestBody OfficeDTO officeDTO) {
+                                             @RequestBody OfficeDTO officeDTO) {
         Office office = officeService.get(id);
         if (office == null) return ResponseEntity.notFound().build();
 

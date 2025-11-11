@@ -41,8 +41,15 @@
             <div style="margin-top:20px; display:flex; flex-wrap:wrap; gap:12px;">
                 <c:forEach var="imgPath" items="${fn:split(review.imgUrl, ',')}">
                     <c:choose>
-                        <c:when test="${fn:startsWith(imgPath, '/uploads/')}">
-                            <!-- /uploads/로 시작하는 경우 contextPath 추가 -->
+                        <c:when test="${fn:startsWith(imgPath, 'http://') || fn:startsWith(imgPath, 'https://')}">
+                            <!-- 절대 URL -->
+                            <img src="${imgPath}" alt="리뷰 이미지"
+                                 style="width:180px; height:180px; object-fit:cover; border-radius:10px;
+                                        border:1px solid var(--gray-300); box-shadow:0 2px 5px rgba(0,0,0,0.1);
+                                        cursor:pointer;" onclick="window.open(this.src, '_blank')">
+                        </c:when>
+                        <c:when test="${fn:startsWith(imgPath, '/img/reviews/') || fn:startsWith(imgPath, '/uploads/')}">
+                            <!-- 절대 경로 (/img/reviews/ 또는 /uploads/) -->
                             <img src="${pageContext.request.contextPath}${imgPath}" alt="리뷰 이미지"
                                  style="width:180px; height:180px; object-fit:cover; border-radius:10px;
                                         border:1px solid var(--gray-300); box-shadow:0 2px 5px rgba(0,0,0,0.1);
@@ -57,7 +64,7 @@
                         </c:when>
                         <c:otherwise>
                             <!-- 상대 경로인 경우 -->
-                            <img src="${pageContext.request.contextPath}/uploads/${imgPath}" alt="리뷰 이미지"
+                            <img src="${pageContext.request.contextPath}/img/reviews/${imgPath}" alt="리뷰 이미지"
                                  style="width:180px; height:180px; object-fit:cover; border-radius:10px;
                                         border:1px solid var(--gray-300); box-shadow:0 2px 5px rgba(0,0,0,0.1);
                                         cursor:pointer;" onclick="window.open(this.src, '_blank')">

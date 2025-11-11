@@ -117,16 +117,19 @@
             border: 1px solid var(--gray-300);
             background: #fff;
             border-radius: 9999px;
-            padding: 12px;
+            padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
             transition: 0.3s ease;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 12px;
+            box-sizing: border-box;
+            min-height: 52px;
+            font-size: 15px;
         }
 
         .google-btn:hover {
@@ -225,17 +228,14 @@
     <!-- ✅ 구글 로그인 -->
     <button type="button" class="google-btn"
             onclick="location.href='${pageContext.request.contextPath}/oauth2/authorization/google'">
-        <img src="${pageContext.request.contextPath}/img/google_logo.png" alt="Google Logo">
+        <img src="${pageContext.request.contextPath}/img/google.svg" alt="Google Logo">
         Google 계정으로 로그인
     </button>
 
     <!-- ✅ 카카오 로그인 -->
     <button type="button" class="kakao-btn"
             onclick="location.href='${pageContext.request.contextPath}/oauth2/authorization/kakao'">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="40" height="40" rx="20" fill="#FEE500"/>
-            <path d="M20 12C14.4772 12 10 15.5817 10 20C10 22.9091 11.6364 25.4545 14 27.0909L13 30L16.5 28.5C17.5909 28.8182 18.7727 29 20 29C25.5228 29 30 25.4183 30 20C30 14.5817 25.5228 12 20 12Z" fill="#000"/>
-        </svg>
+        <img src="${pageContext.request.contextPath}/img/kakao.png" alt="Kakao Logo">
         카카오 계정으로 로그인
     </button>
 

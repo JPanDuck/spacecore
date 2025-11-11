@@ -14,6 +14,9 @@ public class Room {
     private Long capacity;
     private Long priceBase;
     private Long minReservationHours; // 최소 예약 시간 (시간 단위)
+    private String description;    // 공간소개
+    private String facilityInfo;    // 시설안내
+    private String precautions;     // 유의사항
     private String status;
     private LocalDate createdAt;
 

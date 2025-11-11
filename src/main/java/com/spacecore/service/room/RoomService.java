@@ -1,6 +1,5 @@
 package com.spacecore.service.room;
 
-import com.spacecore.domain.office.Office;
 import com.spacecore.domain.room.Room;
 
 import java.util.List;

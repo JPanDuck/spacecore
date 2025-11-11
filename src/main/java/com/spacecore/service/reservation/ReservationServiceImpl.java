@@ -1,11 +1,14 @@
 package com.spacecore.service.reservation;
 
 import com.spacecore.domain.reservation.Reservation;
-import com.spacecore.domain.room.RoomSlot;
 import com.spacecore.domain.room.Room;
+import com.spacecore.domain.room.RoomSlot;
 import com.spacecore.mapper.reservation.ReservationMapper;
-import com.spacecore.mapper.room.RoomSlotMapper;
 import com.spacecore.mapper.room.RoomMapper;
+import com.spacecore.mapper.room.RoomSlotMapper;
+import com.spacecore.service.notification.NotificationService;
+import com.spacecore.service.room.RoomSlotService;
+import com.spacecore.service.user.UserService;
 import com.spacecore.service.virtualAccount.VirtualAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,8 +29,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationMapper reservationMapper;
     private final RoomSlotMapper roomSlotMapper;
+    private final RoomSlotService roomSlotService;
     private final RoomMapper roomMapper;
     private final VirtualAccountService virtualAccountService;
+
+    //알림
+    private final NotificationService notificationService;
+    private final UserService userService;  //관리자 조회용
 
     /// 전체 목록 조회
     @Override
@@ -48,7 +56,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void create(Reservation reservation) {
+    public Reservation create(Reservation reservation) {
 
         Room room = roomMapper.findById(reservation.getRoomId());
 
@@ -72,15 +80,6 @@ public class ReservationServiceImpl implements ReservationService {
             throw new IllegalStateException("선택한 시간에 이미 결제 완료된 예약 또는 차단된 시간이 포함되어 있습니다. 다른 시간을 선택해주세요.");
         }
 
-        // 예약 대기 상태의 슬롯이 있으면 삭제
-        List<Long> awaitingReservationIds = reservationMapper.findAwaitingReservationIds(
-                reservation.getRoomId(),
-                reservation.getStartAt(),
-                reservation.getEndAt()
-        );
-        for (Long reservationId : awaitingReservationIds) {
-            roomSlotMapper.deleteByReservationId(reservationId);
-        }
 
         // 금액 계싼 = (기본요금 * 시간 수)
         long hours = Duration.between(reservation.getStartAt(), reservation.getEndAt()).toHours();
@@ -89,111 +88,144 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setAmount(basePrice * hours);
         reservation.setStatus("AWAITING_PAYMENT");
 
+        // 예약 생성 전: 대기 상태 슬롯 삭제 (동시 요청 방지)
+        roomSlotMapper.deleteAwaitingSlotsByTimeRange(
+                reservation.getRoomId(),
+                reservation.getStartAt(),
+                reservation.getEndAt(),
+                null  // 예약 생성 전이므로 excludeReservationId = null
+        );
+
         // 예약 생성
         reservationMapper.insert(reservation);
 
-        // 슬롯 생성(RESERVED) - 1시간 단위 INSERT 반복
-        for (int i = 0; i < hours; i++) {
-            LocalDateTime start = reservation.getStartAt().plusHours(i);
-            LocalDateTime end = start.plusHours(1);
-            RoomSlot roomSlot = new RoomSlot();
-            roomSlot.setRoomId(reservation.getRoomId());
-            roomSlot.setReservationId(reservation.getId());
-            roomSlot.setSlotUnit("HOUR");
-            roomSlot.setSlotStart(start);
-            roomSlot.setSlotEnd(end);
-            roomSlot.setStatus("RESERVED");
-            roomSlotMapper.insertSlot(roomSlot);
-        }
-        // 가상계좌 발급 (3일 유효)
-        virtualAccountService.createVA(reservation.getId(), LocalDateTime.now());
-    }
+        // 예약 생성 후: 한 번 더 확인 및 삭제 (동시 요청 방지)
+        roomSlotMapper.deleteAwaitingSlotsByTimeRange(
+                reservation.getRoomId(),
+                reservation.getStartAt(),
+                reservation.getEndAt(),
+                reservation.getId()  // 현재 예약 ID 제외
+        );
 
-    @Override
-    public Reservation update(Reservation reservation) {
-        // 예약 ID로 기존 예약 정보 조회 (존재 여부 및 현재 상태 확인)
-        Reservation existingReservation = reservationMapper.findById(reservation.getId());
+        // 슬롯 생성 (RoomSlotService에 위임)
+        roomSlotService.createSlots(
+                reservation.getId(),
+                reservation.getRoomId(),
+                reservation.getStartAt(),
+                reservation.getEndAt(),
+                "RESERVED"
+        );
 
-        // 예약이 존재하지 않으면 예외 발생
-        if (existingReservation == null) {
-            throw new IllegalArgumentException("예약을 찾을 수 없습니다. 예약 ID: " + reservation.getId());
-        }
+        // 가상계좌 발급 (모든 은행에 대해)
+        virtualAccountService.createAllVAs(reservation.getId(), LocalDateTime.now());
 
-        // 이미 취소된 예약은 수정 불가
-        if ("CANCELLED".equals(existingReservation.getStatus())) {
-            throw new IllegalStateException("취소된 예약은 수정할 수 없습니다.");
-        }
 
-        // 이미 만료된 예약은 수정 불가
-        if ("EXPIRED".equals(existingReservation.getStatus())) {
-            throw new IllegalStateException("만료된 예약은 수정할 수 없습니다.");
-        }
-
-        // 이미 확정된 예약은 수정 불가 (결제 완료 후에는 수정 불가)
-        if ("CONFIRMED".equals(existingReservation.getStatus())) {
-            throw new IllegalStateException("확정된 예약은 수정할 수 없습니다.");
-        }
-
-        // Room 정보 조회 (최소 예약 시간을 가져오기 위해)
-        Room room = roomMapper.findById(reservation.getRoomId());
-
-        // 방이 존재하지 않으면 예외 발생
-        if (room == null) {
-            throw new IllegalArgumentException("방을 찾을 수 없습니다. 방 ID: " + reservation.getRoomId());
+        /// (알림) 예약 생성 후 알림 발송 (관리자, 사용자)
+        //사용자 본인에게 알림
+        notificationService.sendNotification(
+                reservation.getUserId(),
+                "RESERVATION_CREATED",
+                reservation.getId(),
+                "예약이 생성되었습니다: " + room.getName(),
+                "/reservations/detail/" + reservation.getId()
+        );
+        //관리자 모두에게 알림
+        List<Long> adminIds = userService.getAllAdminIds();
+        for(Long adminId : adminIds) {
+            notificationService.sendNotification(
+                    adminId,
+                    "RESERVATION_CREATED",
+                    reservation.getId(),
+                    "새로운 예약이 등록되었습니다: " + room.getName(),
+                    "/reservations/detail/" +  reservation.getId()
+            );
         }
 
-        // 최소 예약 시간 가져오기 (기본값 1시간)
-        int minHours = (room.getMinReservationHours() != null && room.getMinReservationHours() > 0)
-                ? room.getMinReservationHours().intValue()
-                : 1;
-
-        // 새로운 예약 시간 범위 검증 (최소 시간: Room 설정값, 최대 시간: 무제한, 운영시간: 09:00~22:00)
-        validateHourRange(reservation.getStartAt(), reservation.getEndAt(), minHours);
-
-        // 새로운 시간대 충돌 검사 (확정된 예약이나 차단 시간과 겹치는지 확인)
-        int conflicts = roomSlotMapper.countConflicts(reservation.getRoomId(),
-                reservation.getStartAt(), reservation.getEndAt());
-
-        // 충돌이 있는 경우 예외 발생 (단, 기존 예약 시간과 완전히 동일하면 허용)
-        boolean isSameTime = existingReservation.getStartAt().equals(reservation.getStartAt())
-                && existingReservation.getEndAt().equals(reservation.getEndAt());
-
-        if (conflicts > 0 && !isSameTime) {
-            throw new IllegalStateException("선택한 시간에 이미 결제 완료된 예약 또는 차단된 시간이 포함되어 있습니다. 다른 시간을 선택해주세요.");
-        }
-
-        // 기존 예약으로 생성된 슬롯들을 모두 삭제 (새로운 시간으로 변경하기 전에 해제)
-        roomSlotMapper.deleteByReservationId(reservation.getId());
-
-        // 새로운 시간 범위에 따른 금액 재계산
-        long hours = Duration.between(reservation.getStartAt(), reservation.getEndAt()).toHours();
-        long basePrice = room.getPriceBase();
-        reservation.setUnit("HOUR");
-        reservation.setAmount(basePrice * hours);
-
-        // 예약 상태는 기존 상태 유지 (수정해도 상태는 그대로)
-        reservation.setStatus(existingReservation.getStatus());
-
-        // 예약 정보 업데이트 (DB에 반영)
-        reservationMapper.update(reservation);
-
-        // 새로운 시간대에 맞춰 슬롯 생성(RESERVED) - 1시간 단위 INSERT 반복
-        for (int i = 0; i < hours; i++) {
-            LocalDateTime start = reservation.getStartAt().plusHours(i);
-            LocalDateTime end = start.plusHours(1);
-            RoomSlot roomSlot = new RoomSlot();
-            roomSlot.setRoomId(reservation.getRoomId());
-            roomSlot.setReservationId(reservation.getId());
-            roomSlot.setSlotUnit("HOUR");
-            roomSlot.setSlotStart(start);
-            roomSlot.setSlotEnd(end);
-            roomSlot.setStatus("RESERVED");
-            roomSlotMapper.insertSlot(roomSlot);
-        }
-
-        // 수정된 예약 정보 반환 (업데이트 후 최신 정보)
+        // 생성된 예약 정보 반환 (ID가 포함된 최신 정보)
         return reservationMapper.findById(reservation.getId());
     }
+
+//    @Override
+//    public Reservation update(Reservation reservation) {
+//        // 예약 ID로 기존 예약 정보 조회 (존재 여부 및 현재 상태 확인)
+//        Reservation existingReservation = reservationMapper.findById(reservation.getId());
+//
+//        // 예약이 존재하지 않으면 예외 발생
+//        if (existingReservation == null) {
+//            throw new IllegalArgumentException("예약을 찾을 수 없습니다. 예약 ID: " + reservation.getId());
+//        }
+//
+//        // 이미 취소된 예약은 수정 불가
+//        if ("CANCELLED".equals(existingReservation.getStatus())) {
+//            throw new IllegalStateException("취소된 예약은 수정할 수 없습니다.");
+//        }
+//
+//        // 이미 만료된 예약은 수정 불가
+//        if ("EXPIRED".equals(existingReservation.getStatus())) {
+//            throw new IllegalStateException("만료된 예약은 수정할 수 없습니다.");
+//        }
+//
+//        // 이미 확정된 예약은 수정 불가 (결제 완료 후에는 수정 불가)
+//        if ("CONFIRMED".equals(existingReservation.getStatus())) {
+//            throw new IllegalStateException("확정된 예약은 수정할 수 없습니다.");
+//        }
+//
+//        // Room 정보 조회 (최소 예약 시간을 가져오기 위해)
+//        Room room = roomMapper.findById(reservation.getRoomId());
+//
+//        // 방이 존재하지 않으면 예외 발생
+//        if (room == null) {
+//            throw new IllegalArgumentException("방을 찾을 수 없습니다. 방 ID: " + reservation.getRoomId());
+//        }
+//
+//        // 최소 예약 시간 가져오기 (기본값 1시간)
+//        int minHours = (room.getMinReservationHours() != null && room.getMinReservationHours() > 0)
+//                ? room.getMinReservationHours().intValue()
+//                : 1;
+//
+//        // 새로운 예약 시간 범위 검증 (최소 시간: Room 설정값, 최대 시간: 무제한, 운영시간: 09:00~22:00)
+//        validateHourRange(reservation.getStartAt(), reservation.getEndAt(), minHours);
+//
+//        // 새로운 시간대 충돌 검사 (확정된 예약이나 차단 시간과 겹치는지 확인)
+//        int conflicts = roomSlotMapper.countConflicts(reservation.getRoomId(),
+//                reservation.getStartAt(), reservation.getEndAt());
+//
+//        // 충돌이 있는 경우 예외 발생 (단, 기존 예약 시간과 완전히 동일하면 허용)
+//        boolean isSameTime = existingReservation.getStartAt().equals(reservation.getStartAt())
+//                && existingReservation.getEndAt().equals(reservation.getEndAt());
+//
+//        if (conflicts > 0 && !isSameTime) {
+//            throw new IllegalStateException("선택한 시간에 이미 결제 완료된 예약 또는 차단된 시간이 포함되어 있습니다. 다른 시간을 선택해주세요.");
+//        }
+//
+//        // 기존 예약으로 생성된 슬롯들을 모두 삭제 (새로운 시간으로 변경하기 전에 해제)
+//        roomSlotMapper.deleteByReservationId(reservation.getId());
+//
+//        // 새로운 시간 범위에 따른 금액 재계산
+//        long hours = Duration.between(reservation.getStartAt(), reservation.getEndAt()).toHours();
+//        long basePrice = room.getPriceBase();
+//        reservation.setUnit("HOUR");
+//        reservation.setAmount(basePrice * hours);
+//
+//        // 예약 상태는 기존 상태 유지 (수정해도 상태는 그대로)
+//        reservation.setStatus(existingReservation.getStatus());
+//
+//        // 예약 정보 업데이트 (DB에 반영)
+//        reservationMapper.update(reservation);
+//
+//        // 슬롯 생성 (RoomSlotService에 위임)
+//        roomSlotService.createSlots(
+//                reservation.getId(),
+//                reservation.getRoomId(),
+//                reservation.getStartAt(),
+//                reservation.getEndAt(),
+//                "RESERVED"
+//        );
+//
+//        // 생성된 예약 정보 반환 (ID가 포함된 최신 정보)
+//        return reservationMapper.findById(reservation.getId());
+//    }
+
 
     @Override
     public void cancel(Long id) {
@@ -218,6 +250,27 @@ public class ReservationServiceImpl implements ReservationService {
 
         // 해당 예약을 생성된 슬롯 모두 삭제
         roomSlotMapper.deleteByReservationId(id);
+
+        /// (알림) 예약 취소 시 관리자 전체랑 사용자
+        //사용자
+        notificationService.sendNotification(
+                reservation.getUserId(),
+                "RESERVATION_CANCELED",
+                reservation.getId(),
+                "예약이 취소되었습니다: " + reservation.getRoomName(),
+                "/reservations/detail/" + reservation.getId()
+        );
+        //관리자
+        List<Long> adminIds = userService.getAllAdminIds();
+        for(Long adminId : adminIds) {
+            notificationService.sendNotification(
+                    adminId,
+                    "RESERVATION_CANCELED",
+                    reservation.getId(),
+                    "예약이 취소되었습니다: " + reservation.getRoomName(),
+                    "/reservations/detail/" + reservation.getId()
+            );
+        }
     }
 
     @Override
@@ -245,6 +298,15 @@ public class ReservationServiceImpl implements ReservationService {
 
         // 예약 상태 변경
         reservationMapper.updateStatus(id, "CONFIRMED");
+
+        /// (알림) 예약 확정 시 사용자에게 알림 발송
+        notificationService.sendNotification(
+                reservation.getUserId(),
+                "RESERVATION_CONFIRMED",
+                reservation.getId(),
+                "예약이 확정되었습니다: " + reservation.getRoomName(),
+                "/reservation/detail/" + reservation.getId()
+        );
     }
 
     /// 시간 범위 검증 유틸리티 메서드 (예약 시간이 유효한지 검사)
@@ -310,11 +372,5 @@ public class ReservationServiceImpl implements ReservationService {
             currentDate = currentDate.plusDays(1);
         }
         return events;
-    }
-
-    /// 사용자와 객실로 예약 조회 (리뷰 작성 권한 확인용)
-    @Override
-    public List<Reservation> findByUserIdAndRoomId(Long userId, Long roomId) {
-        return reservationMapper.findByUserIdAndRoomId(userId, roomId);
     }
 }

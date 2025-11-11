@@ -83,13 +83,11 @@
             labelEl.className = 'label';
             labelEl.textContent = office.name;
             labelEl.onclick = function () {
-                window.location.href = '${pageContext.request.contextPath}/offices/detail/' + office.id;
             };
             map.getPanes().floatPane.appendChild(labelEl);
 
             //마커 클릭 시 상세 페이지 이동
             naver.maps.Event.addListener(marker, 'click', function() {
-                window.location.href = '${pageContext.request.contextPath}/offices/detail/' + office.id;
             });
 
             markers.push({ marker: marker, position: position });

@@ -1,7 +1,9 @@
 package com.spacecore.controller.reservation;
 
 import com.spacecore.domain.reservation.Reservation;
+import com.spacecore.domain.room.RoomSlot;
 import com.spacecore.service.reservation.ReservationService;
+import com.spacecore.service.room.RoomSlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +22,7 @@ import java.util.Map;
 public class ReservationRestController {
 
     private final ReservationService reservationService;
+    private final RoomSlotService roomSlotService;
 
     /// 전체 조회
     @GetMapping
@@ -30,24 +35,23 @@ public class ReservationRestController {
     public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
         Reservation reservation = reservationService.findById(id);
         return (reservation != null) ? ResponseEntity.ok(reservation)
-                                     : ResponseEntity.notFound().build();
+                : ResponseEntity.notFound().build();
     }
 
-    /// 예약 생성
-    @PostMapping
+    @PostMapping  // 이 줄 추가
     public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation){
-        reservationService.create(reservation);
-        return ResponseEntity.status(201).body(reservation);
+        Reservation created = reservationService.create(reservation);
+        return ResponseEntity.status(201).body(created);
     }
 
     /// 수정
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-    public ResponseEntity<Reservation> editReservation(@PathVariable Long id,
-                                                       @RequestBody Reservation reservation){
-        reservation.setId(id);
-        return ResponseEntity.ok(reservationService.update(reservation));
-    }
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Reservation> editReservation(@PathVariable Long id,
+//                                                       @RequestBody Reservation reservation){
+//        reservation.setId(id);
+//        return ResponseEntity.ok(reservationService.update(reservation));
+//    }
 
     /// 예약 취소
     @PutMapping("/{id}/cancel")
@@ -73,5 +77,27 @@ public class ReservationRestController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate end){
         return ResponseEntity.ok(reservationService.findCalendarAvailability(roomId, start, end));
+    }
+
+    /// 날짜별 예약 불가 시간 조회
+    @GetMapping("/availability/{roomId}")
+    public ResponseEntity<List<Map<String, Object>>> getAvailability(@PathVariable Long roomId,
+                                                                     @RequestParam @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) LocalDate date){
+        List<RoomSlot> slots = roomSlotService.findStatesOfDay(roomId, date);
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (RoomSlot slot : slots) {
+            if (slot.getStatus().equals("BLOCKED") || slot.getStatus().equals("RESERVED")){
+                // slot_start부터 slot_end 전까지의 모든 시간을 비활성화
+                int startHour = slot.getSlotStart().getHour();
+                int endHour = slot.getSlotEnd().getHour();
+                for (int hour = startHour; hour < endHour; hour++) {
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("hour", hour);
+                    item.put("status", slot.getStatus());
+                    result.add(item);
+                }
+            }
+        }
+        return ResponseEntity.ok(result);
     }
 }

@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 public class FavoriteDetailDTO extends Favorite {
     private String officeName;
     private String roomName;
-    private String thumbnail;     // 룸 썸네일 이미지 경로
-    private Long capacity;        // 룸 정원
-    private Long priceBase;       // 룸 기본 가격
+    private Integer capacity;
+    private Long priceBase;
+    private String thumbnail;
 }

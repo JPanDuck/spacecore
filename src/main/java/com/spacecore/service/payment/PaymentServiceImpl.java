@@ -3,14 +3,15 @@ package com.spacecore.service.payment;
 
 import com.spacecore.domain.payment.Payment;
 import com.spacecore.mapper.payment.PaymentMapper;
+import com.spacecore.mapper.reservation.ReservationMapper;
 import com.spacecore.mapper.room.RoomSlotMapper;
+import com.spacecore.mapper.virtualAccount.VirtualAccountMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.spacecore.mapper.reservation.ReservationMapper;
-import com.spacecore.mapper.virtualAccount.VirtualAccountMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     /// 전체 조회
     @Override
-    public List<Payment> findAll() {
+    public List<Map<String, Object>> findAll() {
         return paymentMapper.findAll();
     }
 
@@ -34,6 +35,10 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentMapper.findById(id);
     }
 
+    @Override
+    public List<Map<String, Object>> findByUserId(Long userId) {
+        return paymentMapper.findByUserId(userId);
+    }
 
     /// 입금 확정 (관리자가 입금 확인 버튼 클릭 시)
     @Override

@@ -113,6 +113,26 @@
             font-size: 12px;
         }
 
+        .badge-provider-google {
+            background: #4285F4;
+            color: var(--white);
+        }
+
+        .badge-provider-kakao {
+            background: #FEE500;
+            color: #000;
+        }
+
+        .badge-provider-naver {
+            background: #03C75A;
+            color: var(--white);
+        }
+
+        .badge-provider-general {
+            background: var(--gray-200);
+            color: var(--text-primary);
+        }
+
         .action-buttons {
             display: flex;
             gap: 12px;
@@ -269,11 +289,11 @@
         </a>
     </div>
 
-    <c:if test="${not empty message}">
+<c:if test="${not empty message}">
         <div class="info-message">
             ${message}
         </div>
-    </c:if>
+</c:if>
 
     <div class="detail-container">
         <!-- 기본 정보 -->
@@ -313,7 +333,27 @@
 
                 <div class="detail-label">로그인 방식</div>
                 <div class="detail-value">
-                    <span class="badge badge-provider">${user.provider != null ? user.provider : '일반'}</span>
+                    <c:choose>
+                        <c:when test="${not empty user.provider}">
+                            <c:choose>
+                                <c:when test="${user.provider eq 'google'}">
+                                    <span class="badge badge-provider-google">Google 로그인</span>
+                                </c:when>
+                                <c:when test="${user.provider eq 'kakao'}">
+                                    <span class="badge badge-provider-kakao">Kakao 로그인</span>
+                                </c:when>
+                                <c:when test="${user.provider eq 'naver'}">
+                                    <span class="badge badge-provider-naver">Naver 로그인</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge badge-provider-general">${user.provider} 로그인</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="badge badge-provider-general">일반 로그인</span>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <div class="detail-label">임시 비밀번호</div>
@@ -348,12 +388,33 @@
                     비밀번호 초기화
                 </button>
             </c:if>
+            <!-- 예약 차단/해제 버튼 (USER 역할만) -->
+            <c:if test="${user.role == 'USER'}">
+                <c:choose>
+                    <c:when test="${user.status == 'ACTIVE'}">
+                        <form method="post" action="${pageContext.request.contextPath}/admin/${user.id}/block-reservation" style="display: inline;">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('이 사용자의 예약을 차단하시겠습니까?\n사용자 상태가 정지로 변경됩니다.');">
+                                <i class="ph ph-lock"></i>
+                                예약 차단
+                            </button>
+                        </form>
+                    </c:when>
+                    <c:when test="${user.status == 'SUSPENDED'}">
+                        <form method="post" action="${pageContext.request.contextPath}/admin/${user.id}/unblock-reservation" style="display: inline;">
+                            <button type="submit" class="btn btn-success" onclick="return confirm('이 사용자의 예약 차단을 해제하시겠습니까?\n사용자 상태가 활성으로 변경됩니다.');">
+                                <i class="ph ph-unlock"></i>
+                                예약 차단 해제
+                            </button>
+                        </form>
+                    </c:when>
+                </c:choose>
+            </c:if>
             <form method="post" action="${pageContext.request.contextPath}/admin/${user.id}/delete" style="display: inline;">
                 <button type="submit" class="btn btn-danger" data-username="${user.username}" data-user-id="${user.id}" onclick="return confirmDelete(this.getAttribute('data-username'), this.getAttribute('data-user-id'))">
                     <i class="ph ph-trash"></i>
                     사용자 삭제
                 </button>
-            </form>
+</form>
             <a href="${pageContext.request.contextPath}/admin/list" class="btn btn-outline">
                 <i class="ph ph-list"></i>
                 목록으로

@@ -39,4 +39,12 @@ public interface RoomSlotMapper {
             @Param("startAt") LocalDateTime startAt,
             @Param("endAt") LocalDateTime endAt
     );
+
+    /// 예약 대기 상태의 슬롯을 시간 범위로 삭제
+    int deleteAwaitingSlotsByTimeRange(
+            @Param("roomId") Long roomId,
+            @Param("startAt") LocalDateTime startAt,
+            @Param("endAt") LocalDateTime endAt,
+            @Param("excludeReservationId") Long excludeReservationId  // 추가
+    );
 }

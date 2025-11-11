@@ -103,6 +103,34 @@
         color: #e65100;
     }
 
+    .provider-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .provider-badge-google {
+        background: #4285F4;
+        color: var(--white);
+    }
+
+    .provider-badge-kakao {
+        background: #FEE500;
+        color: #000;
+    }
+
+    .provider-badge-naver {
+        background: #03C75A;
+        color: var(--white);
+    }
+
+    .provider-badge-general {
+        background: var(--gray-200);
+        color: var(--text-primary);
+    }
+
     .actions-section {
         background: white;
         padding: 30px;
@@ -214,6 +242,32 @@
                     </c:choose>
                 </td>
             </tr>
+            <tr>
+                <th>로그인 방식</th>
+                <td>
+                    <c:choose>
+                        <c:when test="${not empty user.provider}">
+                            <c:choose>
+                                <c:when test="${user.provider eq 'google'}">
+                                    <span class="provider-badge provider-badge-google">Google 로그인</span>
+                                </c:when>
+                                <c:when test="${user.provider eq 'kakao'}">
+                                    <span class="provider-badge provider-badge-kakao">Kakao 로그인</span>
+                                </c:when>
+                                <c:when test="${user.provider eq 'naver'}">
+                                    <span class="provider-badge provider-badge-naver">Naver 로그인</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="provider-badge provider-badge-general">${user.provider} 로그인</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="provider-badge provider-badge-general">일반 로그인</span>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
         </table>
     </div>
 
@@ -223,9 +277,12 @@
             <a href="<%=context%>/user/edit" class="btn btn-primary">
                 <i class="ph ph-pencil"></i> 정보 수정
             </a>
+            <!-- 일반 로그인 사용자만 비밀번호 변경 버튼 표시 -->
+            <c:if test="${empty user.provider}">
             <a href="<%=context%>/user/change-password" class="btn btn-secondary">
                 <i class="ph ph-key"></i> 비밀번호 변경
             </a>
+            </c:if>
             <button type="button" class="btn btn-danger" onclick="deleteAccount()">
                 <i class="ph ph-trash"></i> 회원 탈퇴
             </button>

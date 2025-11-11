@@ -41,11 +41,9 @@ public class NoticeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
-    public String addNotice(@ModelAttribute Notice notice, @AuthenticationPrincipal CustomUserDetails user) {
-        // 현재 로그인한 사용자의 ID 설정
-        if (user != null) {
-            notice.setUserId(user.getId());
-        }
+    public String addNotice(@ModelAttribute Notice notice,
+                            @AuthenticationPrincipal CustomUserDetails user) {
+        notice.setUserId(user.getId());
         noticeService.create(notice);
         return "redirect:/notices";
     }

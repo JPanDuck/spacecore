@@ -28,7 +28,7 @@ public class NoticeRestController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Void> addNotice(@PathVariable("id") Long id, @RequestBody Notice notice) {
+    public ResponseEntity<Void> addNotice(@RequestBody Notice notice)  {
         noticeService.create(notice);
         return ResponseEntity.status(201).build();
     }

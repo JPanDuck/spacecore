@@ -151,7 +151,6 @@
             <a href="${pageContext.request.contextPath}/offices">오피스</a>
             <a href="${pageContext.request.contextPath}/qna">Q&A</a>
             <a href="${pageContext.request.contextPath}/chatbot/faq">자주묻는 질문</a>
-            <a href="${pageContext.request.contextPath}/support">고객센터</a>
             <hr>
             <div class="menu-extra" id="menuExtra"></div>
         </nav>

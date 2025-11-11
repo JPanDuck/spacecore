@@ -1,6 +1,7 @@
 package com.spacecore.dto.user;
 
 import lombok.Data;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

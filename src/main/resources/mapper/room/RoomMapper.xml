@@ -11,6 +11,9 @@
         <result column="capacity" property="capacity"/>
         <result column="price_base" property="priceBase"/>
         <result column="min_reservation_hours" property="minReservationHours"/>
+        <result column="description" property="description"/>
+        <result column="facility_info" property="facilityInfo"/>
+        <result column="precautions" property="precautions"/>
         <result column="status" property="status"/>
         <result column="created_at" property="createdAt"/>
         <!-- 목록/단건용 대표 이미지 경로 -->
@@ -25,6 +28,9 @@
                r.capacity,
                r.price_base,
                r.min_reservation_hours,
+               r.description,
+               r.facility_info,
+               r.precautions,
                r.status,
                r.created_at,
                NULL AS thumbnail
@@ -40,6 +46,9 @@
                r.capacity,
                r.price_base,
                r.min_reservation_hours,
+               r.description,
+               r.facility_info,
+               r.precautions,
                r.status,
                r.created_at,
                NULL AS thumbnail
@@ -56,6 +65,9 @@
                r.capacity,
                r.price_base,
                r.min_reservation_hours,
+               r.description,
+               r.facility_info,
+               r.precautions,
                r.status,
                r.created_at,
                NULL AS thumbnail
@@ -69,9 +81,10 @@
             SELECT seq_rooms.NEXTVAL FROM dual
         </selectKey>
         INSERT INTO rooms (id, office_id, name, capacity, price_base,
-        min_reservation_hours, status, created_at)
+        min_reservation_hours, status, created_at, description, facility_info, precautions)
         VALUES (#{id}, #{officeId}, #{name}, #{capacity}, #{priceBase},
-        NVL(#{minReservationHours, jdbcType=NUMERIC}, 1), NVL(#{status}, 'ACTIVE'), SYSDATE)
+        NVL(#{minReservationHours, jdbcType=NUMERIC}, 1), NVL(#{status}, 'ACTIVE'), SYSDATE,
+        #{description}, #{facilityInfo}, #{precautions})
     </insert>
 
     <!-- 룸 수정 -->
@@ -82,7 +95,10 @@
             capacity              = #{capacity},
             price_base            = #{priceBase},
             min_reservation_hours = NVL(#{minReservationHours, jdbcType=NUMERIC}, min_reservation_hours),
-            status                = #{status}
+            status                = #{status},
+            description           = #{description},
+            facility_info         = #{facilityInfo},
+            precautions           = #{precautions}
         WHERE id = #{id}
     </update>
 

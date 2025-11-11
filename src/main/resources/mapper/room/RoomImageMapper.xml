@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spacecore.mapper.room.RoomMapper">
+<mapper namespace="com.spacecore.mapper.room.RoomImageMapper">
 
     <resultMap id="RoomImageMap" type="com.spacecore.domain.room.RoomImage">
         <id     column="id"         property="id"/>
@@ -17,19 +17,17 @@
 
     <!-- 상세페이지용 전체 이미지 -->
     <select id="findImagesByRoomId" resultMap="RoomImageMap" parameterType="long">
-        SELECT ri.id, ri.room_id, ri.file_id, f.path,
+        SELECT ri.id, ri.room_id, ri.file_id, NULL AS path,
                ri.is_primary, ri.sort_order, ri.created_at
         FROM room_images ri
-                 JOIN files f ON f.id = ri.file_id
         WHERE ri.room_id = #{roomId}
         ORDER BY CASE WHEN ri.is_primary='Y' THEN 0 ELSE 1 END, ri.sort_order, ri.id
     </select>
 
     <!-- 목록 썸네일 1장 경로(필요 시 서비스에서 직접 호출 가능) -->
     <select id="findThumbnailPathByRoomId" parameterType="long" resultType="string">
-        SELECT f.path
+        SELECT NULL
         FROM room_images ri
-                 JOIN files f ON f.id = ri.file_id
         WHERE ri.room_id = #{roomId}
         ORDER BY CASE WHEN ri.is_primary='Y' THEN 0 ELSE 1 END, ri.sort_order
             FETCH FIRST 1 ROWS ONLY

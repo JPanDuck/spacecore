@@ -19,10 +19,10 @@ public interface ReservationService {
     Reservation findById(Long id);
 
     /// 예약 신규 생성
-    void create(Reservation reservation);
+    Reservation create(Reservation reservation);  // void → Reservation 변경
 
     /// 예약 수정
-    Reservation update(Reservation reservation);
+//    Reservation update(Reservation reservation);
 
     /// 예약 취소 (예약 상태 변경)
     void cancel(Long id);
@@ -34,7 +34,4 @@ public interface ReservationService {
 
     /// 캘린더용 날짜 범위 조회
     List<Map<String, Object>> findCalendarAvailability(Long roomId, LocalDate startDate, LocalDate endDate);
-
-    /// 사용자와 객실로 예약 조회 (리뷰 작성 권한 확인용)
-    List<Reservation> findByUserIdAndRoomId(Long userId, Long roomId);
 }

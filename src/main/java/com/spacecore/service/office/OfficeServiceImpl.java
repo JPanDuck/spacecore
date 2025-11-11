@@ -2,7 +2,6 @@ package com.spacecore.service.office;
 
 import com.spacecore.domain.office.Office;
 import com.spacecore.mapper.office.OfficeMapper;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

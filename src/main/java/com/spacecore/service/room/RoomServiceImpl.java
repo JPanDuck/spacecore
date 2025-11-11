@@ -1,10 +1,6 @@
 package com.spacecore.service.room;
 
-
-import com.spacecore.domain.office.Office;
 import com.spacecore.domain.room.Room;
-import com.spacecore.domain.room.RoomImage;
-import com.spacecore.mapper.room.RoomImageMapper;
 import com.spacecore.mapper.room.RoomMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +14,6 @@ import java.util.List;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomMapper roomMapper;
-    private final RoomImageMapper roomImageMapper;
 
     /// 룸 전체 조회
     @Override
@@ -35,14 +30,8 @@ public class RoomServiceImpl implements RoomService {
     ///  단건 조회
     @Override
     public Room get(Long id) {
-        Room room = roomMapper.findById(id);
-//        if (room != null) {
-//            List<RoomImage> images = roomImageMapper.findImagesByRoomId(id);
-//            room.setImages(images); // 상세 슬라이더용
-//        }
-        return room;
+        return roomMapper.findById(id);
     }
-
     /// 룸 등록
     @Override
     @Transactional

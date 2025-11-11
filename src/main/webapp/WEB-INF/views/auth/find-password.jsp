@@ -149,21 +149,16 @@
                 body: JSON.stringify({ username, email })
             });
 
-            const text = await response.text();
-
             if (response.ok) {
-                messageArea.style.color = "green";
-                messageArea.textContent = text;
-
-                // ✅ 비밀번호 재설정 페이지로 이동
-                setTimeout(() => {
+                // ✅ 성공 시 메시지 표시 없이 바로 비밀번호 재설정 페이지로 이동
                     const params = new URLSearchParams({ username, email });
                     window.location.href =
                         "${pageContext.request.contextPath}/auth/reset-password?" + params.toString();
-                }, 1200);
             } else {
+                // ✅ 에러 메시지만 표시
+                const errorData = await response.json();
                 messageArea.style.color = "red";
-                messageArea.textContent = text;
+                messageArea.textContent = errorData.message || "입력하신 정보가 일치하지 않습니다.";
             }
 
         } catch (err) {

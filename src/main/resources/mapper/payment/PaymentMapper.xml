@@ -11,18 +11,48 @@
         <result column="amount" property="amount"/>
         <result column="status" property="status"/>
         <result column="created_at" property="createdAt"/>
+        <result column="user_name" property="userName"/>
+        <result column="reservation_id" property="reservationId"/>
     </resultMap>
 
-    <select id="findAll" resultType="com.spacecore.domain.payment.Payment">
-        SELECT id, va_id, amount, status, created_at
-        FROM payments
-        ORDER BY id DESC
+    <select id="findAll" resultType="map">
+        SELECT p.id AS "id",
+               p.va_id AS "vaId",
+               p.amount AS "amount",
+               p.status AS "status",
+               p.created_at AS "createdAt",
+               u.username AS "username",
+               r.reservant_name AS "reservantName",
+               r.id AS "reservationId"
+        FROM payments p
+                 INNER JOIN virtual_accounts va ON p.va_id = va.id
+                 INNER JOIN reservations r ON va.res_id = r.id
+                 LEFT JOIN users u ON r.user_id = u.id
+        ORDER BY p.id DESC
     </select>
 
     <select id="findById" parameterType="long" resultType="com.spacecore.domain.payment.Payment">
         SELECT id, va_id, amount, status, created_at
         FROM payments
         WHERE id = #{id}
+    </select>
+
+    <!-- 사용자별 결제 목록 조회 -->
+    <select id="findByUserId" resultType="map">
+        SELECT p.id AS "id",
+               p.va_id AS "vaId",
+               p.amount AS "amount",
+               p.status AS "status",
+               p.created_at AS "createdAt",
+               u.username AS "username",
+               r.reservant_name AS "reservantName",
+               r.id AS "reservationId"
+        FROM payments p
+                 INNER JOIN virtual_accounts va ON p.va_id = va.id
+                 INNER JOIN reservations r ON va.res_id = r.id
+                 LEFT JOIN users u ON r.user_id = u.id
+        WHERE r.user_id = #{userId}
+        ORDER BY p.created_at DESC
     </select>
 
 

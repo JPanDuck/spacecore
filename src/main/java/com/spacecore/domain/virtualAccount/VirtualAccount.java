@@ -10,7 +10,7 @@ public class VirtualAccount {
     private Long id;
     private Long resId;
     private String accountNo;
-    private String bankCode;
+    private String bankName;
     private LocalDateTime expiresAt;
     private String status;
     private LocalDate createdAt;

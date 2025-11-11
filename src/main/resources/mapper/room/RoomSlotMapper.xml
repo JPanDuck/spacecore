@@ -46,8 +46,7 @@
           AND rs.slot_start &lt; #{endAt}
           AND rs.slot_end &gt; #{startAt}
           AND (
-            rs.status = 'BLOCKED'
-                OR (rs.status = 'RESERVED' AND r.status = 'CONFIRMED')
+            rs.status = 'RESERVED' AND r.status = 'CONFIRMED'
             )
     </select>
 
@@ -59,9 +58,16 @@
         INSERT INTO room_slots (
         id, room_id, reservation_id, slot_unit, slot_start, slot_end, status
         ) VALUES (
-        #{id}, #{roomId}, #{reservationId}, #{slotUnit}, #{slotStart}, #{slotEnd}, #{status}
+        #{id},
+        #{roomId},
+        #{reservationId, jdbcType=NUMERIC},
+        #{slotUnit},
+        #{slotStart},
+        #{slotEnd},
+        #{status}
         )
     </insert>
+
 
     <!-- 예약 취소 시 : 해당 예약으로 생성된 슬롯 전부 삭제 -->
     <delete id="deleteByReservationId" parameterType="long">
@@ -74,9 +80,30 @@
     <delete id="deleteBlockedRange">
         DELETE
         FROM room_slots WHERE room_id = #{roomId}
-            AND slot_start &gt;= #{startAt}
-            AND slot_end &lt;= #{endAt}
-            AND status = 'BLOCKED'
+                          AND slot_start &lt; #{endAt}
+                          AND slot_end &gt; #{startAt}
+                          AND status = 'BLOCKED'
+    </delete>
+
+    <!-- 예약 대기 상태의 슬롯을 시간 범위로 삭제 -->
+    <delete id="deleteAwaitingSlotsByTimeRange">
+        DELETE FROM room_slots rs
+        WHERE rs.room_id = #{roomId}
+        AND rs.slot_start &lt; #{endAt}
+        AND rs.slot_end &gt; #{startAt}
+        AND rs.status = 'RESERVED'
+        <if test="excludeReservationId != null">
+            AND rs.reservation_id != #{excludeReservationId, jdbcType=NUMERIC}
+        </if>
+        <if test="excludeReservationId == null">
+            AND rs.reservation_id IS NOT NULL
+        </if>
+        AND EXISTS (
+        SELECT 1
+        FROM reservations r
+        WHERE r.id = rs.reservation_id
+        AND r.status = 'AWAITING_PAYMENT'
+        )
     </delete>
 
     <!--=====================================================================-->
@@ -103,7 +130,7 @@
     <update id="reserveSlots">
         UPDATE room_slots
         SET status         = 'RESERVED',
-            reservation_id = #{reservationId}
+            reservation_id = #{reservationId, jdbcType=NUMERIC}
         WHERE room_id = #{roomId}
           AND slot_start &gt;= #{slotStart}
           AND slot_end &lt;= #{slotEnd}
@@ -114,6 +141,6 @@
     <update id="clearSlots">
         UPDATE room_slots
         SET status = 'AVAILABLE' , reservation_id = NULL
-        WHERE reservation_id = #{reservationId}
+        WHERE reservation_id = #{reservationId, jdbcType=NUMERIC}
     </update>
 </mapper>
