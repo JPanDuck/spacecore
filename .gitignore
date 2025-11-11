@@ -43,3 +43,6 @@ out
 gen
 .gradle
 build
+
+### Spring Boot application settings (ignore actual values)
+src/main/resources/application.properties
